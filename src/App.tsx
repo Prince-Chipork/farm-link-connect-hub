@@ -27,7 +27,8 @@ import AdminManageProducts from './pages/admin/ManageProducts';
 import AdminManageOrders from './pages/admin/ManageOrders';
 import AdminReports from './pages/admin/Reports';
 
-import NotFound from './pages/NotFound';<Toaster position="top-center" richColors/>
+import NotFound from "./pages/NotFound";
+import { Toaster } from "@/components/ui/sonner";
 
 function App() {
   return (
@@ -69,7 +70,10 @@ function App() {
 
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <Toaster />
+      <Toaster
+  position="top-center"
+  richColors
+/>
     </>
   );
 }
