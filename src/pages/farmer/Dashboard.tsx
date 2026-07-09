@@ -92,9 +92,15 @@ export default function FarmerDashboard() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-foreground">Farmer Dashboard</h1>
-          <p className="text-muted-foreground mt-1">Manage your farm operations and track your performance.</p>
-        </div>
+          <div>
+  <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+    Welcome, {user?.name || "Farmer"} 👋
+  </h1>
+
+  <p className="text-muted-foreground mt-1">
+    Manage your farm operations and track your performance.
+  </p>
+</div>
         <div className="flex items-center gap-2">
           <Button variant="outline">Download Report</Button>
           <Button asChild>
@@ -146,9 +152,9 @@ export default function FarmerDashboard() {
               <Award className="h-6 w-6 text-purple-600" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Trust Level</p>
-              <p className="text-2xl font-bold text-purple-600">Platinum</p>
-            </div>
+              <p className="text-2xl font-bold text-purple-600">
+  {user?.trustLevel || "Bronze"}
+</p>
           </CardContent>
         </Card>
       </div>
