@@ -52,9 +52,22 @@ export default function FarmerDashboard() {
       
       try {
         const [productsRes, ordersRes] = await Promise.all([
-          supabase.from('products').select('id', { count: 'exact', head: true }).eq('farmer_id', user.id),
-          supabase.from('orders').select('*, profiles(full_name)').order('created_at', { ascending: false }).limit(5)
-        ]);
+  supabase
+    .from("products")
+    .select("id", { count: "exact", head: true })
+    .eq("farmer_id", user.id),
+
+  supabase
+    .from("orders")
+    .select(`
+      *,
+      buyer:profiles!orders_buyer_id_fkey (
+        full_name
+      )
+    `)
+    .order("created_at", { ascending: false })
+    .limit(5),
+]);
 
         if (productsRes.error) throw productsRes.error;
         if (ordersRes.error) throw ordersRes.error;
@@ -258,7 +271,7 @@ export default function FarmerDashboard() {
                 {farmerOrders.length > 0 ? farmerOrders.map((order) => (
                   <tr key={order.id} className="hover:bg-muted/50 transition-colors">
                     <td className="px-4 py-4 font-medium text-foreground">#{order.id.split('-')[0].toUpperCase()}</td>
-                    <td className="px-4 py-4">{order.profiles?.full_name || 'Customer'}</td>
+                    <td className="px-4 py-4">{order.buyer?.full_name || 'Customer'}</td>
                     <td className="px-4 py-4">{new Date(order.created_at).toLocaleDateString()}</td>
                     <td className="px-4 py-4 font-semibold text-foreground">₦{Number(order.total || 0).toLocaleString()}</td>
                     <td className="px-4 py-4">
