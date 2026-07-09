@@ -20,13 +20,15 @@ export default function FarmerOrders() {
     const { data, error } = await supabase
       .from('orders')
       .select(`
-        *,
-        profiles!orders_buyer_id_fkey (full_name, email),
-        order_items (
-          *,
-          products (*)
-        )
-      `)
+  *,
+  profiles!orders_buyer_id_fkey (
+    full_name
+  ),
+  order_items (
+    *,
+    products (*)
+  )
+`)
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -178,8 +180,12 @@ export default function FarmerOrders() {
                      </div>
                    </div>
                    <div className="text-right">
-                      <p className="text-xs text-muted-foreground uppercase font-semibold">Customer Email</p>
-                      <p className="text-sm font-medium">{order.profiles?.email}</p>
+                      <p className="text-xs text-muted-foreground uppercase font-semibold">
+  Customer Name
+</p>
+<p className="text-sm font-medium">
+  {order.profiles?.full_name}
+</p>
                    </div>
                 </div>
               </CardContent>
