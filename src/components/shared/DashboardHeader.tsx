@@ -8,8 +8,10 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import Sidebar from "./Sidebar";
 import NotificationBell from "@/components/notifications/NotificationBell";
 import CartDrawer from "@/components/cart/CartDrawer";
+import { useAuth } from "@/context/AuthContext";
 
 export default function DashboardHeader() {
+  const { signOut } = useAuth();
   return (
     <header className="flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 sticky top-0 z-30">
         <Sheet>
@@ -50,7 +52,7 @@ export default function DashboardHeader() {
             <DropdownMenuItem>Profile</DropdownMenuItem>
             <DropdownMenuItem>Settings</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Logout</DropdownMenuItem>
+            <DropdownMenuItem onClick={signOut}>Logout</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
