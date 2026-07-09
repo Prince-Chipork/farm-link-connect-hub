@@ -18,29 +18,27 @@ export default function FarmerOrders() {
     // Fetch orders that contain items from this farmer
     // RLS policy already filters the orders table correctly for us
     const { data, error } = await supabase
-      .from('orders')
-      .select(`
-  *,
-  profiles!orders_buyer_id_fkey (
-    full_name
-  ),
-  order_items (
+  .from("order_items")
+  .select(`
     *,
-    products (*)
-  )
-`)
-      .order('created_at', { ascending: false });
+    products(*),
+    orders(
+      id,
+      created_at,
+      status,
+      delivery_address,
+      buyer:profiles!orders_buyer_id_fkey(
+        full_name
+      )
+    )
+  `)
+  .order("created_at", { ascending: false });
 
     if (error) {
       toast.error(error.message);
     } else {
       // Filter order_items to only show items belonging to this farmer
-      const filteredOrders = data.map((order: any) => ({
-        ...order,
-        order_items: order.order_items.filter((item: any) => item.products.farmer_id === user.id)
-      })).filter((order: any) => order.order_items.length > 0);
       
-      setOrders(filteredOrders);
     }
     setLoading(false);
   };
