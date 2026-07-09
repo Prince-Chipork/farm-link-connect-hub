@@ -67,7 +67,7 @@ export default function ProductDetailsPage() {
     }, quantity);
     toast.success(`${product.name} added to cart!`);
   };
-
+console.log(product);
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-20 flex justify-center">
@@ -101,7 +101,7 @@ export default function ProductDetailsPage() {
         <div className="space-y-4">
           <div className="aspect-square rounded-2xl overflow-hidden border bg-muted relative shadow-sm">
             <img 
-              src={product.image_url || "/placeholder.svg"} 
+              src={product.images?.[0] || "/placeholder.svg"}
               alt={product.name} 
               className="w-full h-full object-cover"
             />
