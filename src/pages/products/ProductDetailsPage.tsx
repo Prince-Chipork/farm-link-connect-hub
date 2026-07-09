@@ -99,12 +99,15 @@ console.log(product);
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
         {/* Product Image */}
         <div className="space-y-4">
-          <div className="aspect-square rounded-2xl overflow-hidden border bg-muted relative shadow-sm">
-            <img 
-              src={product.images?.[0] || "/placeholder.svg"}
-              alt={product.name} 
-              className="w-full h-full object-cover"
-            />
+          <div className="aspect-square rounded-2xl overflow-hidden border bg-muted relative shadow-sm"> 
+              <img
+  src={product.images?.[0] || "/placeholder.svg"}
+  alt={product.name}
+  className="w-full h-full object-cover"
+  onError={(e) => {
+    e.currentTarget.src = "/placeholder.svg";
+  }}
+/>
             {product.profiles?.is_verified && (
               <Badge className="absolute top-4 right-4 bg-green-600 text-white gap-1 px-3 py-1 text-sm shadow-lg">
                 <Verified className="h-4 w-4" /> Verified Farmer
