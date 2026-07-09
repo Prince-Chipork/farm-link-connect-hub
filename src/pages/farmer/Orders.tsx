@@ -35,11 +35,11 @@ export default function FarmerOrders() {
   .order("created_at", { ascending: false });
 
     if (error) {
-      toast.error(error.message);
-    } else {
-      // Filter order_items to only show items belonging to this farmer
-      
-    }
+  toast.error(error.message);
+} else {
+  toast(JSON.stringify(data));
+  setOrders(data || []);
+}
     setLoading(false);
   };
 
