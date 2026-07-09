@@ -90,26 +90,32 @@ export default function FarmerDashboard() {
   return (
     <div className="p-4 md:p-6 lg:p-8 space-y-8">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
-          <div>
-  <h1 className="text-2xl md:text-3xl font-bold text-foreground">
-    Welcome, {user?.name || "Farmer"} 👋
-  </h1>
+<div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 
-  <p className="text-muted-foreground mt-1">
-    Manage your farm operations and track your performance.
-  </p>
+  <div>
+    <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+      Welcome, {user?.name || "Farmer"} 👋
+    </h1>
+
+    <p className="text-muted-foreground mt-1">
+      Manage your farm operations and track your performance.
+    </p>
+  </div>
+
+  <div className="flex items-center gap-2">
+    <Button variant="outline">
+      Download Report
+    </Button>
+
+    <Button asChild>
+      <Link to="/farmer/products">
+        <Plus className="h-4 w-4 mr-2" />
+        Add New Product
+      </Link>
+    </Button>
+  </div>
+
 </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline">Download Report</Button>
-          <Button asChild>
-            <Link to="/farmer/products">
-              <Plus className="h-4 w-4 mr-2" /> Add New Product
-            </Link>
-          </Button>
-        </div>
-      </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -152,9 +158,14 @@ export default function FarmerDashboard() {
               <Award className="h-6 w-6 text-purple-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-purple-600">
-  {user?.trustLevel || "Bronze"}
-</p>
+  <p className="text-sm text-muted-foreground">
+    Trust Level
+  </p>
+
+  <p className="text-2xl font-bold text-purple-600">
+    {user?.trustLevel || "Bronze"}
+  </p>
+</div>
           </CardContent>
         </Card>
       </div>
