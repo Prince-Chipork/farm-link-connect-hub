@@ -55,12 +55,12 @@ toast.success(`Found ${data?.length || 0} order items`);
       .eq('id', orderId);
 
     if (error) {
-      toast.error(error.message);
-    } else {
-      toast.success(`Order marked as ${newStatus}`);
-      fetchOrders();
-    }
-  };
+  console.error(error);
+  toast.error(error.message);
+} else {
+  console.log("Fetched order items:", data);
+  setOrders(data || []);
+}
 
   const statusColors: Record<string, string> = {
     Pending: "bg-amber-100 text-amber-700",
