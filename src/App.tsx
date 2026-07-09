@@ -27,8 +27,7 @@ import AdminManageProducts from './pages/admin/ManageProducts';
 import AdminManageOrders from './pages/admin/ManageOrders';
 import AdminReports from './pages/admin/Reports';
 
-import NotFound from './pages/NotFound';
-import { Toaster } from '@/components/ui/sonner';
+import NotFound from './pages/NotFound';<Toaster position="top-center" richColors/>
 
 function App() {
   return (
