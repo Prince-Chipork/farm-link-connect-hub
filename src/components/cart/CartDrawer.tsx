@@ -39,7 +39,7 @@ const CartDrawer = () => {
                 )}
                 <div className="flex-1 min-w-0">
                   <p className="font-medium text-sm truncate">{item.name}</p>
-                  <p className="text-sm text-muted-foreground">${item.price.toFixed(2)}</p>
+                  <p className="text-sm text-muted-foreground">₦{item.price.toLocaleString()}</p>
                 </div>
                 <div className="flex items-center gap-1">
                   <Button
@@ -77,7 +77,7 @@ const CartDrawer = () => {
             <div className="w-full space-y-3">
               <div className="flex justify-between text-lg font-bold">
                 <span>Total:</span>
-                <span>${cartTotal.toFixed(2)}</span>
+                <span>₦{cartTotal.toLocaleString()}</span>
               </div>
               <Button
   className="w-full"
