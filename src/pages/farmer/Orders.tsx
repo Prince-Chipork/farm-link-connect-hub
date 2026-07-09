@@ -37,8 +37,7 @@ export default function FarmerOrders() {
     if (error) {
   toast.error(error.message);
 } else {
-  console.log(data);
-toast.success(`Found ${data?.length || 0} order items`);
+  console.log("Farmer Orders:", data);
   setOrders(data || []);
 }
     setLoading(false);
