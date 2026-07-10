@@ -147,11 +147,14 @@ export default function FarmerOrders() {
                   </Badge>
                   <Select
   value={order.orders?.status ?? "Pending"}
-                    onValueChange={(value) => {
-  if (order.orders?.id) {
-    updateOrderStatus(order.orders.id, value);
-  }
-}}>
+  onValueChange={(value) => {
+    toast.success(`Selected: ${value}`);
+
+    if (order.orders?.id) {
+      updateOrderStatus(order.orders.id, value);
+    }
+  }}
+>
   <SelectTrigger className="w-[140px] h-9">
                       <SelectValue placeholder="Update Status" />
                     </SelectTrigger>
