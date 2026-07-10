@@ -59,15 +59,14 @@ export default function FarmerOrders() {
   }, [user]);
 
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
-  console.log("Updating:", orderId, newStatus);
-
   const { data, error } = await supabase
     .from("orders")
     .update({ status: newStatus })
     .eq("id", orderId)
     .select();
 
-  console.log("Result:", data, error);
+  console.log("Updated rows:", data);
+  console.log("Update error:", error);
 
   if (error) {
     toast.error(error.message);
