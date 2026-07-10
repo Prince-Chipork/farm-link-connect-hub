@@ -59,6 +59,8 @@ export default function FarmerOrders() {
   }, [user]);
 
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
+  toast.success(`Updating order to ${newStatus}`);
+
   const { data, error } = await supabase
     .from("orders")
     .update({ status: newStatus })
@@ -70,10 +72,12 @@ export default function FarmerOrders() {
 
   if (error) {
     toast.error(error.message);
-  } else {
-    toast.success("Order updated");
-    fetchOrders();
+    return;
   }
+
+  toast.success(`Rows updated: ${data?.length ?? 0}`);
+
+  fetchOrders();
 };
   
   const statusColors: Record<string, string> = {
