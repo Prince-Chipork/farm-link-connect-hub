@@ -166,10 +166,14 @@ toast.info(`Order ID: ${orderId}`);
   value={order.orders?.status ?? "Pending"}
   onValueChange={(value) => {
   toast.info(`Farmer ID: ${order.products?.farmer_id}`);
+  toast.info(`Order ID: ${order.orders?.id}`);
 
-  if (order.orders?.id) {
-    updateOrderStatus(order.orders.id, value);
+  if (!order.orders?.id) {
+    toast.error("Order ID is missing");
+    return;
   }
+
+  updateOrderStatus(order.orders.id, value);
 }}
 >
   <SelectTrigger className="w-[140px] h-9">
