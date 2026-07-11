@@ -37,14 +37,16 @@ export default function FarmerOrders() {
     toast.success(`Loaded ${data?.length ?? 0} orders`);
     setOrders(data || []);
     toast.info(JSON.stringify(data?.[0]));
+    
+    toast.info(`Error: ${JSON.stringify(error)}`);
+toast.info(`Rows: ${data?.length ?? 0}`);
+toast.info(`First row: ${JSON.stringify(data?.[0])}`);
   }
 
   setLoading(false);
 };
 
-  toast.info(`Error: ${JSON.stringify(error)}`);
-toast.info(`Rows: ${data?.length ?? 0}`);
-toast.info(`First row: ${JSON.stringify(data?.[0])}`);
+  
   
   useEffect(() => {
     fetchOrders();
