@@ -65,7 +65,8 @@ export default function FarmerOrders() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  toast.info(`Logged in: ${user?.id}`);
+toast.info(`Logged in user: ${user?.id}`);
+toast.info(`Order ID: ${orderId}`);
 
   const { data, error } = await supabase
     .from("orders")
@@ -77,11 +78,18 @@ export default function FarmerOrders() {
   toast.error(error?.message ?? "No update error");
 
   if (error) {
-    toast.error(error.message);
+  toast.error(`Error: ${error.message}`);
+} else {
+  toast.success(`Rows updated: ${data?.length ?? 0}`);
+
+  if (data && data.length > 0) {
+    toast.success(`New status: ${data[0].status}`);
   } else {
-    toast.success("Order updated");
-    fetchOrders();
+    toast.error("No rows were updated.");
   }
+
+  fetchOrders();
+}
 };
   
   const statusColors: Record<string, string> = {
