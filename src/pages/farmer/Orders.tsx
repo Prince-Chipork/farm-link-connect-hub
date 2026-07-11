@@ -65,7 +65,7 @@ export default function FarmerOrders() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  console.log("Logged in user:", user?.id);
+  toast.info(`Logged in: ${user?.id}`);
 
   const { data, error } = await supabase
     .from("orders")
@@ -73,8 +73,8 @@ export default function FarmerOrders() {
     .eq("id", orderId)
     .select();
 
-  console.log("Updated rows:", data);
-  console.log("Update error:", error);
+  toast.info(`Rows updated: ${data?.length ?? 0}`);
+  toast.error(error?.message ?? "No update error");
 
   if (error) {
     toast.error(error.message);
@@ -156,7 +156,7 @@ export default function FarmerOrders() {
                   <Select
   value={order.orders?.status ?? "Pending"}
   onValueChange={(value) => {
-  console.log("Farmer ID from product:", order.products?.farmer_id);
+  toast.info(`Farmer ID: ${order.products?.farmer_id}`);
 
   if (order.orders?.id) {
     updateOrderStatus(order.orders.id, value);
