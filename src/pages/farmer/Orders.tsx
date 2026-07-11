@@ -60,6 +60,8 @@ export default function FarmerOrders() {
   }, [user]);
 
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
+    toast.success("updateOrderStatus() called");
+    
   // Check who is actually logged in
   const {
     data: { user },
