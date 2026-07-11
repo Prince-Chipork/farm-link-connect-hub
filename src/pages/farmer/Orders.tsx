@@ -29,6 +29,8 @@ export default function FarmerOrders() {
   .from("farmer_orders")
   .select("*")
   .order("created_at", { ascending: false });
+
+toast.info(`Supabase error: ${JSON.stringify(error)}`);
       
   if (error) {
     console.error(error);
@@ -47,7 +49,7 @@ toast.info(`First row: ${JSON.stringify(data?.[0])}`);
 };
 
   
-  
+
   useEffect(() => {
     fetchOrders();
   }, [user]);
