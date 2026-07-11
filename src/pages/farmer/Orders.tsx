@@ -15,8 +15,9 @@ export default function FarmerOrders() {
     // Fetch orders that contain items from this farmer
     // RLS policy already filters the orders table correctly for us
     const fetchOrders = async () => {
+      toast.error("THIS IS THE NEW FARMER ORDERS PAGE");
   if (!user) return;
-  toast.error("THIS IS THE NEW FARMER ORDERS PAGE");
+  
 
   setLoading(true);
       
