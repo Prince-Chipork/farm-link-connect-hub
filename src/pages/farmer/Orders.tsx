@@ -103,96 +103,149 @@ export default function FarmerOrders() {
   };
 
   if (loading) {
-    return (
-      <div className="p-4 md:p-6 lg:p-8 flex justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary">
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="p-4 md:p-6 lg:p-8 space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Manage Orders</h1>
-        <p className="text-muted-foreground text-sm">Track and fulfill orders for your products</p>
-      </div>
+    <div className="flex justify-center p-8">
+      <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary" />
+    </div>
+  );
+}
 
-      <div className="space-y-6">
-        {orders.length === 0 ? (
-          <Card className="p-12 text-center">
-            <div className="mx-auto w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
-              <ShoppingBag className="h-8 w-8 text-muted-foreground" />
-            </div>
-            <CardTitle className="mb-2">No orders found</CardTitle>
-            <CardContent>
-              <p className="text-muted-foreground">You haven't received any orders yet. Once buyers purchase your products, they will appear here.</p>
-            </CardContent>
-          </Card>
-        ) : (
-          orders.map((order) => (
-            <Card
-  key={order.order_item_id ?? order.order_id}
-  className="overflow-hidden border-2"
->
-              <CardHeader className="bg-muted/30 border-b flex flex-col md:flex-row md:items-center justify-between gap-4 p-4">
-                <div className="flex gap-4 md:gap-8 flex-wrap">
-                  <div>
-                    <p className="text-xs text-muted-foreground uppercase font-semibold">Order ID</p>
-                    <p className="text-sm font-medium">#{order.order_id?.slice(0, 8) ?? "N/A"}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground uppercase font-semibold">Date</p>
-                    <p className="text-sm font-medium">
-  {order.created_at
-    ? new Date(order.created_at).toLocaleDateString()
-    : "-"}
-</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground uppercase font-semibold">Customer</p>
-                    <p className="text-sm font-medium">{order.buyer_name}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground uppercase font-semibold">Total for you</p>
-                    <p className="text-sm font-medium text-primary">
-                      ₦{(Number(order.price ?? 0) * Number(order.quantity ?? 0)).toLocaleString()}
-                    </p>
-                  </div>
+return (
+  <div className="space-y-6 p-4 md:p-6 lg:p-8">
+    <div>
+      <h1 className="text-2xl font-bold">Manage Orders</h1>
+      <p className="text-sm text-muted-foreground">
+        Track and fulfill orders for your products
+      </p>
+    </div>
+
+    <div className="space-y-6">
+      {orders.length === 0 ? (
+        <Card className="p-12 text-center">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
+            <ShoppingBag className="h-8 w-8 text-muted-foreground" />
+          </div>
+
+          <CardTitle className="mb-2">
+            No orders found
+          </CardTitle>
+
+          <CardContent>
+            <p className="text-muted-foreground">
+              You haven't received any orders yet. Once buyers purchase your
+              products, they will appear here.
+            </p>
+          </CardContent>
+        </Card>
+      ) : (
+        orders.map((order) => (
+          <Card
+            key={order.order_item_id ?? order.order_id}
+            className="overflow-hidden border-2"
+          >
+            <CardHeader className="flex flex-col justify-between gap-4 border-b bg-muted/30 p-4 md:flex-row md:items-center">
+              <div className="flex flex-wrap gap-4 md:gap-8">
+                <div>
+                  <p className="text-xs font-semibold uppercase text-muted-foreground">
+                    Order ID
+                  </p>
+
+                  <p className="text-sm font-medium">
+                    #{order.order_id?.slice(0, 8) ?? "N/A"}
+                  </p>
                 </div>
-                
-                <div className="flex items-center gap-3">
-                  <Badge className={`${statusColors[order.status ||"Pending"]} border-none px-3 py-1`}>
-                    {order.status ?? "Pending"}
-                  </Badge>
-                  <Select
-  value={order.status ?? "Pending"}
-  onValueChange={(value) => {
-  toast.info(`Farmer ID: ${order.farmer_id}`);
-  toast.info(`Order ID: ${order.order_id}`);
 
-  if (!order.order_id) {
-    toast.error("Order ID is missing");
-    return;
-  }
+                <div>
+                  <p className="text-xs font-semibold uppercase text-muted-foreground">
+                    Date
+                  </p>
 
-  updateOrderStatus(order.order_id, value);
-}}
->
-  <SelectTrigger className="w-[140px] h-9">
-                      <SelectValue placeholder="Update Status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Pending">Pending</SelectItem>
-                      <SelectItem value="Accepted">Accepted</SelectItem>
-                      <SelectItem value="Processing">Processing</SelectItem>
-                      <SelectItem value="Shipped">Shipped</SelectItem>
-                      <SelectItem value="Delivered">Delivered</SelectItem>
-                      <SelectItem value="Cancelled">Cancelled</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <p className="text-sm font-medium">
+                    {order.created_at
+                      ? new Date(order.created_at).toLocaleDateString()
+                      : "-"}
+                  </p>
                 </div>
-              </CardHeader>
+
+                <div>
+                  <p className="text-xs font-semibold uppercase text-muted-foreground">
+                    Customer
+                  </p>
+
+                  <p className="text-sm font-medium">
+                    {order.buyer_name ?? "Unknown"}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-xs font-semibold uppercase text-muted-foreground">
+                    Total for you
+                  </p>
+
+                  <p className="text-sm font-medium text-primary">
+                    ₦
+                    {(
+                      Number(order.price ?? 0) *
+                      Number(order.quantity ?? 0)
+                    ).toLocaleString()}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <Badge
+                  className={`${
+                    statusColors[order.status ?? "Pending"]
+                  } border-none px-3 py-1`}
+                >
+                  {order.status ?? "Pending"}
+                </Badge>
+
+                <Select
+                  value={order.status ?? "Pending"}
+                  onValueChange={(value) => {
+                    if (!order.order_id) {
+                      toast.error("Order ID is missing.");
+                      return;
+                    }
+
+                    updateOrderStatus(order.order_id, value);
+                  }}
+                >
+                  <SelectTrigger className="h-9 w-[140px]">
+                    <SelectValue placeholder="Update Status" />
+                  </SelectTrigger>
+
+                  <SelectContent>
+                    <SelectItem value="Pending">
+                      Pending
+                    </SelectItem>
+
+                    <SelectItem value="Accepted">
+                      Accepted
+                    </SelectItem>
+
+                    <SelectItem value="Processing">
+                      Processing
+                    </SelectItem>
+
+                    <SelectItem value="Shipped">
+                      Shipped
+                    </SelectItem>
+
+                    <SelectItem value="Delivered">
+                      Delivered
+                    </SelectItem>
+
+                    <SelectItem value="Cancelled">
+                      Cancelled
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </CardHeader>
+
+            
               <CardContent className="p-4 md:p-6">
                 <div className="space-y-4">
                   <div className="flex gap-4">
