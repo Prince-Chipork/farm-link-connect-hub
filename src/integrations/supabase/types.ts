@@ -201,8 +201,28 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+  farmer_orders: {
+    Row: {
+      order_item_id: string
+      order_id: string
+      quantity: number
+      price: number
+      product_id: string
+      name: string
+      images: string[] | null
+      unit: string
+      farmer_id: string
+      status: string
+      created_at: string | null
+      delivery_address: string | null
+      buyer_id: string
+      buyer_name: string | null
     }
+    Insert: never
+    Update: never
+    Relationships: []
+  }
+}
     Functions: {
       [_ in never]: never
     }
