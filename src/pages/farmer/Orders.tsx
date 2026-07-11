@@ -24,8 +24,14 @@ export default function FarmerOrders() {
 
   setLoading(true);
       
-  const { data, error } = await supabase.rpc("get_farmer_orders");
+  const { data, error } = await supabase
+  .from("farmer_orders")
+  .select("*")
+  .order("created_at", { ascending: false });
 
+if (error) throw error;
+
+setOrders(data ?? []);
       
   if (error) {
     console.error(error);
