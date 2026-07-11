@@ -21,34 +21,19 @@ export default function FarmerOrders() {
       
   const { data, error } = await supabase
     .from("order_items")
-    .select(`
-      id,
-      quantity,
-      price,
-      products (
-  id,
-  farmer_id,
-  name,
-  unit,
-  images
-),
-      orders (
-        id,
-        created_at,
-        status,
-        delivery_address,
-        buyer:profiles!orders_buyer_id_fkey (
-          full_name
-        )
-      )
-    `)
-    .order("id", { ascending: false });
+.select(`
+  *,
+  products(*),
+  orders(*)
+  `).order("id", { ascending: false });
 
   if (error) {
     console.error(error);
     toast.error(error.message);
   } else {
-    console.log(data);
+    toast.success(
+  data?.[0]?.orders ? "Orders loaded" : "Orders NOT loaded"
+);
     setOrders(data || []);
   }
 
