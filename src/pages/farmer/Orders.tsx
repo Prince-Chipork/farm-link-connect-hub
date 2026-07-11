@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 export default function FarmerOrders() {
   const { user } = useAuth();
+  toast.info(`Context user: ${user?.id ?? "NONE"}`);
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   
@@ -41,6 +42,10 @@ export default function FarmerOrders() {
   setLoading(false);
 };
 
+  toast.info(`Error: ${JSON.stringify(error)}`);
+toast.info(`Rows: ${data?.length ?? 0}`);
+toast.info(`First row: ${JSON.stringify(data?.[0])}`);
+  
   useEffect(() => {
     fetchOrders();
   }, [user]);
