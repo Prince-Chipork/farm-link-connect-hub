@@ -245,69 +245,79 @@ return (
               </div>
             </CardHeader>
 
-            
-              <CardContent className="p-4 md:p-6">
-                <div className="space-y-4">
-                  <div className="flex gap-4">
-  <div className="w-16 h-16 bg-muted rounded-md overflow-hidden flex-shrink-0">
-    {order.images?.[0] ? (
-      <img
-  src={order.images?.[0]}
-  alt={order.name}
-  className="w-full h-full object-cover"
-/>
-    ) : (
-      <div className="w-full h-full flex items-center justify-center">
-        <Package className="h-6 w-6 text-muted-foreground/50" />
-      </div>
-    )}
-  </div>
-
-  <div className="flex-1">
-    <h4 className="font-semibold">
-      {order.name}
-    </h4>
-
-    <p className="text-sm text-muted-foreground">
-      Quantity: {order.quantity} {order.unit}
-    </p>
-
-    <p className="text-sm">
-      ₦{Number(order.price).toLocaleString()} each
-    </p>
-  </div>
-
-  <div className="text-right">
-    <p className="font-bold text-primary">
-      ₦{(order.price * order.quantity).toLocaleString()}
-    </p>
-  </div>
-</div>      
-                </div>              
-                  
-             <div className="mt-6 pt-6 border-t flex flex-col md:flex-row gap-4 justify-between">
-                   <div className="flex items-start gap-2">
-                     <Truck className="h-5 w-5 text-muted-foreground mt-0.5" />
-                     <div>
-                       <p className="text-xs text-muted-foreground font-semibold uppercase">Shipping Address</p>
-                       <p className="text-sm">{order.delivery_address ?? "No address"}</p>
-                     </div>
-                   </div>
-                   <div className="text-right">
-                      <p className="text-xs text-muted-foreground uppercase font-semibold">
-  Customer Name
-</p>
-<p className="text-sm font-medium">
-{order.buyer_name}
-</p>
-                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))
+         <CardContent className="p-4 md:p-6">
+  <div className="space-y-4">
+    <div className="flex gap-4">
+      <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded-md bg-muted">
+        {order.images?.[0] ? (
+          <img
+            src={order.images[0]}
+            alt={order.name}
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center">
+            <Package className="h-6 w-6 text-muted-foreground/50" />
+          </div>
         )}
       </div>
+
+      <div className="flex-1">
+        <h4 className="font-semibold">
+          {order.name}
+        </h4>
+
+        <p className="text-sm text-muted-foreground">
+          Quantity: {order.quantity} {order.unit}
+        </p>
+
+        <p className="text-sm">
+          ₦{Number(order.price ?? 0).toLocaleString()} each
+        </p>
+      </div>
+
+      <div className="text-right">
+        <p className="font-bold text-primary">
+          ₦
+          {(
+            Number(order.price ?? 0) *
+            Number(order.quantity ?? 0)
+          ).toLocaleString()}
+        </p>
+      </div>
     </div>
-  );
-  }
-  
+  </div>
+
+  <div className="mt-6 flex flex-col justify-between gap-4 border-t pt-6 md:flex-row">
+    <div className="flex items-start gap-2">
+      <Truck className="mt-0.5 h-5 w-5 text-muted-foreground" />
+
+      <div>
+        <p className="text-xs font-semibold uppercase text-muted-foreground">
+          Shipping Address
+        </p>
+
+        <p className="text-sm">
+          {order.delivery_address ?? "No address provided"}
+        </p>
+      </div>
+    </div>
+
+    <div className="text-right">
+      <p className="text-xs font-semibold uppercase text-muted-foreground">
+        Customer Name
+      </p>
+
+      <p className="text-sm font-medium">
+        {order.buyer_name ?? "Unknown"}
+      </p>
+    </div>
+  </div>
+</CardContent>
+          </Card>
+        ))
+      )}
+    </div>
+  </div>
+);
+}
