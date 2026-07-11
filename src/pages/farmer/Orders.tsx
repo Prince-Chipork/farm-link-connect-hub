@@ -30,6 +30,8 @@ export default function FarmerOrders() {
 
   const fetchOrders = async () => {
     if (!user) {
+      console.log("Logged in user:", user.id);
+toast.info(`User ID: ${user.id}`);
       setOrders([]);
       setLoading(false);
       return;
