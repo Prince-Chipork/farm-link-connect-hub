@@ -75,7 +75,6 @@ toast.info(`Order ID: ${orderId}`);
     .select();
 
   toast.info(`Rows updated: ${data?.length ?? 0}`);
-  toast.error(error?.message ?? "No update error");
 
   if (error) {
   toast.error(`Error: ${error.message}`);
