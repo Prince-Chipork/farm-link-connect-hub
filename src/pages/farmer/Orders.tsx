@@ -30,6 +30,7 @@ export default function FarmerOrders() {
   } else {
     toast.success(`Loaded ${data?.length ?? 0} orders`);
     setOrders(data || []);
+    toast.info(JSON.stringify(data?.[0]));
   }
 
   setLoading(false);
