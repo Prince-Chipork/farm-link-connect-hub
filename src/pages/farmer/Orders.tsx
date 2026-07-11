@@ -16,7 +16,10 @@ export default function FarmerOrders() {
     // RLS policy already filters the orders table correctly for us
     const fetchOrders = async () => {
       toast.error("THIS IS THE NEW FARMER ORDERS PAGE");
-  if (!user) return;
+  if (!user) {
+    toast.error("No authenticated user");
+    return;
+  }
   
 
   setLoading(true);
