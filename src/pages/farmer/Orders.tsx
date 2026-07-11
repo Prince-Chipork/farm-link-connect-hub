@@ -29,34 +29,36 @@ export default function FarmerOrders() {
   const [loading, setLoading] = useState(true);
 
   const fetchOrders = async () => {
-    if (!user) {
-      console.log("Logged in user:", user.id);
-toast.info(`User ID: ${user.id}`);
-      setOrders([]);
-      setLoading(false);
-      return;
-    }
+  if (!user) {
+    setOrders([]);
+    setLoading(false);
+    return;
+  }
 
-    try {
-      setLoading(true);
+  console.log("Logged in user:", user.id);
+  toast.info(`User ID: ${user.id}`);
 
-      const { data, error } = await supabase
-        .from("farmer_orders")
-        .select("*")
-        .order("created_at", { ascending: false });
+  try {
+    setLoading(true);
 
-      if (error) {
-        throw error;
-      }
+    const { data, error } = await supabase
+      .from("farmer_orders")
+      .select("*")
+      .order("created_at", { ascending: false });
 
-      setOrders((data ?? []) as FarmerOrder[]);
-    } catch (error: any) {
-      console.error("Failed to fetch orders:", error);
-      toast.error(error.message ?? "Unable to load orders.");
-    } finally {
-      setLoading(false);
-    }
-  };
+    if (error) throw error;
+
+    setOrders((data ?? []) as FarmerOrder[]);
+
+console.log("Orders returned:", data);
+toast.info(`Orders returned: ${data?.length ?? 0}`);
+  } catch (error: any) {
+    console.error(error);
+    toast.error(error.message ?? "Unable to load orders.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => {
     fetchOrders();
