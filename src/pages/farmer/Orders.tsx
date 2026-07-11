@@ -3,89 +3,96 @@ import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Package, Truck, ShoppingBag } from "lucide-react";
-import { toast } from "sonner";
+import { Package, ShoppingBag, Truck } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { toast } from "sonner";
+
+type FarmerOrder = {
+  order_id: string;
+  order_item_id?: string;
+  buyer_name: string | null;
+  delivery_address: string | null;
+  created_at: string | null;
+  status: string | null;
+  farmer_id: string;
+  name: string;
+  images: string[] | null;
+  quantity: number;
+  unit: string;
+  price: number;
+};
 
 export default function FarmerOrders() {
   const { user } = useAuth();
-  const [orders, setOrders] = useState<any[]>([]);
+
+  const [orders, setOrders] = useState<FarmerOrder[]>([]);
   const [loading, setLoading] = useState(true);
-  
-    // Fetch orders that contain items from this farmer
-    // RLS policy already filters the orders table correctly for us
-    const fetchOrders = async () => {
-      
-  if (!user) {
-    toast.error("No authenticated user");
-    return;
-  }
-  
 
-  setLoading(true);
-      
-  const { data, error } = await supabase
-  .from("farmer_orders")
-  .select("*")
-  .order("created_at", { ascending: false });
+  const fetchOrders = async () => {
+    if (!user) {
+      setOrders([]);
+      setLoading(false);
+      return;
+    }
 
-if (error) throw error;
+    try {
+      setLoading(true);
 
-setOrders(data ?? []);
-      
-  if (error) {
-    console.error(error);
-    toast.error(error.message);
-  } else {
-    toast.success(`Loaded ${data?.length ?? 0} orders`);
-    console.log(data);
+      const { data, error } = await supabase
+        .from("farmer_orders")
+        .select("*")
+        .order("created_at", { ascending: false });
 
-setOrders(data || []);
-  }
+      if (error) {
+        throw error;
+      }
 
-  setLoading(false);
-};
-
-  
+      setOrders((data ?? []) as FarmerOrder[]);
+    } catch (error: any) {
+      console.error("Failed to fetch orders:", error);
+      toast.error(error.message ?? "Unable to load orders.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchOrders();
   }, [user]);
 
-  const updateOrderStatus = async (orderId: string, newStatus: string) => {
-    toast.success("updateOrderStatus() called");
-    
-  // Check who is actually logged in
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const updateOrderStatus = async (
+    orderId: string,
+    newStatus: string
+  ) => {
+    try {
+      const { error } = await supabase
+        .from("orders")
+        .update({
+          status: newStatus,
+        })
+        .eq("id", orderId);
 
-toast.info(`Logged in user: ${user?.id}`);
-toast.info(`Order ID: ${orderId}`);
+      if (error) {
+        throw error;
+      }
 
-  const { data, error } = await supabase
-    .from("orders")
-    .update({ status: newStatus })
-    .eq("id", orderId)
-    .select();
+      setOrders((current) =>
+        current.map((order) =>
+          order.order_id === orderId
+            ? { ...order, status: newStatus }
+            : order
+        )
+      );
 
-  toast.info(`Rows updated: ${data?.length ?? 0}`);
+      toast.success("Order status updated successfully.");
 
-  if (error) {
-  toast.error(`Error: ${error.message}`);
-} else {
-  toast.success(`Rows updated: ${data?.length ?? 0}`);
+      await fetchOrders();
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error.message ?? "Failed to update order status.");
+    }
+  };
 
-  if (data && data.length > 0) {
-    toast.success(`New status: ${data[0].status}`);
-  } else {
-    toast.error("No rows were updated.");
-  }
-
-  fetchOrders();
-}
-};
-  
   const statusColors: Record<string, string> = {
     Pending: "bg-amber-100 text-amber-700",
     Accepted: "bg-blue-100 text-blue-700",
