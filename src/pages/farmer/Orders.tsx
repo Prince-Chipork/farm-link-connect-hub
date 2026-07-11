@@ -9,14 +9,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 export default function FarmerOrders() {
   const { user } = useAuth();
-  toast.info(`Context user: ${user?.id ?? "NONE"}`);
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   
     // Fetch orders that contain items from this farmer
     // RLS policy already filters the orders table correctly for us
     const fetchOrders = async () => {
-      toast.error("THIS IS THE NEW FARMER ORDERS PAGE");
+      
   if (!user) {
     toast.error("No authenticated user");
     return;
@@ -30,19 +29,16 @@ export default function FarmerOrders() {
   .select("*")
   .order("created_at", { ascending: false });
 
-toast.info(`Supabase error: ${JSON.stringify(error)}`);
+
       
   if (error) {
     console.error(error);
     toast.error(error.message);
   } else {
     toast.success(`Loaded ${data?.length ?? 0} orders`);
-    setOrders(data || []);
-    toast.info(JSON.stringify(data?.[0]));
-    
-    toast.info(`Error: ${JSON.stringify(error)}`);
-toast.info(`Rows: ${data?.length ?? 0}`);
-toast.info(`First row: ${JSON.stringify(data?.[0])}`);
+    console.log(data);
+
+setOrders(data || []);
   }
 
   setLoading(false);
@@ -127,14 +123,14 @@ toast.info(`Order ID: ${orderId}`);
         ) : (
           orders.map((order) => (
             <Card
-  key={order.order_item_id}
+  key={order.order_item_id ?? order.order_id}
   className="overflow-hidden border-2"
 >
               <CardHeader className="bg-muted/30 border-b flex flex-col md:flex-row md:items-center justify-between gap-4 p-4">
                 <div className="flex gap-4 md:gap-8 flex-wrap">
                   <div>
                     <p className="text-xs text-muted-foreground uppercase font-semibold">Order ID</p>
-                    <p className="text-sm font-medium">#{order.order_id.slice(0,8)}</p>
+                    <p className="text-sm font-medium">#{order.order_id?.slice(0, 8) ?? "N/A"}</p>
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground uppercase font-semibold">Date</p>
@@ -151,7 +147,7 @@ toast.info(`Order ID: ${orderId}`);
                   <div>
                     <p className="text-xs text-muted-foreground uppercase font-semibold">Total for you</p>
                     <p className="text-sm font-medium text-primary">
-                      ₦{(order.price * order.quantity).toLocaleString()}
+                      ₦{(Number(order.price ?? 0) * Number(order.quantity ?? 0)).toLocaleString()}
                     </p>
                   </div>
                 </div>
@@ -251,4 +247,5 @@ toast.info(`Order ID: ${orderId}`);
       </div>
     </div>
   );
-    }
+  }
+  
