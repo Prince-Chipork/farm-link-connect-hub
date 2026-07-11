@@ -20,20 +20,15 @@ export default function FarmerOrders() {
   setLoading(true);
       
   const { data, error } = await supabase
-    .from("order_items")
-.select(`
-  *,
-  products(*),
-  orders(*)
-  `).order("id", { ascending: false });
-
+  .from("farmer_orders")
+  .select("*")
+  .order("created_at", { ascending: false });
+      
   if (error) {
     console.error(error);
     toast.error(error.message);
   } else {
-    toast.success(
-  data?.[0]?.orders ? "Orders loaded" : "Orders NOT loaded"
-);
+    toast.success(`Loaded ${data?.length ?? 0} orders`);
     setOrders(data || []);
   }
 
@@ -116,24 +111,27 @@ toast.info(`Order ID: ${orderId}`);
           </Card>
         ) : (
           orders.map((order) => (
-            <Card key={order.id} className="overflow-hidden border-2">
+            <Card
+  key={order.order_item_id}
+  className="overflow-hidden border-2"
+>
               <CardHeader className="bg-muted/30 border-b flex flex-col md:flex-row md:items-center justify-between gap-4 p-4">
                 <div className="flex gap-4 md:gap-8 flex-wrap">
                   <div>
                     <p className="text-xs text-muted-foreground uppercase font-semibold">Order ID</p>
-                    <p className="text-sm font-medium">#{order.orders?.id?.slice(0, 8) ?? "--------"}</p>
+                    <p className="text-sm font-medium">#{order.order_id.slice(0,8)}</p>
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground uppercase font-semibold">Date</p>
                     <p className="text-sm font-medium">
-  {order.orders?.created_at
-    ? new Date(order.orders.created_at).toLocaleDateString()
+  {order.created_at
+    ? new Date(order.created_at).toLocaleDateString()
     : "-"}
 </p>
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground uppercase font-semibold">Customer</p>
-                    <p className="text-sm font-medium">{order.orders?.buyer?.full_name ?? "Unknown Customer"}</p>
+                    <p className="text-sm font-medium">{order.buyer_name}</p>
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground uppercase font-semibold">Total for you</p>
@@ -144,21 +142,21 @@ toast.info(`Order ID: ${orderId}`);
                 </div>
                 
                 <div className="flex items-center gap-3">
-                  <Badge className={`${statusColors[order.orders?.status ||"Pending"]} border-none px-3 py-1`}>
-                    {order.orders?.status ?? "Pending"}
+                  <Badge className={`${statusColors[order.status ||"Pending"]} border-none px-3 py-1`}>
+                    {order.status ?? "Pending"}
                   </Badge>
                   <Select
-  value={order.orders?.status ?? "Pending"}
+  value={order.status ?? "Pending"}
   onValueChange={(value) => {
-  toast.info(`Farmer ID: ${order.products?.farmer_id}`);
-  toast.info(`Order ID: ${order.orders?.id}`);
+  toast.info(`Farmer ID: ${order.farmer_id}`);
+  toast.info(`Order ID: ${order.order_id}`);
 
-  if (!order.orders?.id) {
+  if (!order.order_id) {
     toast.error("Order ID is missing");
     return;
   }
 
-  updateOrderStatus(order.orders.id, value);
+  updateOrderStatus(order.order_id, value);
 }}
 >
   <SelectTrigger className="w-[140px] h-9">
@@ -179,10 +177,10 @@ toast.info(`Order ID: ${orderId}`);
                 <div className="space-y-4">
                   <div className="flex gap-4">
   <div className="w-16 h-16 bg-muted rounded-md overflow-hidden flex-shrink-0">
-    {order.products?.images?.[0] ? (
+    {order.images?.[0] ? (
       <img
-  src={order.products?.images?.[0]}
-  alt={order.products?.name}
+  src={order.images?.[0]}
+  alt={order.name}
   className="w-full h-full object-cover"
 />
     ) : (
@@ -194,11 +192,11 @@ toast.info(`Order ID: ${orderId}`);
 
   <div className="flex-1">
     <h4 className="font-semibold">
-      {order.products?.name}
+      {order.name}
     </h4>
 
     <p className="text-sm text-muted-foreground">
-      Quantity: {order.quantity} {order.products?.unit}
+      Quantity: {order.quantity} {order.unit}
     </p>
 
     <p className="text-sm">
@@ -219,7 +217,7 @@ toast.info(`Order ID: ${orderId}`);
                      <Truck className="h-5 w-5 text-muted-foreground mt-0.5" />
                      <div>
                        <p className="text-xs text-muted-foreground font-semibold uppercase">Shipping Address</p>
-                       <p className="text-sm">{order.orders?.delivery_address ?? "No address"}</p>
+                       <p className="text-sm">{order.delivery_address ?? "No address"}</p>
                      </div>
                    </div>
                    <div className="text-right">
@@ -227,7 +225,7 @@ toast.info(`Order ID: ${orderId}`);
   Customer Name
 </p>
 <p className="text-sm font-medium">
-{order.orders?.buyer?.full_name ?? "Unknown Customer"}
+{order.buyer_name}
 </p>
                    </div>
                 </div>
