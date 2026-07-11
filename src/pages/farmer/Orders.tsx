@@ -26,11 +26,12 @@ export default function FarmerOrders() {
       quantity,
       price,
       products (
-        id,
-        name,
-        unit,
-        images
-      ),
+  id,
+  farmer_id,
+  name,
+  unit,
+  images
+),
       orders (
         id,
         created_at,
@@ -59,7 +60,12 @@ export default function FarmerOrders() {
   }, [user]);
 
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
-  toast.success(`Updating order to ${newStatus}`);
+  // Check who is actually logged in
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  console.log("Logged in user:", user?.id);
 
   const { data, error } = await supabase
     .from("orders")
@@ -72,12 +78,10 @@ export default function FarmerOrders() {
 
   if (error) {
     toast.error(error.message);
-    return;
+  } else {
+    toast.success("Order updated");
+    fetchOrders();
   }
-
-  toast.success(`Rows updated: ${data?.length ?? 0}`);
-
-  fetchOrders();
 };
   
   const statusColors: Record<string, string> = {
@@ -152,12 +156,12 @@ export default function FarmerOrders() {
                   <Select
   value={order.orders?.status ?? "Pending"}
   onValueChange={(value) => {
-    toast.success(`Selected: ${value}`);
+  console.log("Farmer ID from product:", order.products?.farmer_id);
 
-    if (order.orders?.id) {
-      updateOrderStatus(order.orders.id, value);
-    }
-  }}
+  if (order.orders?.id) {
+    updateOrderStatus(order.orders.id, value);
+  }
+}}
 >
   <SelectTrigger className="w-[140px] h-9">
                       <SelectValue placeholder="Update Status" />
