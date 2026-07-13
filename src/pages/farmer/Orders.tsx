@@ -64,16 +64,24 @@ console.log("Orders returned:", data);
     newStatus: string
   ) => {
     try {
-      const { error } = await supabase
-        .from("orders")
-        .update({
-          status: newStatus,
-        })
-        .eq("id", orderId);
+      const { data, error } = await supabase
+  .from("orders")
+  .update({
+    status: newStatus,
+  })
+  .eq("id", orderId)
+  .select();
 
       if (error) {
-        throw error;
-      }
+  throw error;
+}
+
+console.log("Updated rows:", data);
+
+if (!data || data.length === 0) {
+  toast.error("No rows were updated.");
+  return;
+}
 
       setOrders((current) =>
         current.map((order) =>
