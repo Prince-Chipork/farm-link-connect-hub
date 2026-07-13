@@ -62,9 +62,17 @@ console.log("Header user:", user);
               <hr className='my-4'/>
               {user ? (
   <>
-    <Link to="/dashboard" className="hover:text-foreground">
-      Dashboard
-    </Link>
+    <Link
+  to={
+    user.role === "farmer"
+      ? "/farmer/dashboard"
+      : user.role === "buyer"
+      ? "/buyer/dashboard"
+      : "/admin/dashboard"
+  }
+>
+  Dashboard
+</Link>
 
     <button
       onClick={signOut}
