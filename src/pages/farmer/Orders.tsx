@@ -64,22 +64,16 @@ const updateOrderStatus = async (
   newStatus: string
 ) => {
   try {
-    const { data, error } = await (supabase as any).rpc("update_farmer_order_status", {
-  p_order_item_id: orderItemId,
-  p_status: newStatus,
-}
+    const { data, error } = await (supabase as any).rpc(
+  "update_farmer_order_status",
+  {
+    p_order_item_id: orderItemId,
+    p_status: newStatus,
+  }
 );
-    
-console.log(data);
-toast.info(JSON.stringify(data));
-    
-    if (error) throw error;
 
-    if (data.rows_updated === 0) {
-  toast.error("You are not allowed to update this order.");
-  return;
-    }
-    
+if (error) throw error;
+
 setOrders((current) =>
   current.map((order) =>
     order.order_item_id === orderItemId
