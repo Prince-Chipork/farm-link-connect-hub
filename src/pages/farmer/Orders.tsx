@@ -60,46 +60,34 @@ export default function FarmerOrders() {
   }, [user]);
 
   const updateOrderStatus = async (
-    orderId: string,
-    newStatus: string
-  ) => {
-    try {
-      const { data, error } = await supabase
-  .from("orders")
-  .update({
-    status: newStatus,
-  })
-  .eq("id", orderId)
-  .select();
+  orderId: string,
+  newStatus: string
+) => {
+  try {
+    const { data, error } = await (supabase as any).rpc(
+      "update_farmer_order_status",
+      {
+        p_order_id: orderId,
+        p_status: newStatus,
+      }
+    );
 
-      if (error) {
-  throw error;
-}
+    if (error) throw error;
 
-console.log("Updated rows:", data);
-
-if (!data || data.length === 0) {
-  toast.error("No rows were updated.");
-  return;
-}
-
-      setOrders((current) =>
-        current.map((order) =>
-          order.order_id === orderId
-            ? { ...order, status: newStatus }
-            : order
-        )
-      );
-
-      toast.success("Order status updated successfully.");
-
-      await fetchOrders();
-    } catch (error: any) {
-      console.error(error);
-      toast.error(error.message ?? "Failed to update order status.");
+    if (!data) {
+      toast.error("You are not allowed to update this order.");
+      return;
     }
-  };
 
+    toast.success("Order status updated successfully.");
+
+    await fetchOrders();
+  } catch (error: any) {
+    console.error(error);
+    toast.error(error.message ?? "Failed to update order.");
+  }
+};
+  
   const statusColors: Record<string, string> = {
     Pending: "bg-amber-100 text-amber-700",
     Accepted: "bg-blue-100 text-blue-700",
