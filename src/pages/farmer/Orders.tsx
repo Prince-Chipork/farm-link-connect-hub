@@ -83,7 +83,6 @@ toast.info(JSON.stringify(data));
     }
 
     toast.success("Order status updated successfully.");
-
     await fetchOrders();
   } catch (error: any) {
     console.error(error);
