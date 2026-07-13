@@ -36,7 +36,6 @@ export default function FarmerOrders() {
   }
 
   console.log("Logged in user:", user.id);
-  toast.info(`User ID: ${user.id}`);
 
   try {
     setLoading(true);
