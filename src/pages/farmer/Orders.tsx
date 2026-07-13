@@ -45,8 +45,7 @@ export default function FarmerOrders() {
     if (error) throw error;
 
     setOrders((data || []) as FarmerOrder[]);
- console.log(data);
-toast.info(JSON.stringify(data?.[0]));
+ 
   } catch (error: any) {
     console.error(error);
     toast.error(error.message ?? "Unable to load orders.");
