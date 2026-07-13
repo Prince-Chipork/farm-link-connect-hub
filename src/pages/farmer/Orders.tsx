@@ -76,13 +76,23 @@ toast.info(JSON.stringify(data));
     
     if (error) throw error;
 
-    if (!data) {
-      toast.error("You are not allowed to update this order.");
-      return;
+    if (data.rows_updated === 0) {
+  toast.error("You are not allowed to update this order.");
+  return;
     }
+    
+setOrders((current) =>
+  current.map((order) =>
+    order.order_item_id === orderItemId
+      ? { ...order, status: newStatus }
+      : order
+  )
+);
 
-    toast.success("Order status updated successfully.");
-    await fetchOrders();
+toast.success("Order status updated successfully.");
+
+await fetchOrders();
+    
   } catch (error: any) {
     console.error(error);
     toast.error(error.message ?? "Failed to update order.");
