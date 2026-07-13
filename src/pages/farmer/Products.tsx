@@ -5,7 +5,7 @@ import { useAuth } from "@/context/AuthContext";
 import { ProductCard } from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/EmptyState";
-import { Package, Plus } from "lucide-react";
+import { Package, Plus, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import type { Product } from "@/types";
 
@@ -87,8 +87,31 @@ export default function FarmerProducts() {
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {products.map((product) => (
-                        <ProductCard key={product.id} product={product} />
-                    ))}
+  <div key={product.id} className="space-y-3">
+    <ProductCard product={product} />
+
+    <div className="flex gap-2">
+      <Button
+        asChild
+        variant="outline"
+        className="flex-1"
+      >
+        <Link to={`/farmer/products/edit/${product.id}`}>
+          <Pencil className="mr-2 h-4 w-4" />
+          Edit
+        </Link>
+      </Button>
+
+      <Button
+        variant="destructive"
+        className="flex-1"
+      >
+        <Trash2 className="mr-2 h-4 w-4" />
+        Delete
+      </Button>
+    </div>
+  </div>
+))}
                 </div>
             )}
         </div>
