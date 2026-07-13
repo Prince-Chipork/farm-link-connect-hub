@@ -115,12 +115,14 @@ export default function BuyerOrderHistory() {
                   </Button>
                 </div>
               </CardHeader>
-              console.log(item.products);
+              
               <CardContent className="p-4">
                 <div className="space-y-4">
                   {order.order_items?.map((item: any) => (
                     <div key={item.id} className="flex items-center gap-4">
-                      
+                      <pre className="text-xs overflow-auto">
+  {JSON.stringify(item.products, null, 2)}
+</pre>
                       <img 
                         src={item.products?.image_url || '/placeholder.svg'} 
                         alt={item.products?.name} 
