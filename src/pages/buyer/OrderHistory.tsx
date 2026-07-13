@@ -123,11 +123,11 @@ export default function BuyerOrderHistory() {
                       <pre className="text-xs overflow-auto">
   {JSON.stringify(item.products, null, 2)}
 </pre>
-                      <img 
-                        src={item.products?.image_url || '/placeholder.svg'} 
-                        alt={item.products?.name} 
-                        className="h-16 w-16 rounded-md object-cover bg-muted"
-                      />
+                      <img
+  src={item.products?.images?.[0] || "/placeholder.svg"}
+  alt={item.products?.name}
+  className="h-16 w-16 rounded-md object-cover bg-muted"
+/>
                       <div className="flex-1">
                         <h4 className="text-sm font-semibold">{item.products?.name}</h4>
                         <p className="text-xs text-muted-foreground">
