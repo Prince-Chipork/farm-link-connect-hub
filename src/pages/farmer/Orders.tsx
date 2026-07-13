@@ -41,14 +41,13 @@ export default function FarmerOrders() {
   try {
     setLoading(true);
 
-    const { data, error } = await supabase
-  .rpc("get_farmer_orders");
+    const { data, error } = await (supabase as any).rpc("get_farmer_orders");
+    
     if (error) throw error;
 
-    setOrders((data ?? []) as FarmerOrder[]);
-
+    setOrders((data || []) as FarmerOrder[]);
 console.log("Orders returned:", data);
-toast.info(`Orders returned: ${data?.length ?? 0}`);
+toast.info(`Orders returned: ${(data || []).length}`);
   } catch (error: any) {
     console.error(error);
     toast.error(error.message ?? "Unable to load orders.");
