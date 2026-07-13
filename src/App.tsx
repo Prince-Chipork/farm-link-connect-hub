@@ -49,6 +49,7 @@ function App() {
             <Route path="/farmer/dashboard" element={<FarmerDashboard />} />
             <Route path="/farmer/products" element={<FarmerProducts />} />
             <Route path="/farmer/products/new" element={<CreateProduct />} />
+            <Route path="/farmer/products/edit/:id" element={<CreateProduct />} />
             <Route path="/farmer/orders" element={<FarmerOrders />} />
           </Route>
 
