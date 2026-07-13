@@ -70,8 +70,8 @@ export default function FarmerOrders() {
         p_order_id: orderId,
         p_status: newStatus,
       }
-      
     );
+    
 console.log(data);
 toast.info(JSON.stringify(data));
     
