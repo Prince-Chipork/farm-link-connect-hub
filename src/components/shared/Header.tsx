@@ -3,8 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, Mountain } from "lucide-react";
 import { ThemeToggle } from "../ThemeToggle";
+import { useAuth } from "@/context/AuthContext";
 
-export default function Header() { 
+    export default function Header() {
+  const { user, signOut } = useAuth();
+console.log("Header user:", user);
   return (
     <header className="bg-background/80 backdrop-blur-sm sticky top-0 z-40 border-b">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
@@ -16,11 +19,31 @@ export default function Header() {
           <Button variant="ghost" asChild><Link to="/products">Browse Products</Link></Button>
           <Button variant="ghost" asChild><Link to="/signup-farmer">Become a Seller</Link></Button>
         </nav>
-        <div className="hidden md:flex items-center space-x-2">
-          <Button variant="ghost" asChild><Link to="/login">Login</Link></Button>
-          <Button asChild><Link to="/signup">Sign Up</Link></Button>
-          <ThemeToggle />
-        </div>
+      <div className="hidden md:flex items-center space-x-2">
+  {user ? (
+    <>
+      <Button variant="ghost" asChild>
+        <Link to="/dashboard">Dashboard</Link>
+      </Button>
+
+      <Button variant="outline" onClick={signOut}>
+        Logout
+      </Button>
+    </>
+  ) : (
+    <>
+      <Button variant="ghost" asChild>
+        <Link to="/login">Login</Link>
+      </Button>
+
+      <Button asChild>
+        <Link to="/signup">Sign Up</Link>
+      </Button>
+    </>
+  )}
+
+  <ThemeToggle />
+</div>
         <Sheet>
           <SheetTrigger asChild>
             <Button variant="outline" size="icon" className="md:hidden">
@@ -37,8 +60,30 @@ export default function Header() {
               <Link to="/products" className="hover:text-foreground">Browse Products</Link>
               <Link to="/signup-farmer" className="hover:text-foreground">Become a Seller</Link>
               <hr className='my-4'/>
-              <Link to="/login" className="hover:text-foreground">Login</Link>
-              <Link to="/signup" className="hover:text-foreground">Sign Up</Link>
+              {user ? (
+  <>
+    <Link to="/dashboard" className="hover:text-foreground">
+      Dashboard
+    </Link>
+
+    <button
+      onClick={signOut}
+      className="text-left hover:text-foreground"
+    >
+      Logout
+    </button>
+  </>
+) : (
+  <>
+    <Link to="/login" className="hover:text-foreground">
+      Login
+    </Link>
+
+    <Link to="/signup" className="hover:text-foreground">
+      Sign Up
+    </Link>
+  </>
+)}
               <div className="pt-4">
                 <ThemeToggle />
               </div>
