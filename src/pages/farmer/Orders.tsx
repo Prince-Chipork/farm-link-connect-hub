@@ -42,6 +42,8 @@ export default function FarmerOrders() {
     setLoading(true);
 
     const { data, error } = await (supabase as any).rpc("get_farmer_orders");
+    console.log(data);
+toast.info(JSON.stringify(data?.[0]));
     
     if (error) throw error;
 
