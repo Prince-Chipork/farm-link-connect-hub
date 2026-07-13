@@ -64,12 +64,10 @@ const updateOrderStatus = async (
   newStatus: string
 ) => {
   try {
-    const { data, error } = await (supabase as any).rpc(
-  "update_farmer_order_status",
-  {
-    p_order_id: orderItemId,
-    p_status: newStatus,
-  }
+    const { data, error } = await (supabase as any).rpc("update_farmer_order_status", {
+  p_order_item_id: orderItemId,
+  p_status: newStatus,
+}
 );
     
 console.log(data);
