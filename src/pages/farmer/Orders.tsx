@@ -58,19 +58,19 @@ export default function FarmerOrders() {
   useEffect(() => {
     fetchOrders();
   }, [user]);
-
-  const updateOrderStatus = async (
-  orderId: string,
+  
+const updateOrderStatus = async (
+  orderItemId: string,
   newStatus: string
 ) => {
   try {
     const { data, error } = await (supabase as any).rpc(
-      "update_farmer_order_status",
-      {
-        p_order_id: orderId,
-        p_status: newStatus,
-      }
-    );
+  "update_farmer_order_status",
+  {
+    p_order_id: orderItemId,
+    p_status: newStatus,
+  }
+);
     
 console.log(data);
 toast.info(JSON.stringify(data));
@@ -207,7 +207,7 @@ return (
                       return;
                     }
 
-                    updateOrderStatus(order.order_id, value);
+                    updateOrderStatus(order.order_item_id, value);
                   }}
                 >
                   <SelectTrigger className="h-9 w-[140px]">
