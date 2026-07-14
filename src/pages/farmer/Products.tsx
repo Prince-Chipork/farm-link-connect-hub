@@ -58,7 +58,33 @@ export default function FarmerProducts() {
             </div>
         );
     }
+const deleteProduct = async (productId: string) => {
+  const confirmed = window.confirm(
+    "Are you sure you want to delete this product?"
+  );
 
+  if (!confirmed) return;
+
+  try {
+    const { error } = await (supabase as any).rpc(
+      "delete_farmer_product",
+      {
+        p_product_id: productId,
+      }
+    );
+
+    if (error) throw error;
+
+    setProducts((current) =>
+      current.filter((p) => p.id !== productId)
+    );
+
+    toast.success("Product deleted successfully.");
+  } catch (error: any) {
+    console.error(error);
+    toast.error(error.message ?? "Failed to delete product.");
+  }
+};
     return (
         <div className="p-4 md:p-6 lg:p-8 space-y-8">
             <div className="flex items-center justify-between">
@@ -103,12 +129,13 @@ export default function FarmerProducts() {
       </Button>
 
       <Button
-        variant="destructive"
-        className="flex-1"
-      >
-        <Trash2 className="mr-2 h-4 w-4" />
-        Delete
-      </Button>
+  variant="destructive"
+  className="flex-1"
+  onClick={() => deleteProduct(product.id)}
+>
+  <Trash2 className="mr-2 h-4 w-4" />
+  Delete
+</Button>
     </div>
   </div>
 ))}
