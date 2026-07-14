@@ -79,7 +79,11 @@ const deleteProduct = async (productId: string) => {
       current.filter((p) => p.id !== productId)
     );
 
-    toast.success("Product deleted successfully.");
+    if (data?.action === "archived") {
+  toast.success("Product archived successfully.");
+} else {
+  toast.success("Product deleted successfully.");
+}
   } catch (error: any) {
     console.error(error);
     toast.error(error.message ?? "Failed to delete product.");
