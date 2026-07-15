@@ -166,6 +166,13 @@ const getStatusBadge = (status: string) => {
     View Details
   </Link>
 </Button>
+                  <Button
+  variant="outline"
+  size="sm"
+  className="h-7 text-xs"
+>
+  Track Order
+</Button>
                 </div>
               </CardHeader>
               
