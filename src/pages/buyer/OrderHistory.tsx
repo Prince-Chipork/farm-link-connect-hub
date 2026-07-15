@@ -162,6 +162,56 @@ const getStatusBadge = (status: string) => {
               </CardHeader>
               
               <CardContent className="p-4">
+                <div className="mb-6">
+  <div className="flex items-center justify-between text-xs font-medium">
+
+    <div className={`flex flex-col items-center ${
+      ["pending","accepted","processing","packed","shipped","delivered"]
+        .includes((order.status || "").toLowerCase())
+        ? "text-primary"
+        : "text-muted-foreground"
+    }`}>
+      <Clock className="h-4 w-4 mb-1" />
+      <span>Placed</span>
+    </div>
+
+    <div className="flex-1 h-[2px] bg-border mx-2"></div>
+
+    <div className={`flex flex-col items-center ${
+      ["accepted","processing","packed","shipped","delivered"]
+        .includes((order.status || "").toLowerCase())
+        ? "text-primary"
+        : "text-muted-foreground"
+    }`}>
+      <Package className="h-4 w-4 mb-1" />
+      <span>Packed</span>
+    </div>
+
+    <div className="flex-1 h-[2px] bg-border mx-2"></div>
+
+    <div className={`flex flex-col items-center ${
+      ["shipped","delivered"]
+        .includes((order.status || "").toLowerCase())
+        ? "text-primary"
+        : "text-muted-foreground"
+    }`}>
+      <Truck className="h-4 w-4 mb-1" />
+      <span>Shipped</span>
+    </div>
+
+    <div className="flex-1 h-[2px] bg-border mx-2"></div>
+
+    <div className={`flex flex-col items-center ${
+      (order.status || "").toLowerCase() === "delivered"
+        ? "text-green-600"
+        : "text-muted-foreground"
+    }`}>
+      <CheckCircle2 className="h-4 w-4 mb-1" />
+      <span>Delivered</span>
+    </div>
+
+  </div>
+</div>
                 <div className="space-y-4">
                   {order.order_items?.map((item: any) => (
                     <div key={item.id} className="flex items-center gap-4">
