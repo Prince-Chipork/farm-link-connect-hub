@@ -165,7 +165,7 @@ console.log(product);
               <span className="text-xl text-muted-foreground">/ {product.unit || 'kg'}</span>
             </div>
             <p className="text-sm text-green-600 font-medium mt-1">
-              Stock: {product.stock_quantity || 0} {product.unit || 'kg'} available
+              Stock: {product.quantity || 0} {product.unit || 'kg'} available
             </p>
           </div>
 
@@ -208,12 +208,12 @@ console.log(product);
                 <button 
                     className="px-4 hover:bg-muted transition-colors"
                     onClick={() => setQuantity(quantity + 1)}
-                    disabled={quantity >= (product.stock_quantity || 100)}
+                    disabled={quantity >= (product.quantity || 100)}
                 >
                     +
                 </button>
               </div>
-              <Button size="lg" className="flex-1 h-12 text-lg shadow-lg" onClick={handleAddToCart} disabled={(product.stock_quantity || 0) <= 0}>
+              <Button size="lg" className="flex-1 h-12 text-lg shadow-lg" onClick={handleAddToCart} disabled={(product.quantity || 0) <= 0}>
                 <ShoppingCart className="h-5 w-5 mr-2" /> Add to Cart
               </Button>
               <Button size="lg" variant="outline" className="h-12 w-12 p-0">
