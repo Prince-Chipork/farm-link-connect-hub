@@ -78,7 +78,7 @@ export default function CreateProduct() {
     description: "",
     price: "",
     quantity: "",
-    unit: "kg",
+    unit: categoryUnits["Crops"][0],
     harvestDate: "",
     location: user?.farmLocation || "",
   });
@@ -228,18 +228,26 @@ export default function CreateProduct() {
                   </div>
                   <div className="w-32 space-y-2">
                     <Label htmlFor="unit">Unit</Label>
-                    <Select 
-                      value={formData.unit} 
-                      onValueChange={(value) => setFormData({...formData, unit: value})}
-                    >
+                    <Select
+  value={formData.category}
+  onValueChange={(value) =>
+    setFormData({
+      ...formData,
+      category: value,
+      unit: categoryUnits[value][0], // automatically select the first valid unit
+    })
+  }
+>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        {units.map((u) => (
-                          <SelectItem key={u} value={u}>{u}</SelectItem>
-                        ))}
-                      </SelectContent>
+  {(categoryUnits[formData.category] || []).map((u) => (
+    <SelectItem key={u} value={u}>
+      {u}
+    </SelectItem>
+  ))}
+</SelectContent>
                     </Select>
                   </div>
                 </div>
