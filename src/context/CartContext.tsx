@@ -37,6 +37,8 @@ export const CartProvider = ({
   const { user } = useAuth();
 
   const cartKey = user ? `cart_${user.id}` : "cart_guest";
+  console.log("Current user:", user?.id);
+console.log("Cart key:", cartKey);
 
   const [cart, setCart] = useState<CartItem[]>(() => {
     try {
