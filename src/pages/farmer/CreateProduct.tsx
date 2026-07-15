@@ -182,9 +182,7 @@ export default function CreateProduct() {
       ...formData,
       category: value,
       unit: categoryUnits[value][0], // automatically select the first valid unit
-    })
-  }
->
+    })}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select Category" />
                   </SelectTrigger>
