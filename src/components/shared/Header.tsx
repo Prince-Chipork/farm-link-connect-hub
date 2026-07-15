@@ -41,7 +41,6 @@ console.log("Header user:", user);
         </span>
       )}
     </Link>
-      Dashboard
   </Button>
 )}
       <Button variant="outline" onClick={signOut}>
