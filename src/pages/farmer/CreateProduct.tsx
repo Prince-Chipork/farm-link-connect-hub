@@ -12,7 +12,58 @@ import { ArrowLeft, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 
 const categories = ["Crops", "Poultry", "Fishery", "Processed", "Other"];
-const units = ["kg", "lbs", "piece", "dozen", "bunch"];
+const categoryUnits: Record<string, string[]> = {
+  Crops: [
+    "kg",
+    "g",
+    "ton",
+    "25kg bag",
+    "50kg bag",
+    "100kg bag",
+    "sack",
+    "basket",
+    "bundle",
+    "crate",
+    "bunch",
+  ],
+
+  Poultry: [
+    "bird",
+    "dozen",
+    "tray",
+    "crate",
+    "kg",
+  ],
+
+  Fishery: [
+    "kg",
+    "g",
+    "basket",
+    "crate",
+    "piece",
+  ],
+
+  Processed: [
+    "L",
+    "mL",
+    "bottle",
+    "carton",
+    "pack",
+    "box",
+    "sachet",
+  ],
+
+  Other: [
+    "piece",
+    "head",
+    "kg",
+    "bundle",
+    "box",
+    "pack",
+    "crate",
+    "basket",
+  ],
+};
 
 export default function CreateProduct() {
   const { user } = useAuth();
