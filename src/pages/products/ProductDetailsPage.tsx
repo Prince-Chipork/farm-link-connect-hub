@@ -21,6 +21,7 @@ import { useCart } from "@/context/CartContext";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
+import { useAuth } from "@/context/AuthContext";
 
 const trustLevelColors: Record<string, string> = {
   Platinum: "bg-blue-600",
@@ -33,6 +34,7 @@ export default function ProductDetailsPage() {
   const { id } = useParams();
   const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
   const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
@@ -58,50 +60,20 @@ export default function ProductDetailsPage() {
     fetchProduct();
   }, [id]);
 
-  const handleAddToCart = async () => {
-  if (!product || !user) {
-    toast.error("Please login first.");
-    return;
-  }
+  const handleAddToCart = () => {
+  if (!product) return;
 
-  try {
-    // Check if product is already in cart
-    const { data: existingItem, error: fetchError } = await supabase
-      .from("cart_items")
-      .select("id, quantity")
-      .eq("buyer_id", user.id)
-      .eq("product_id", product.id)
-      .maybeSingle();
+  addToCart(
+    {
+      id: product.id,
+      name: product.name,
+      price: Number(product.price),
+      image: product.images?.[0],
+    },
+    quantity
+  );
 
-    if (fetchError) throw fetchError;
-
-    if (existingItem) {
-      // Update quantity
-      const { error: updateError } = await supabase
-        .from("cart_items")
-        .update({
-          quantity: existingItem.quantity + quantity,
-        })
-        .eq("id", existingItem.id);
-
-      if (updateError) throw updateError;
-    } else {
-      // Insert new item
-      const { error: insertError } = await supabase
-        .from("cart_items")
-        .insert({
-          buyer_id: user.id,
-          product_id: product.id,
-          quantity,
-        });
-
-      if (insertError) throw insertError;
-    }
-
-    toast.success(`${product.name} added to cart.`);
-  } catch (error: any) {
-    toast.error(error.message);
-  }
+  toast.success(`${product.name} added to cart!`);
 };
   
 console.log(product);
