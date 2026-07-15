@@ -155,9 +155,17 @@ const getStatusBadge = (status: string) => {
                 </div>
                 <div className="flex flex-col items-end gap-2">
                   {getStatusBadge(order.status)}
-                  <Button variant="ghost" size="sm" className="h-7 text-xs gap-1">
-                    <Eye className="h-3 w-3" /> View Details
-                  </Button>
+                  <Button
+  asChild
+  variant="ghost"
+  size="sm"
+  className="h-7 text-xs gap-1"
+>
+  <Link to={`/buyer/orders/${order.id}`}>
+    <Eye className="h-3 w-3" />
+    View Details
+  </Link>
+</Button>
                 </div>
               </CardHeader>
               
