@@ -20,13 +20,21 @@ console.log("Header user:", user);
         </Link>
         <nav className="hidden md:flex items-center space-x-4">
           <Button variant="ghost" asChild><Link to="/products">Browse Products</Link></Button>
-          <Button variant="ghost" asChild><Link to="/signup-farmer">Become a Seller</Link></Button>
+          <Button variant="ghost" asChild><Link to="/signup">Become a Seller</Link></Button>
         </nav>
       <div className="hidden md:flex items-center space-x-2">
   {user ? (
     <>
       <Button variant="ghost" asChild>
-        <Link to="/dashboard">Dashboard</Link>
+        <Link
+  to={
+    user?.role === "farmer"
+      ? "/farmer/dashboard"
+      : user?.role === "admin"
+      ? "/admin/dashboard"
+      : "/buyer/dashboard"
+  }
+>
       </Button>
         
       {user && (
