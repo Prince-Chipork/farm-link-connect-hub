@@ -47,6 +47,15 @@ export const CartProvider = ({ children }) => {
   localStorage.setItem(cartKey, JSON.stringify(cart));
 }, [cart, cartKey]);
 
+  useEffect(() => {
+  try {
+    const saved = localStorage.getItem(cartKey);
+    setCart(saved ? JSON.parse(saved) : []);
+  } catch {
+    setCart([]);
+  }
+}, [cartKey]);
+  
   const addToCart = (item: Omit<CartItem, 'quantity'>, quantity: number = 1) => {
     setCart((prevCart) => {
       const existingItem = prevCart.find((i) => i.id === item.id);
