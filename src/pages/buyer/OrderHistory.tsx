@@ -154,7 +154,7 @@ const getStatusBadge = (status: string) => {
                   </div>
                 </div>
                 <div className="flex flex-col items-end gap-2">
-                  {getStatusBadge(order.status)}
+      
                   <Button
   asChild
   variant="ghost"
@@ -236,15 +236,18 @@ const getStatusBadge = (status: string) => {
   className="h-16 w-16 rounded-md object-cover bg-muted"
 />
                       <div className="flex-1">
-                        <h4 className="text-sm font-semibold">{item.products?.name}</h4>
-                        <p className="text-xs text-muted-foreground">
-                          Qty: {item.quantity} × ₦{Number(item.price || 0).toLocaleString()}
-                        </p>
-                      </div>
-                      <p className="text-sm font-bold">
-                        ₦{Number((item.quantity || 0) * (item.price || 0)).toLocaleString()}
-                      </p>
-                    </div>
+  <h4 className="text-sm font-semibold">
+    {item.products?.name}
+  </h4>
+
+  <p className="text-xs text-muted-foreground">
+    Qty: {item.quantity} × ₦{Number(item.price).toLocaleString()}
+  </p>
+
+  <div className="mt-2">
+    {getStatusBadge(item.status)}
+  </div>
+</div>
                   ))}
                 </div>
               </CardContent>
