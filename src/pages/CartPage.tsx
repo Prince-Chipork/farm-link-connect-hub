@@ -120,6 +120,50 @@ export default function CartPage() {
     )}
 
   </div>
+        <div className="space-y-4">
+
+  <Card>
+
+    <CardContent className="p-6 space-y-4">
+
+      <h2 className="text-xl font-bold">
+        Order Summary
+      </h2>
+
+      <div className="flex justify-between">
+        <span>Total Items</span>
+        <span>{cartCount}</span>
+      </div>
+
+      <div className="flex justify-between">
+        <span>Subtotal</span>
+        <span>₦{cartTotal.toLocaleString()}</span>
+      </div>
+
+      <hr />
+
+      <div className="flex justify-between text-xl font-bold">
+        <span>Total</span>
+        <span className="text-primary">
+          ₦{cartTotal.toLocaleString()}
+        </span>
+      </div>
+
+      <Button
+        asChild
+        className="w-full h-12"
+        disabled={cart.length === 0}
+      >
+        <Link to="/checkout">
+          Proceed to Checkout
+        </Link>
+      </Button>
+
+    </CardContent>
+
+  </Card>
+
+</div>
 
 </div>
     </div>
