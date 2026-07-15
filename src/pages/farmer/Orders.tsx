@@ -11,6 +11,9 @@ type FarmerOrder = {
   order_id: string;
   order_item_id?: string;
   buyer_name: string | null;
+buyer_phone: string | null;
+shipping_cost: number;
+total: number;
   delivery_address: string | null;
   created_at: string | null;
   status: string | null;
@@ -165,15 +168,19 @@ return (
                   </p>
                 </div>
 
-                <div>
-                  <p className="text-xs font-semibold uppercase text-muted-foreground">
-                    Customer
-                  </p>
+                <div className="text-right space-y-1">
+  <p className="text-xs font-semibold uppercase text-muted-foreground">
+    Customer
+  </p>
 
-                  <p className="text-sm font-medium">
-                    {order.buyer_name ?? "Unknown"}
-                  </p>
-                </div>
+  <p className="text-sm font-medium">
+    {order.buyer_name ?? "Unknown"}
+  </p>
+
+  <p className="text-xs text-muted-foreground">
+    {order.buyer_phone ?? "No phone"}
+  </p>
+</div>
 
                 <div>
                   <p className="text-xs font-semibold uppercase text-muted-foreground">
@@ -181,11 +188,7 @@ return (
                   </p>
 
                   <p className="text-sm font-medium text-primary">
-                    ₦
-                    {(
-                      Number(order.price ?? 0) *
-                      Number(order.quantity ?? 0)
-                    ).toLocaleString()}
+                    ₦{Number(order.total ?? 0).toLocaleString()}
                   </p>
                 </div>
               </div>
@@ -296,8 +299,10 @@ return (
         </p>
 
         <p className="text-sm">
-          {order.delivery_address ?? "No address provided"}
-        </p>
+          {order.delivery_address ?? "No address provided"}</p>
+        <p className="mt-2 text-sm font-semibold text-primary">
+  Shipping Fee: ₦{Number(order.shipping_cost ?? 0).toLocaleString()}
+</p>
       </div>
     </div>
 
