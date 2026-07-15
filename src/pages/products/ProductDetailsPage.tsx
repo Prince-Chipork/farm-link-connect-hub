@@ -35,6 +35,7 @@ export default function ProductDetailsPage() {
   const [loading, setLoading] = useState(true);
   const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
+  const [selectedImage, setSelectedImage] = useState(0);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -101,7 +102,7 @@ console.log(product);
         <div className="space-y-4">
           <div className="aspect-square rounded-2xl overflow-hidden border bg-muted relative shadow-sm"> 
               <img
-  src={product.images?.[0] || "/placeholder.svg"}
+  src={product.images?.[selectedImage] || "/placeholder.svg"}
   alt={product.name}
   className="w-full h-full object-cover"
   onError={(e) => {
@@ -117,6 +118,29 @@ console.log(product);
               <Award className="h-4 w-4" /> FarmLink {farmerTrustLevel}
             </Badge>
           </div>
+          
+          {product.images && product.images.length > 1 && (
+  <div className="flex gap-3 overflow-x-auto">
+    {product.images.map((image: string, index: number) => (
+      <button
+        key={index}
+        type="button"
+        onClick={() => setSelectedImage(index)}
+        className={`w-20 h-20 rounded-lg overflow-hidden border-2 transition ${
+          selectedImage === index
+            ? "border-primary"
+            : "border-transparent"
+        }`}
+      >
+        <img
+          src={image}
+          alt={`${product.name} ${index + 1}`}
+          className="w-full h-full object-cover"
+        />
+      </button>
+    ))}
+  </div>
+)}
         </div>
 
         {/* Product Info */}
