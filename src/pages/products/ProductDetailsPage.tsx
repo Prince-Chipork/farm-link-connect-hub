@@ -58,16 +58,52 @@ export default function ProductDetailsPage() {
     fetchProduct();
   }, [id]);
 
-  const handleAddToCart = () => {
-    if (!product) return;
-    addToCart({
-      id: product.id,
-      name: product.name,
-      price: Number(product.price),
-      image: product.image_url
-    }, quantity);
-    toast.success(`${product.name} added to cart!`);
-  };
+  const handleAddToCart = async () => {
+  if (!product || !user) {
+    toast.error("Please login first.");
+    return;
+  }
+
+  try {
+    // Check if product is already in cart
+    const { data: existingItem, error: fetchError } = await supabase
+      .from("cart_items")
+      .select("id, quantity")
+      .eq("buyer_id", user.id)
+      .eq("product_id", product.id)
+      .maybeSingle();
+
+    if (fetchError) throw fetchError;
+
+    if (existingItem) {
+      // Update quantity
+      const { error: updateError } = await supabase
+        .from("cart_items")
+        .update({
+          quantity: existingItem.quantity + quantity,
+        })
+        .eq("id", existingItem.id);
+
+      if (updateError) throw updateError;
+    } else {
+      // Insert new item
+      const { error: insertError } = await supabase
+        .from("cart_items")
+        .insert({
+          buyer_id: user.id,
+          product_id: product.id,
+          quantity,
+        });
+
+      if (insertError) throw insertError;
+    }
+
+    toast.success(`${product.name} added to cart.`);
+  } catch (error: any) {
+    toast.error(error.message);
+  }
+};
+  
 console.log(product);
   if (loading) {
     return (
