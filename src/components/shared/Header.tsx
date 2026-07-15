@@ -41,7 +41,7 @@ console.log("Header user:", user);
         
       {user && (
   <Button variant="ghost" asChild className="relative">
-    <Link to="/checkout">
+    <Link to="/cart">
       <ShoppingCart className="h-5 w-5" />
 
       {cartCount > 0 && (
