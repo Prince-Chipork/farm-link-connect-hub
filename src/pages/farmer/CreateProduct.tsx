@@ -175,10 +175,16 @@ export default function CreateProduct() {
 
               <div className="space-y-2">
                 <Label htmlFor="category">Category</Label>
-                <Select 
-                  value={formData.category} 
-                  onValueChange={(value) => setFormData({...formData, category: value})}
-                >
+                <Select
+  value={formData.category}
+  onValueChange={(value) =>
+    setFormData({
+      ...formData,
+      category: value,
+      unit: categoryUnits[value][0], // automatically select the first valid unit
+    })
+  }
+>
                   <SelectTrigger>
                     <SelectValue placeholder="Select Category" />
                   </SelectTrigger>
