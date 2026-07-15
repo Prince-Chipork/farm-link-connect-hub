@@ -68,7 +68,7 @@ const deleteProduct = async (productId: string) => {
   if (!confirmed) return;
 
   try {
-    const { error } = await (supabase as any).rpc(
+const { data, error } = await (supabase as any).rpc(
       "delete_farmer_product",
       {
         p_product_id: productId,
