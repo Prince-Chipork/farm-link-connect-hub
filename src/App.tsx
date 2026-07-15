@@ -29,6 +29,7 @@ import AdminReports from './pages/admin/Reports';
 
 import NotFound from "./pages/NotFound";
 import { Toaster } from "@/components/ui/sonner";
+import CartPage from "@/pages/CartPage";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/products/:id" element={<ProductDetailsPage />} />
+          <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
         </Route>
 
