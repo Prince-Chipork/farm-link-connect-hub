@@ -189,11 +189,12 @@ export default function CreateProduct() {
                     <SelectValue placeholder="Select Category" />
                   </SelectTrigger>
                   <SelectContent>
-                    {categories.map((c) => (
-                      <SelectItem key={c} value={c}>{c}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+  {(categoryUnits[formData.category] || []).map((u) => (
+    <SelectItem key={u} value={u}>
+      {u}
+    </SelectItem>
+  ))}
+</SelectContent>
               </div>
 
               <div className="space-y-2 md:col-span-2">
