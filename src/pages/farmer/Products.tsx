@@ -13,6 +13,7 @@ export default function FarmerProducts() {
     const { user } = useAuth();
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
+    const [showArchived, setShowArchived] = useState(false);
 
     useEffect(() => {
         const fetchMyProducts = async () => {
