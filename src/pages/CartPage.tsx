@@ -32,6 +32,96 @@ export default function CartPage() {
           </p>
         </div>
       </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+  <div className="lg:col-span-2 space-y-4">
+
+    {cart.length === 0 ? (
+
+      <Card>
+        <CardContent className="py-12 text-center">
+          <ShoppingCart className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+          <h2 className="text-xl font-bold mb-2">
+            Your cart is empty
+          </h2>
+
+          <Button asChild className="mt-4">
+            <Link to="/products">
+              Browse Products
+            </Link>
+          </Button>
+        </CardContent>
+      </Card>
+
+    ) : (
+
+      cart.map((item) => (
+
+        <Card key={item.id}>
+          <CardContent className="p-4 flex items-center gap-4">
+
+            <img
+              src={item.image}
+              alt={item.name}
+              className="h-20 w-20 rounded-lg object-cover border"
+            />
+
+            <div className="flex-1">
+              <h3 className="font-semibold">
+                {item.name}
+              </h3>
+
+              <p className="text-primary font-bold">
+                ₦{item.price.toLocaleString()}
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2">
+
+              <Button
+                size="icon"
+                variant="outline"
+                onClick={() =>
+                  updateQuantity(item.id, item.quantity - 1)
+                }
+              >
+                <Minus className="h-4 w-4" />
+              </Button>
+
+              <span className="w-8 text-center">
+                {item.quantity}
+              </span>
+
+              <Button
+                size="icon"
+                variant="outline"
+                onClick={() =>
+                  updateQuantity(item.id, item.quantity + 1)
+                }
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
+
+            </div>
+
+            <Button
+              size="icon"
+              variant="destructive"
+              onClick={() => removeFromCart(item.id)}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+
+          </CardContent>
+        </Card>
+
+      ))
+
+    )}
+
+  </div>
+
+</div>
     </div>
   );
 }
