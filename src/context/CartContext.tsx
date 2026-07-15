@@ -44,8 +44,8 @@ export const CartProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    localStorage.setItem(cartKey), JSON.stringify(cart));
-  }, [cart]);
+  localStorage.setItem(cartKey, JSON.stringify(cart));
+}, [cart, cartKey]);
 
   const addToCart = (item: Omit<CartItem, 'quantity'>, quantity: number = 1) => {
     setCart((prevCart) => {
