@@ -201,7 +201,8 @@ const orderSteps = [
                     <div
   key={item.id}
   className="border rounded-lg p-4 space-y-4"
->
+> 
+<div className="flex items-center gap-4">
                       <img
   src={item.products?.images?.[0] || "/placeholder.svg"}
   alt={item.products?.name}
