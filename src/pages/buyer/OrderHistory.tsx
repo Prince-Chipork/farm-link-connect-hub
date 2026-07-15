@@ -3,7 +3,7 @@ import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Package, Truck, CheckCircle2, Clock, XCircle, ShoppingBag, Eye } from "lucide-react";
+import { Package, Truck, CheckCircle2, Clock, ShoppingBag, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
@@ -231,7 +231,7 @@ const orderSteps = [
 </div> {/* End of flex row */}
 
 <div className="mt-4">
-  <div className="flex items-center justify-between text-[11px] font-medium">
+  <div className="flex items-center justify-between gap-2 overflow-x-auto text-[11px] font-medium">
 
     <div className={`flex flex-col items-center ${
       stepReached(item.status, orderSteps, "pending")
