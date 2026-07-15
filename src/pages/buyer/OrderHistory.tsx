@@ -266,6 +266,19 @@ const orderSteps = [
 
     <div className="flex-1 h-[2px] bg-border mx-2" />
 
+<div
+  className={`flex flex-col items-center ${
+    stepReached(item.status, orderSteps, "packed")
+      ? "text-primary"
+      : "text-muted-foreground"
+  }`}
+>
+  <Package className="h-4 w-4 mb-1" />
+  <span>Packed</span>
+</div>
+
+    <div className="flex-1 h-[2px] bg-border mx-2" />
+
     <div className={`flex flex-col items-center ${
       stepReached(item.status, orderSteps, "shipped")
         ? "text-primary"
