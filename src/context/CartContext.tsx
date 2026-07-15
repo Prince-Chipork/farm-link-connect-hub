@@ -29,7 +29,11 @@ export const useCart = () => {
   return context;
 };
 
-export const CartProvider = ({ children }) => {
+export const CartProvider = ({
+  children,
+}: {
+  children: ReactNode;
+}) => {
   const { user } = useAuth();
 
   const cartKey = user ? `cart_${user.id}` : "cart_guest";
