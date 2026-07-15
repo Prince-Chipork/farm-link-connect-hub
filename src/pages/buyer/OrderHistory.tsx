@@ -107,6 +107,25 @@ const getStatusBadge = (status: string) => {
       </div>
     );
   }
+  const stepReached = (
+  current: string,
+  steps: string[],
+  target: string
+) => {
+  return (
+    steps.indexOf((current || "").toLowerCase()) >=
+    steps.indexOf(target)
+  );
+};
+
+const orderSteps = [
+  "pending",
+  "accepted",
+  "processing",
+  "packed",
+  "shipped",
+  "delivered",
+];
 
   return (
     <div className="container mx-auto py-8 px-4 space-y-6">
@@ -181,9 +200,7 @@ const getStatusBadge = (status: string) => {
   <div className="flex items-center justify-between text-xs font-medium">
 
     <div className={`flex flex-col items-center ${
-      ["pending","accepted","processing","packed","shipped","delivered"]
-        .includes((order.status || "").toLowerCase())
-        ? "text-primary"
+      stepReached(item.status, orderSteps, "pending")? "text-primary"
         : "text-muted-foreground"
     }`}>
       <Clock className="h-4 w-4 mb-1" />
@@ -193,21 +210,30 @@ const getStatusBadge = (status: string) => {
     <div className="flex-1 h-[2px] bg-border mx-2"></div>
 
     <div className={`flex flex-col items-center ${
-      ["accepted","processing","packed","shipped","delivered"]
-        .includes((order.status || "").toLowerCase())
-        ? "text-primary"
+      stepReached(item.status, orderSteps, "accepted")? "text-primary"
         : "text-muted-foreground"
     }`}>
       <Package className="h-4 w-4 mb-1" />
-      <span>Packed</span>
+      <span>Accepted</span>
     </div>
+
+    <div className="flex-1 h-[2px] bg-border mx-2" />
+
+<div
+  className={`flex flex-col items-center ${
+    stepReached(item.status, orderSteps, "processing")
+      ? "text-primary"
+      : "text-muted-foreground"
+  }`}
+>
+  <Package className="h-4 w-4 mb-1" />
+  <span>Processing</span>
+</div>
 
     <div className="flex-1 h-[2px] bg-border mx-2"></div>
 
     <div className={`flex flex-col items-center ${
-      ["shipped","delivered"]
-        .includes((order.status || "").toLowerCase())
-        ? "text-primary"
+      stepReached(item.status, orderSteps, "shipped")? "text-primary"
         : "text-muted-foreground"
     }`}>
       <Truck className="h-4 w-4 mb-1" />
@@ -217,8 +243,7 @@ const getStatusBadge = (status: string) => {
     <div className="flex-1 h-[2px] bg-border mx-2"></div>
 
     <div className={`flex flex-col items-center ${
-      (order.status || "").toLowerCase() === "delivered"
-        ? "text-green-600"
+      stepReached(item.status, orderSteps, "delivered")? "text-green-600"
         : "text-muted-foreground"
     }`}>
       <CheckCircle2 className="h-4 w-4 mb-1" />
