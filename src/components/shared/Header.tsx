@@ -27,6 +27,7 @@ console.log("Header user:", user);
     <>
       <Button variant="ghost" asChild>
         <Link to={user?.role === "farmer"? "/farmer/dashboard": user?.role === "admin"? "/admin/dashboard": "/buyer/dashboard"}>
+         </Link>   
       </Button>
         
       {user && (
