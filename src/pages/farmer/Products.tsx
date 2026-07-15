@@ -19,9 +19,10 @@ export default function FarmerProducts() {
             if (!user) return;
             setLoading(true);
             const { data, error } = await supabase
-                .from('products')
-                .select('*')
-                .eq('farmer_id', user.id);
+    .from("products")
+    .select("*")
+    .eq("farmer_id", user.id)
+    .eq("is_available", !showArchived);
 
             if (error) {
                 toast.error(error.message);
@@ -49,7 +50,7 @@ export default function FarmerProducts() {
         };
 
         fetchMyProducts();
-    }, [user]);
+    }, [user, showArchived]);
 
     if (loading) {
         return (
@@ -92,17 +93,39 @@ const deleteProduct = async (productId: string) => {
     return (
         <div className="p-4 md:p-6 lg:p-8 space-y-8">
             <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-2xl font-bold">My Products</h1>
-                    <p className="text-muted-foreground text-sm">Manage your listed farm produce</p>
-                </div>
-                <Button asChild>
-                    <Link to="/farmer/products/new">
-                        <Plus className="mr-2 h-4 w-4" />
-                        Add Product
-                    </Link>
-                </Button>
-            </div>
+  <div>
+    <h1 className="text-2xl font-bold">My Products</h1>
+
+    <p className="text-muted-foreground text-sm">
+      Manage your listed farm produce
+    </p>
+
+    <div className="flex gap-2 mt-3">
+      <Button
+        size="sm"
+        variant={!showArchived ? "default" : "outline"}
+        onClick={() => setShowArchived(false)}
+      >
+        Active
+      </Button>
+
+      <Button
+        size="sm"
+        variant={showArchived ? "default" : "outline"}
+        onClick={() => setShowArchived(true)}
+      >
+        Archived
+      </Button>
+    </div>
+  </div>
+
+  <Button asChild>
+    <Link to="/farmer/products/new">
+      <Plus className="mr-2 h-4 w-4" />
+      Add Product
+    </Link>
+  </Button>
+</div>
 
             {products.length === 0 ? (
                 <EmptyState 
