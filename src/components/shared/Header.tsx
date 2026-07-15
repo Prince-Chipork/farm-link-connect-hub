@@ -1,12 +1,15 @@
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Mountain } from "lucide-react";
+import { Menu, Mountain, ShoppingCart } from "lucide-react";
 import { ThemeToggle } from "../ThemeToggle";
 import { useAuth } from "@/context/AuthContext";
+import { useCart } from "@/context/CartContext";
+
 
     export default function Header() {
   const { user, signOut } = useAuth();
+const { cartCount } = useCart();
 console.log("Header user:", user);
   return (
     <header className="bg-background/80 backdrop-blur-sm sticky top-0 z-40 border-b">
