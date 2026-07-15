@@ -220,7 +220,17 @@ const orderSteps = [
   <div className="mt-2">
     {getStatusBadge(item.status)}
   </div>
-   <div className="mt-4">
+</div>
+
+<div className="text-right">
+  <p className="font-bold text-primary">
+    ₦{Number(item.quantity * item.price).toLocaleString()}
+  </p>
+</div>
+
+</div> {/* End of flex row */}
+
+<div className="mt-4">
   <div className="flex items-center justify-between text-[11px] font-medium">
 
     <div className={`flex flex-col items-center ${
