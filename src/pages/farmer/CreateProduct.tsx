@@ -174,26 +174,32 @@ export default function CreateProduct() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="category">Category</Label>
-                <Select
-  value={formData.category}
-  onValueChange={(value) =>
-    setFormData({
-      ...formData,
-      category: value,
-      unit: categoryUnits[value][0], // automatically select the first valid unit
-    })}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select Category" />
-                  </SelectTrigger>
-                  <SelectContent>
-  {(categoryUnits[formData.category] || []).map((u) => (
-    <SelectItem key={u} value={u}>
-      {u}
-    </SelectItem>
-  ))}
-</SelectContent>
-              </div>
+  <Label htmlFor="category">Category</Label>
+
+  <Select
+    value={formData.category}
+    onValueChange={(value) =>
+      setFormData({
+        ...formData,
+        category: value,
+        unit: categoryUnits[value][0],
+      })
+    }
+  >
+    <SelectTrigger>
+      <SelectValue placeholder="Select Category" />
+    </SelectTrigger>
+
+    <SelectContent>
+      {categories.map((c) => (
+        <SelectItem key={c} value={c}>
+          {c}
+        </SelectItem>
+      ))}
+    </SelectContent>
+
+  </Select>
+</div>
 
               <div className="space-y-2 md:col-span-2">
                 <Label htmlFor="description">Description</Label>
@@ -232,29 +238,31 @@ export default function CreateProduct() {
                     />
                   </div>
                   <div className="w-32 space-y-2">
-                    <Label htmlFor="unit">Unit</Label>
-                    <Select
-  value={formData.category}
-  onValueChange={(value) =>
-    setFormData({
-      ...formData,
-      category: value,
-      unit: categoryUnits[value][0], // automatically select the first valid unit
-    })
-  }
->
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-  {(categoryUnits[formData.category] || []).map((u) => (
-    <SelectItem key={u} value={u}>
-      {u}
-    </SelectItem>
-  ))}
-</SelectContent>
-                    </Select>
-                  </div>
+  <Label htmlFor="unit">Unit</Label>
+
+  <Select
+    value={formData.unit}
+    onValueChange={(value) =>
+      setFormData({
+        ...formData,
+        unit: value,
+      })
+    }
+  >
+    <SelectTrigger>
+      <SelectValue />
+    </SelectTrigger>
+
+    <SelectContent>
+      {(categoryUnits[formData.category] || []).map((u) => (
+        <SelectItem key={u} value={u}>
+          {u}
+        </SelectItem>
+      ))}
+    </SelectContent>
+
+  </Select>
+</div>
                 </div>
               </div>
 
