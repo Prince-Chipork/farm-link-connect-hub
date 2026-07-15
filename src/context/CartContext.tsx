@@ -32,9 +32,11 @@ export const useCart = () => {
 export const CartProvider = ({ children }) => {
   const { user } = useAuth();
 
+  const cartKey = user ? `cart_${user.id}` : "cart_guest";
+
   const [cart, setCart] = useState<CartItem[]>(() => {
     try {
-      const saved = localStorage.getItem('cart');
+      const saved = localStorage.getItem(cartKey);
       return saved ? JSON.parse(saved) : [];
     } catch {
       return [];
@@ -42,7 +44,7 @@ export const CartProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cart));
+    localStorage.setItem(cartKey), JSON.stringify(cart));
   }, [cart]);
 
   const addToCart = (item: Omit<CartItem, 'quantity'>, quantity: number = 1) => {
