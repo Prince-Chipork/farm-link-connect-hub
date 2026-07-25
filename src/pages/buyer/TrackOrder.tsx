@@ -65,19 +65,52 @@ export default function TrackOrder() {
           </CardTitle>
         </CardHeader>
 
-        <CardContent>
-          <p>
-            Order ID: {order.id}
+        <CardContent className="space-y-6">
+  {order.order_items?.map((item: any) => (
+    <div
+      key={item.id}
+      className="border rounded-lg p-4"
+    >
+      <div className="flex items-center gap-4">
+
+        <img
+          src={item.products?.images?.[0] || "/placeholder.svg"}
+          alt={item.products?.name}
+          className="h-16 w-16 rounded-md object-cover bg-muted"
+        />
+
+        <div className="flex-1">
+          <h3 className="font-semibold">
+            {item.products?.name}
+          </h3>
+
+          <p className="text-sm text-muted-foreground">
+            Qty: {item.quantity}
           </p>
 
-          <p>
-            Total: ₦{Number(order.total).toLocaleString()}
+          <p className="text-sm">
+            ₦{Number(item.price).toLocaleString()} each
           </p>
+        </div>
 
-          <p>
-            Delivery Address: {order.delivery_address}
+        <div className="text-right">
+          <p className="font-bold text-primary">
+            ₦{Number(item.price * item.quantity).toLocaleString()}
           </p>
-        </CardContent>
+        </div>
+
+      </div>
+    </div>
+  ))}
+
+  <div className="border-t pt-4">
+    <p>
+      <strong>Delivery Address:</strong>
+    </p>
+
+    <p>{order.delivery_address}</p>
+  </div>
+</CardContent>
       </Card>
     </div>
   );
