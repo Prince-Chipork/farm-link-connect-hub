@@ -80,8 +80,7 @@ setOrders((current) =>
   current.map((order) =>
     order.order_item_id === orderItemId
       ? { ...order, status: newStatus }
-      : order
-  )
+      : order)
 );
 
 toast.success("Order status updated successfully.");
