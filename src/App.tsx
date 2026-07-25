@@ -30,6 +30,7 @@ import AdminReports from './pages/admin/Reports';
 import NotFound from "./pages/NotFound";
 import { Toaster } from "@/components/ui/sonner";
 import CartPage from "@/pages/CartPage";
+import TrackOrder from "@/pages/buyer/TrackOrder";
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
           <Route path="/products/:id" element={<ProductDetailsPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
+
         </Route>
 
         <Route element={<DashboardLayout />}>
@@ -72,6 +74,7 @@ function App() {
         </Route>
 
         <Route path="*" element={<NotFound />} />
+        <Route path="/buyer/orders/:orderId/track" element={<TrackOrder />} />
       </Routes>
       <Toaster
   position="top-center"
