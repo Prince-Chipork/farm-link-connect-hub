@@ -3,7 +3,7 @@ import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Package, Truck, CheckCircle2, Clock, ShoppingBag, Eye } from "lucide-react";
+import { ShoppingBag, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
@@ -99,6 +99,19 @@ const getStatusBadge = (status: string) => {
       );
   }
 };
+  const getOverallOrderStatus = (order: any) => {
+  const statuses =
+    order.order_items?.map((item: any) =>
+      (item.status || "").toLowerCase()
+    ) || [];
+
+  if (statuses.every((s) => s === "delivered")) return "delivered";
+  if (statuses.some((s) => s === "shipped")) return "shipped";
+  if (statuses.some((s) => s === "packed")) return "packed";
+  if (statuses.some((s) => s === "processing")) return "processing";
+  if (statuses.some((s) => s === "accepted")) return "accepted";
+  return "pending";
+};
 
   if (loading) {
     return (
@@ -107,25 +120,6 @@ const getStatusBadge = (status: string) => {
       </div>
     );
   }
-  const stepReached = (
-  current: string,
-  steps: string[],
-  target: string
-) => {
-  return (
-    steps.indexOf((current || "").toLowerCase()) >=
-    steps.indexOf(target)
-  );
-};
-
-const orderSteps = [
-  "pending",
-  "accepted",
-  "processing",
-  "packed",
-  "shipped",
-  "delivered",
-];
 
   return (
     <div className="container mx-auto py-8 px-4 space-y-6">
