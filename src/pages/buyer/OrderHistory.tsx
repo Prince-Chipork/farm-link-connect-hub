@@ -185,12 +185,15 @@ const orderSteps = [
     View Details
   </Link>
 </Button>
-                  <Button
+        <Button
+  asChild
   variant="outline"
   size="sm"
   className="h-7 text-xs"
 >
-  Track Order
+  <Link to={`/buyer/orders/${order.id}/track`}>
+    Track Order
+  </Link>
 </Button>
                 </div>
               </CardHeader>
