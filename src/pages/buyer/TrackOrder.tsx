@@ -55,7 +55,25 @@ export default function TrackOrder() {
       </div>
     );
   }
+const stepReached = (
+  current: string,
+  steps: string[],
+  target: string
+) => {
+  return (
+    steps.indexOf((current || "").toLowerCase()) >=
+    steps.indexOf(target)
+  );
+};
 
+const orderSteps = [
+  "pending",
+  "accepted",
+  "processing",
+  "packed",
+  "shipped",
+  "delivered",
+];
   return (
     <div className="container mx-auto py-8 px-4">
       <Card>
