@@ -45,8 +45,8 @@ export default function TrackOrder() {
   if (loading) {
     return (
       <div className="flex justify-center py-10">
-        Loading...
-      </div>
+  <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary" />
+</div>
     );
   }
 
