@@ -192,6 +192,16 @@ const orderSteps = [
       
     </div>
   ))}
+  {item.status === "Shipped" && (
+  <div className="mt-4 flex justify-end">
+    <Button
+      onClick={() => confirmDelivery(item.id)}
+      className="bg-green-600 hover:bg-green-700"
+    >
+      Confirm Delivery
+    </Button>
+  </div>
+)}
 
   <div className="border-t pt-4">
     <p>
