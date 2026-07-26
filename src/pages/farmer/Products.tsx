@@ -8,7 +8,7 @@ import { EmptyState } from "@/components/EmptyState";
 import { Package, Plus, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import type { Product } from "@/types";
-import LoadingSpinner from "@/components/shared/LoadingSpinner";
+
 
 export default function FarmerProducts() {
     const { user } = useAuth();
