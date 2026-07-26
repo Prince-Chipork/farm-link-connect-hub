@@ -7,7 +7,6 @@ import { Clock, Package, Truck, CheckCircle2, ArrowLeft, ShoppingBag } from "luc
 import { Button } from "@/components/ui/button";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import OrderTimeline from "@/components/orders/OrderTimeline";
-import { ORDER_STEPS, stepReached } from "@/lib/orderStatus";
 
 export default function TrackOrder() {
   const { orderId } = useParams();
