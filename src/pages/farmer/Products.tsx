@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/EmptyState";
 import { Package, Plus, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import type { Product } from "@/types";
 
 
