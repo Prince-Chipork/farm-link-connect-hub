@@ -13,31 +13,33 @@ export default function TrackOrder() {
   const [loading, setLoading] = useState(true);
   
  const fetchOrder = async () => {
-      if (!orderId) return;
+  if (!orderId) return;
 
-      setLoading(true);
+  try {
+    setLoading(true);
 
-      const { data, error } = await supabase
-        .from("orders")
-        .select(`
+    const { data, error } = await supabase
+      .from("orders")
+      .select(`
+        *,
+        order_items (
           *,
-          order_items (
-            *,
-            products (*)
-          )
-        `)
-        .eq("id", orderId)
-        .single();
+          products (*)
+        )
+      `)
+      .eq("id", orderId)
+      .single();
 
-      if (error) {
-        toast.error(error.message);
-      } else {
-        setOrder(data);
-      }
+    if (error) throw error;
 
-      setLoading(false);
-    };
-
+    setOrder(data);
+  } catch (error: any) {
+    toast.error(error.message);
+  } finally {
+    setLoading(false);
+  }
+};
+  
   useEffect(() => {
         fetchOrder();
   }, [orderId]);
@@ -86,11 +88,7 @@ const orderSteps = [
 );
 
 if (error) throw error;
-
-console.log("RPC returned:", data);
-
 toast.success("Order confirmed as delivered.");
-
 await fetchOrder();
   } catch (error: any) {
     console.error(error);
