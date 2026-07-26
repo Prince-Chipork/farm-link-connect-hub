@@ -161,10 +161,15 @@ const getStatusBadge = (status: string) => {
                     <p className="text-[10px] text-muted-foreground uppercase font-semibold">Total</p>
                     <p className="text-sm font-medium text-primary font-bold">₦{Number(order.total || 0).toLocaleString()}</p>
                   </div>
-                  <div className="hidden md:block">
-                    <p className="text-[10px] text-muted-foreground uppercase font-semibold">Ship To</p>
-                    <p className="text-sm font-medium truncate max-w-[150px]">{order.delivery_address || 'Home Address'}</p>
-                  </div>
+                  <div>
+  <p className="text-[10px] text-muted-foreground uppercase font-semibold">
+    Status
+  </p>
+
+  <div className="mt-1">
+    {getStatusBadge(getOverallOrderStatus(order))}
+  </div>
+</div>
                 </div>
                 <div className="flex flex-col items-end gap-2">
       
