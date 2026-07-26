@@ -6,7 +6,7 @@ import { ShoppingBag, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
-import StatusBadge from "@/components/orders/StatusBadge";
+import StatusBadge from "@/components/orders/StatusBadge"; 
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 
 export default function BuyerOrderHistory() {
