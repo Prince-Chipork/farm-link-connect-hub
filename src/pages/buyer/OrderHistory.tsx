@@ -9,10 +9,11 @@ import { toast } from "sonner";
 import StatusBadge from "@/components/orders/StatusBadge"; 
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import { getOverallOrderStatus } from "@/lib/orderStatus";
+import type { Order } from "@/types";
 
 export default function BuyerOrderHistory() {
   const { user } = useAuth();
-  const [orders, setOrders] = useState<any[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
