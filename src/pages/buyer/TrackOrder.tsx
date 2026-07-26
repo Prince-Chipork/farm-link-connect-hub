@@ -7,6 +7,7 @@ import { Clock, Package, Truck, CheckCircle2, ArrowLeft, ShoppingBag } from "luc
 import { Button } from "@/components/ui/button";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import OrderTimeline from "@/components/orders/OrderTimeline";
+import { ORDER_STEPS, stepReached } from "@/lib/orderStatus";
 
 export default function TrackOrder() {
   const { orderId } = useParams();
@@ -57,25 +58,6 @@ export default function TrackOrder() {
       </div>
     );
   }
-const stepReached = (
-  current: string,
-  steps: string[],
-  target: string
-) => {
-  return (
-    steps.indexOf((current || "").toLowerCase()) >=
-    steps.indexOf(target)
-  );
-};
-
-const orderSteps = [
-  "pending",
-  "accepted",
-  "processing",
-  "packed",
-  "shipped",
-  "delivered",
-];
   const confirmDelivery = async (orderItemId: string) => {
   try {
     const { data, error } = await (supabase as any).rpc(
