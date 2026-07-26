@@ -238,11 +238,7 @@ return (
   Shipped
 </SelectItem>
 
-                    <SelectItem value="Delivered">
-                      Delivered
-                    </SelectItem>
-
-                    <SelectItem value="Cancelled">
+<SelectItem value="Cancelled">
                       Cancelled
                     </SelectItem>
                   </SelectContent>
