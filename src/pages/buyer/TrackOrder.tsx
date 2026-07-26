@@ -75,6 +75,26 @@ const orderSteps = [
   "shipped",
   "delivered",
 ];
+  const confirmDelivery = async (orderItemId: string) => {
+  try {
+    const { error } = await (supabase as any).rpc(
+      "update_farmer_order_status",
+      {
+        p_order_item_id: orderItemId,
+        p_status: "Delivered",
+      }
+    );
+
+    if (error) throw error;
+
+    toast.success("Order confirmed as delivered.");
+
+    fetchOrder();
+  } catch (error: any) {
+    console.error(error);
+    toast.error(error.message ?? "Unable to confirm delivery.");
+  }
+};
   return (
     <div className="container mx-auto py-8 px-4">
       <Card>
