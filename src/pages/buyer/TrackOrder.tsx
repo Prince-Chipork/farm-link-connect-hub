@@ -91,7 +91,7 @@ console.log("RPC returned:", data);
 
 toast.success("Order confirmed as delivered.");
 
-fetchOrder();
+await fetchOrder();
   } catch (error: any) {
     console.error(error);
     toast.error(error.message ?? "Unable to confirm delivery.");
