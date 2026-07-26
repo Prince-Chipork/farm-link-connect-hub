@@ -7,6 +7,7 @@ import { Package, ShoppingBag, Truck } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import StatusBadge from "@/components/orders/StatusBadge";
 
 type FarmerOrder = {
   order_id: string;
