@@ -47,12 +47,10 @@ export default function BuyerOrderHistory() {
       (item.status || "").toLowerCase()
     ) || [];
 
-  // Ignore cancelled items
   const activeStatuses = statuses.filter(
     (s) => s !== "cancelled"
   );
 
-  // If everything is cancelled
   if (activeStatuses.length === 0) {
     return "cancelled";
   }
@@ -77,9 +75,12 @@ export default function BuyerOrderHistory() {
     return "accepted";
   }
 
+  if (activeStatuses.some((s) => s === "pending")) {
+    return "pending";
+  }
+
   return "pending";
 };
-
   if (loading) {
   return <LoadingSpinner />;
 }
