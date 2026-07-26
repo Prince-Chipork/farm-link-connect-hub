@@ -4,15 +4,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { Clock, Package, Truck, CheckCircle2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function TrackOrder() {
   const { orderId } = useParams();
 
   const [order, setOrder] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchOrder = async () => {
+  
+ const fetchOrder = async () => {
       if (!orderId) return;
 
       setLoading(true);
@@ -38,7 +38,8 @@ export default function TrackOrder() {
       setLoading(false);
     };
 
-    fetchOrder();
+  useEffect(() => {
+        fetchOrder();
   }, [orderId]);
 
   if (loading) {
@@ -209,10 +210,7 @@ const orderSteps = [
 
   </div>
 </div>
-      
-    </div>
-  ))}
-  {item.status === "Shipped" && (
+        {item.status === "Shipped" && (
   <div className="mt-4 flex justify-end">
     <Button
       onClick={() => confirmDelivery(item.id)}
@@ -222,6 +220,9 @@ const orderSteps = [
     </Button>
   </div>
 )}
+      
+    </div>
+  ))}
 
   <div className="border-t pt-4">
     <p>
