@@ -94,17 +94,6 @@ await fetchOrders();
     toast.error(error.message ?? "Failed to update order.");
   }
 };
-  
-  const statusColors: Record<string, string> = {
-    Pending: "bg-amber-100 text-amber-700",
-    Accepted: "bg-blue-100 text-blue-700",
-    Processing: "bg-indigo-100 text-indigo-700",
-    Packed: "bg-purple-100 text-purple-700",
-    Shipped: "bg-purple-100 text-purple-700",
-    Delivered: "bg-green-100 text-green-700",
-    Cancelled: "bg-red-100 text-red-700",
-  };
-
   const getNextStatuses = (status: string) => {
   switch (status) {
     case "Pending":
@@ -217,13 +206,7 @@ return (
               </div>
 
               <div className="flex items-center gap-3">
-                <Badge
-                  className={`${
-                    statusColors[order.status ?? "Pending"]
-                  } border-none px-3 py-1`}
-                >
-                  {order.status ?? "Pending"}
-                </Badge>
+                <StatusBadge status={order.status} />
 
                 <Select
   value={order.status ?? "Pending"}
