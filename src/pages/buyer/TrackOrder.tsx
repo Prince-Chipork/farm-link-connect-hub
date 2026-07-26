@@ -132,7 +132,7 @@ fetchOrder();
         <img
           src={item.products?.images?.[0] || "/placeholder.svg"}
           alt={item.products?.name}
-          className="h-14 w-14 md:h-16 md:w-16" rounded-md object-cover bg-muted"
+          className="h-14 w-14 rounded-md object-cover bg-muted md:h-16 md:w-16"
         />
 
         <div className="flex-1">
