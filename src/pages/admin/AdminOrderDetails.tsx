@@ -68,7 +68,49 @@ export default function AdminOrderDetails() {
       <p>
         Total: ₦{Number(order.total).toLocaleString()}
       </p>
+      
+      <h2 className="mt-8 mb-3 text-lg font-semibold">
+  Ordered Products
+</h2>
 
+<div className="space-y-4">
+  {order.order_items?.map((item: any) => (
+    <div
+      key={item.id}
+      className="flex items-center gap-4 rounded-lg border p-4"
+    >
+      <img
+        src={item.products?.images?.[0] || "/placeholder.svg"}
+        alt={item.products?.name}
+        className="h-16 w-16 rounded-md object-cover"
+      />
+
+      <div className="flex-1">
+        <h3 className="font-semibold">
+          {item.products?.name}
+        </h3>
+
+        <p className="text-sm text-muted-foreground">
+          Qty: {item.quantity}
+        </p>
+
+        <p className="text-sm">
+          ₦{Number(item.price).toLocaleString()} each
+        </p>
+      </div>
+
+      <div className="text-right">
+        <p className="font-bold">
+          ₦{Number(item.quantity * item.price).toLocaleString()}
+        </p>
+
+        <p className="text-sm text-muted-foreground">
+          {item.status}
+        </p>
+      </div>
+    </div>
+  ))}
+</div>
     </div>
   );
 }
