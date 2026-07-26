@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import StatusBadge from "@/components/orders/StatusBadge";
+import OrderCard from "@/components/orders/OrderCard";
 
 type FarmerOrder = {
   order_id: string;
@@ -151,10 +152,7 @@ return (
         </Card>
       ) : (
         orders.map((order) => (
-          <Card
-            key={order.order_item_id ?? order.order_id}
-            className="overflow-hidden border-2"
-          >
+          <OrderCard key={order.order_item_id ?? order.order_id}>
             <CardHeader className="flex flex-col justify-between gap-4 border-b bg-muted/30 p-4 md:flex-row md:items-center">
               <div className="flex flex-wrap gap-4 md:gap-8">
                 <div>
@@ -308,7 +306,7 @@ return (
     </div>
   </div>
 </CardContent>
-          </Card>
+          </OrderCard>
         ))
       )}
     </div>
