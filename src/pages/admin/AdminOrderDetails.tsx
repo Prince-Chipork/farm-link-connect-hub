@@ -68,6 +68,30 @@ export default function AdminOrderDetails() {
       <p>
         Total: ₦{Number(order.total).toLocaleString()}
       </p>
+
+      <div className="mt-6 space-y-2 rounded-lg border p-4 bg-muted/20">
+
+  <p>
+    <strong>Order Date:</strong>{" "}
+    {new Date(order.created_at).toLocaleString()}
+  </p>
+
+  <p>
+    <strong>Delivery Address:</strong>{" "}
+    {order.delivery_address}
+  </p>
+
+  <p>
+    <strong>Shipping Cost:</strong>{" "}
+    ₦{Number(order.shipping_cost || 0).toLocaleString()}
+  </p>
+
+  <p>
+    <strong>Overall Status:</strong>{" "}
+    {order.status}
+  </p>
+
+</div>
       
       <h2 className="mt-8 mb-3 text-lg font-semibold">
   Ordered Products ({order.order_items?.length ?? 0})
