@@ -13,7 +13,7 @@ import type { Order } from "@/types";
 
 export default function BuyerOrderHistory() {
   const { user } = useAuth();
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
