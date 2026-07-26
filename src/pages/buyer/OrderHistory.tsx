@@ -35,7 +35,7 @@ type BuyerOrder = {
 
 export default function BuyerOrderHistory() {
   const { user } = useAuth();
-  const [orders, setOrders] = useState<any[]>([]);
+  const [orders, setOrders] = useState<BuyerOrder[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
