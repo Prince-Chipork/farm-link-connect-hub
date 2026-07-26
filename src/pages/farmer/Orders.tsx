@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Package, ShoppingBag, Truck } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
+import LoadingSpinner from "@/components/shared/LoadingSpinner";
 
 type FarmerOrder = {
   order_id: string;
@@ -129,12 +130,8 @@ await fetchOrders();
 };
   
   if (loading) {
-  return (
-    <div className="flex justify-center p-8">
-      <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary" />
-    </div>
-  );
-}
+  return <LoadingSpinner />;
+  }
 
 return (
   <div className="space-y-6 p-4 md:p-6 lg:p-8">
