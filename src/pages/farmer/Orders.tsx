@@ -228,8 +228,9 @@ return (
                 </Badge>
 
                 <Select
-                  value={order.status ?? "Pending"}
-                  onValueChange={(value) => {
+  value={order.status ?? "Pending"}
+  disabled={getNextStatuses(order.status ?? "Pending").length === 0}
+  onValueChange={(value) => {
                     if (!order.order_id) {
                       toast.error("Order ID is missing.");
                       return;
