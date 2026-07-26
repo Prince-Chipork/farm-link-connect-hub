@@ -58,9 +58,16 @@ export default function AdminDashboard() {
       setLoading(true);
       const [usersRes, ordersRes] = await Promise.all([
         supabase.from('profiles').select('*'),
-        supabase.from('orders').select('*, profiles(full_name)')
+        supabase
+  .from("orders")
+  .select(`
+    *,
+    buyer:profiles!orders_buyer_id_fkey(full_name),
+    farmer:profiles!orders_farmer_id_fkey(full_name)
+  `)
+        
       ]);
-
+      
       if (usersRes.error) toast.error(usersRes.error.message);
       else setUsers(usersRes.data || []);
 
