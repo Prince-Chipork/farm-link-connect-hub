@@ -52,7 +52,7 @@ export default function AdminManageOrders() {
     
       if (error) {
   toast.error(error.message);
-};
+} else {
   setOrders(data || []);
       }
       setLoading(false);
