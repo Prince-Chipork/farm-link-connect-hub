@@ -158,10 +158,12 @@ export default function AdminManageOrders() {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuLabel>Order Actions</DropdownMenuLabel>
-                          <DropdownMenuItem>
-                            <Eye className="mr-2 h-4 w-4" />
-                            View Details
-                          </DropdownMenuItem>
+                          <DropdownMenuItem asChild>
+  <Link to={`/admin/orders/${order.id}`}>
+    <Eye className="mr-2 h-4 w-4" />
+    View Details
+  </Link>
+</DropdownMenuItem>
                           <DropdownMenuItem>
                             <Truck className="mr-2 h-4 w-4" />
                             Update Status
