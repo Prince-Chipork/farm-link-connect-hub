@@ -152,7 +152,10 @@ return (
         </Card>
       ) : (
         orders.map((order) => (
-          <OrderCard key={order.order_item_id ?? order.order_id}>
+          <OrderCard
+  key={order.order_item_id ?? order.order_id}
+  className="border-2"
+>
             <CardHeader className="flex flex-col justify-between gap-4 border-b bg-muted/30 p-4 md:flex-row md:items-center">
               <div className="flex flex-wrap gap-4 md:gap-8">
                 <div>
