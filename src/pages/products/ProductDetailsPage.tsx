@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import { 
   ShoppingCart, 
   Heart, 
@@ -23,6 +22,7 @@ import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/context/AuthContext";
+import LoadingSpinner from "@/components/shared/LoadingSpinner";
 
 const trustLevelColors: Record<string, string> = {
   Platinum: "bg-blue-600",
