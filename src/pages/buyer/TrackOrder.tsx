@@ -85,11 +85,13 @@ const orderSteps = [
   }
 );
 
+if (error) throw error;
+
 console.log("RPC returned:", data);
 
-    toast.success("Order confirmed as delivered.");
+toast.success("Order confirmed as delivered.");
 
-    fetchOrder();
+fetchOrder();
   } catch (error: any) {
     console.error(error);
     toast.error(error.message ?? "Unable to confirm delivery.");
