@@ -38,13 +38,9 @@ export default function BuyerWishlist() {
     toast.success("Removed from wishlist");
   };
 
-  if (loading) {
-    return (
-      <div className="container mx-auto py-12 flex justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
+if (loading) {
+  return <LoadingSpinner />;
+}
 
   return (
     <div className="container mx-auto py-8 px-4">
