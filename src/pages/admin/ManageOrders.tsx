@@ -59,11 +59,12 @@ export default function AdminManageOrders() {
     fetchOrders();
   }, []);
 
-  const filteredOrders = orders.filter(o => 
-    o.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (o.profiles?.full_name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (o.status || '').toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredOrders = orders.filter(o =>
+  o.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  (o.buyer?.full_name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+  (o.farmer?.full_name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+  (o.status || "").toLowerCase().includes(searchTerm.toLowerCase())
+);
 
   const getStatusBadge = (status: string) => {
     switch (status?.toLowerCase()) {
@@ -133,7 +134,17 @@ export default function AdminManageOrders() {
                     <TableCell className="font-mono text-xs">
                       #{order.id.split('-')[0].toUpperCase()}
                     </TableCell>
-                    <TableCell>{order.profiles?.full_name}</TableCell>
+                  <TableCell>
+  <div className="space-y-1">
+    <p>
+      <strong>Buyer:</strong> {order.buyer?.full_name || "Unknown"}
+    </p>
+
+    <p className="text-xs text-muted-foreground">
+      <strong>Farmer:</strong> {order.farmer?.full_name || "Unknown"}
+    </p>
+  </div>
+</TableCell>
                     <TableCell>{new Date(order.created_at).toLocaleDateString()}</TableCell>
                     <TableCell>₦{Number(order.total || 0).toLocaleString()}</TableCell>
                     <TableCell>{getStatusBadge(order.status)}</TableCell>
