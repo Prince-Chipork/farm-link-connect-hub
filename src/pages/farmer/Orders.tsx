@@ -103,6 +103,31 @@ await fetchOrders();
     Cancelled: "bg-red-100 text-red-700",
   };
 
+  const getNextStatuses = (status: string) => {
+  switch (status) {
+    case "Pending":
+      return ["Accepted", "Cancelled"];
+
+    case "Accepted":
+      return ["Processing", "Cancelled"];
+
+    case "Processing":
+      return ["Packed", "Cancelled"];
+
+    case "Packed":
+      return ["Shipped"];
+
+    case "Shipped":
+      return [];
+
+    case "Delivered":
+      return [];
+
+    default:
+      return [];
+  }
+};
+  
   if (loading) {
   return (
     <div className="flex justify-center p-8">
@@ -218,30 +243,15 @@ return (
                   </SelectTrigger>
 
                   <SelectContent>
-                    <SelectItem value="Pending">
-                      Pending
-                    </SelectItem>
-
-                    <SelectItem value="Accepted">
-                      Accepted
-                    </SelectItem>
-
-                    <SelectItem value="Processing">
-  Processing
-</SelectItem>
-
-<SelectItem value="Packed">
-  Packed
-</SelectItem>
-
-<SelectItem value="Shipped">
-  Shipped
-</SelectItem>
-
-<SelectItem value="Cancelled">
-                      Cancelled
-                    </SelectItem>
-                  </SelectContent>
+  {getNextStatuses(order.status ?? "Pending").map((status) => (
+    <SelectItem
+      key={status}
+      value={status}
+    >
+      {status}
+    </SelectItem>
+  ))}
+</SelectContent>
                 </Select>
               </div>
             </CardHeader>
