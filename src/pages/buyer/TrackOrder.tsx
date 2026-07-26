@@ -226,6 +226,7 @@ fetchOrder();
 
   </div>
 </div>
+      </div>
         {item.status?.toLowerCase() === "shipped" && (
   <div className="mt-4 flex justify-end">
     <Button
