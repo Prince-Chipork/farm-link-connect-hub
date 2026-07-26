@@ -227,7 +227,7 @@ await fetchOrder();
   </div>
 </div>
       </div>
-        {item.status?.toLowerCase() === "shipped" && (
+        {item.status?.toLowerCase() === "shipped" ? (
   <div className="mt-4 flex justify-end">
     <Button
       onClick={() => confirmDelivery(item.id)}
@@ -236,7 +236,13 @@ await fetchOrder();
       Confirm Delivery
     </Button>
   </div>
-)}
+) : item.status?.toLowerCase() === "delivered" ? (
+  <div className="mt-4 flex justify-end">
+    <span className="rounded-full bg-green-100 px-3 py-2 text-sm font-medium text-green-700">
+      ✓ Delivery Confirmed
+    </span>
+  </div>
+) : null}
       
     </div>
   ))}
