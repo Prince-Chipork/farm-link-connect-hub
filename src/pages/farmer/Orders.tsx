@@ -43,7 +43,7 @@ export default function FarmerOrders() {
   try {
     setLoading(true);
 
-    const { data, error } = await supabase.rpc("get_farmer_orders");
+    const { data, error } = await (supabase as any).rpc("get_farmer_orders");
 
 if (error) throw error;
 
