@@ -26,6 +26,7 @@ import AdminManageUsers from './pages/admin/ManageUsers';
 import AdminManageProducts from './pages/admin/ManageProducts';
 import AdminManageOrders from './pages/admin/ManageOrders';
 import AdminReports from './pages/admin/Reports';
+import AdminOrderDetails from "@/pages/admin/AdminOrderDetails";
 
 import NotFound from "./pages/NotFound";
 import { Toaster } from "@/components/ui/sonner";
