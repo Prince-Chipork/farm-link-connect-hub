@@ -92,7 +92,7 @@ export default function BuyerOrderHistory() {
             </CardContent>
           </Card>
         ) : (
-          orders.map((order) => (
+          orders.map((order: BuyerOrder) => (
             <Card key={order.id} className="overflow-hidden border shadow-sm">
               <CardHeader className="bg-muted/30 border-b flex flex-row items-center justify-between space-y-0 p-4">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 flex-1">
