@@ -210,7 +210,7 @@ const orderSteps = [
 
   </div>
 </div>
-        {item.status === "Shipped" && (
+        {item.status?.toLowerCase() === "shipped" && (
   <div className="mt-4 flex justify-end">
     <Button
       onClick={() => confirmDelivery(item.id)}
