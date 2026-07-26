@@ -132,7 +132,7 @@ fetchOrder();
         <img
           src={item.products?.images?.[0] || "/placeholder.svg"}
           alt={item.products?.name}
-          className="h-16 w-16 rounded-md object-cover bg-muted"
+          className="h-14 w-14 md:h-16 md:w-16" rounded-md object-cover bg-muted"
         />
 
         <div className="flex-1">
@@ -158,8 +158,8 @@ fetchOrder();
       </div>
 
       <div className="mt-4">
-  <div className="flex items-center justify-between gap-2 overflow-x-auto text-[11px] font-medium">
-
+  <div className="overflow-x-auto">
+  <div className="flex min-w-[700px] items-center justify-between gap-2 text-[11px] font-medium">
     <div className={`flex flex-col items-center ${
       stepReached(item.status, orderSteps, "pending")
         ? "text-primary"
