@@ -70,7 +70,7 @@ export default function AdminOrderDetails() {
       </p>
       
       <h2 className="mt-8 mb-3 text-lg font-semibold">
-  Ordered Products
+  Ordered Products ({order.order_items?.length ?? 0})
 </h2>
 
 <div className="space-y-4">
