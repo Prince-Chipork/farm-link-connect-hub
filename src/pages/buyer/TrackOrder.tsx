@@ -85,7 +85,7 @@ const orderSteps = [
         p_status: "Delivered",
       }
     );
-
+console.log("RPC returned:", data);
     if (error) throw error;
 
     toast.success("Order confirmed as delivered.");
