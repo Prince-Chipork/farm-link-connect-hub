@@ -227,7 +227,7 @@ const getStatusBadge = (status: string) => {
 </div>
 
 </div> {/* End of flex row */}
-
+<OrderTimeline status={item.status} />
 
 </div>
                   ))}
