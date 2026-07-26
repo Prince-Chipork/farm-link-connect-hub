@@ -11,31 +11,9 @@ import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import { getOverallOrderStatus } from "@/lib/orderStatus";
 import type { Order } from "@/types";
 
-type BuyerOrder = {
-  id: string;
-  buyer_id: string;
-  total: number;
-  status: string;
-  delivery_address: string;
-  shipping_cost: number;
-  created_at: string;
-
-  order_items: {
-    id: string;
-    quantity: number;
-    price: number;
-    status: string;
-
-    products: {
-      name: string;
-      images: string[];
-    };
-  }[];
-};
-
 export default function BuyerOrderHistory() {
   const { user } = useAuth();
-  const [orders, setOrders] = useState<BuyerOrder[]>([]);
+  const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -92,7 +70,7 @@ export default function BuyerOrderHistory() {
             </CardContent>
           </Card>
         ) : (
-          orders.map((order: BuyerOrder) => (
+          orders.map((order) => (
             <Card key={order.id} className="overflow-hidden border shadow-sm">
               <CardHeader className="bg-muted/30 border-b flex flex-row items-center justify-between space-y-0 p-4">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 flex-1">
