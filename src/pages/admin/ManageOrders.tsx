@@ -44,7 +44,11 @@ export default function AdminManageOrders() {
   useEffect(() => {
     const fetchOrders = async () => {
       setLoading(true);
-      const { data, error } = await supabase.from('orders').select('*, profiles(full_name)');
+      const { data, error } = await supabase.from('orders').select(`
+  *,
+  buyer:profiles!orders_buyer_id_fkey(full_name),
+  farmer:profiles!orders_farmer_id_fkey(full_name)
+`)
       if (error) {
         toast.error(error.message);
       } else {
