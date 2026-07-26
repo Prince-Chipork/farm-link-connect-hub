@@ -43,15 +43,11 @@ export default function FarmerOrders() {
   try {
     setLoading(true);
 
-    const { data, error } = await (supabase as any).rpc(
-  "confirm_order_delivery",
-  {
-    p_order_item_id: orderItemId,
-  }
-);
-    if (error) throw error;
+    const { data, error } = await supabase.rpc("get_farmer_orders");
 
-    setOrders((data || []) as FarmerOrder[]);
+if (error) throw error;
+
+setOrders((data ?? []) as FarmerOrder[]);
  
   } catch (error: any) {
     console.error(error);
