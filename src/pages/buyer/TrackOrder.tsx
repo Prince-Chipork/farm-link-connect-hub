@@ -99,7 +99,7 @@ fetchOrder();
 };
   return (
     <div className="container mx-auto py-8 px-4">
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
   <Button asChild variant="outline">
     <Link to="/buyer/orders">
       <ArrowLeft className="mr-2 h-4 w-4" />
