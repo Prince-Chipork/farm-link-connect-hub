@@ -52,9 +52,10 @@ export default function AdminManageOrders() {
      console.log("Orders:", data);
 console.log("Error:", error); 
       if (error) {
-        toast.error(error.message);
-      } else {
-        setOrders(data || []);
+  toast.error(error.message);
+} else {
+  toast.success(`Orders loaded: ${data?.length ?? 0}`);
+  setOrders(data || []);
       }
       setLoading(false);
     };
