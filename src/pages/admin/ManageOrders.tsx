@@ -49,12 +49,10 @@ export default function AdminManageOrders() {
   buyer:profiles!orders_buyer_id_fkey(full_name),
   farmer:profiles!orders_farmer_id_fkey(full_name)
 `);
-     console.log("Orders:", data);
-console.log("Error:", error); 
+    
       if (error) {
   toast.error(error.message);
-} else {
-  toast.success(`Orders loaded: ${data?.length ?? 0}`);
+};
   setOrders(data || []);
       }
       setLoading(false);
