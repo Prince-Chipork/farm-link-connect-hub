@@ -7,6 +7,7 @@ import { useCart } from "@/context/CartContext";
 import { Heart, ShoppingCart, Trash2, Star } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
+import LoadingSpinner from "@/components/shared/LoadingSpinner";
 
 export default function BuyerWishlist() {
   const [products, setProducts] = useState<any[]>([]);
