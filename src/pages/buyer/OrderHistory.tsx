@@ -11,6 +11,28 @@ import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import { getOverallOrderStatus } from "@/lib/orderStatus";
 import type { Order } from "@/types";
 
+type BuyerOrder = {
+  id: string;
+  buyer_id: string;
+  total: number;
+  status: string;
+  delivery_address: string;
+  shipping_cost: number;
+  created_at: string;
+
+  order_items: {
+    id: string;
+    quantity: number;
+    price: number;
+    status: string;
+
+    products: {
+      name: string;
+      images: string[];
+    };
+  }[];
+};
+
 export default function BuyerOrderHistory() {
   const { user } = useAuth();
   const [orders, setOrders] = useState<any[]>([]);
