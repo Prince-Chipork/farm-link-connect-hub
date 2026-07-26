@@ -47,11 +47,36 @@ export default function BuyerOrderHistory() {
       (item.status || "").toLowerCase()
     ) || [];
 
-  if (statuses.every((s) => s === "delivered")) return "delivered";
-  if (statuses.some((s) => s === "shipped")) return "shipped";
-  if (statuses.some((s) => s === "packed")) return "packed";
-  if (statuses.some((s) => s === "processing")) return "processing";
-  if (statuses.some((s) => s === "accepted")) return "accepted";
+  // Ignore cancelled items
+  const activeStatuses = statuses.filter(
+    (s) => s !== "cancelled"
+  );
+
+  // If everything is cancelled
+  if (activeStatuses.length === 0) {
+    return "cancelled";
+  }
+
+  if (activeStatuses.every((s) => s === "delivered")) {
+    return "delivered";
+  }
+
+  if (activeStatuses.some((s) => s === "shipped")) {
+    return "shipped";
+  }
+
+  if (activeStatuses.some((s) => s === "packed")) {
+    return "packed";
+  }
+
+  if (activeStatuses.some((s) => s === "processing")) {
+    return "processing";
+  }
+
+  if (activeStatuses.some((s) => s === "accepted")) {
+    return "accepted";
+  }
+
   return "pending";
 };
 
