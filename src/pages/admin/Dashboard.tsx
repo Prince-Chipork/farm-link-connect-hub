@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import { 
   Users, 
   ShoppingBag, 
