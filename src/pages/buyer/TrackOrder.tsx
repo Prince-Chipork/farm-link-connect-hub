@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { Clock, Package, Truck, CheckCircle2, ArrowLeft, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import LoadingSpinner from "@/components/shared/LoadingSpinner";
 
 export default function TrackOrder() {
   const { orderId } = useParams();
@@ -45,11 +46,7 @@ export default function TrackOrder() {
   }, [orderId]);
 
   if (loading) {
-    return (
-      <div className="flex justify-center py-10">
-  <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary" />
-</div>
-    );
+  return <LoadingSpinner />;
   }
 
   if (!order) {
