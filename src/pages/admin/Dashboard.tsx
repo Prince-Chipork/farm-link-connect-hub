@@ -83,11 +83,7 @@ export default function AdminDashboard() {
   const recentOrders = [...orders].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).slice(0, 5);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[80vh]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
-    );
+  return <LoadingSpinner />;
   }
 
   return (
