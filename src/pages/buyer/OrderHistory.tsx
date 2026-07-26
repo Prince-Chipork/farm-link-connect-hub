@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import StatusBadge from "@/components/orders/StatusBadge"; 
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import { getOverallOrderStatus } from "@/lib/orderStatus";
 
 export default function BuyerOrderHistory() {
   const { user } = useAuth();
@@ -41,46 +42,6 @@ export default function BuyerOrderHistory() {
     fetchOrders();
   }, [user]);
 
-  const getOverallOrderStatus = (order: any) => {
-  const statuses =
-    order.order_items?.map((item: any) =>
-      (item.status || "").toLowerCase()
-    ) || [];
-
-  const activeStatuses = statuses.filter(
-    (s) => s !== "cancelled"
-  );
-
-  if (activeStatuses.length === 0) {
-    return "cancelled";
-  }
-
-  if (activeStatuses.every((s) => s === "delivered")) {
-    return "delivered";
-  }
-
-  if (activeStatuses.some((s) => s === "shipped")) {
-    return "shipped";
-  }
-
-  if (activeStatuses.some((s) => s === "packed")) {
-    return "packed";
-  }
-
-  if (activeStatuses.some((s) => s === "processing")) {
-    return "processing";
-  }
-
-  if (activeStatuses.some((s) => s === "accepted")) {
-    return "accepted";
-  }
-
-  if (activeStatuses.some((s) => s === "pending")) {
-    return "pending";
-  }
-
-  return "pending";
-};
   if (loading) {
   return <LoadingSpinner />;
 }
