@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Clock, Package, Truck, CheckCircle2 } from "lucide-react";
+import { Clock, Package, Truck, CheckCircle2, ArrowLeft, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function TrackOrder() {
@@ -97,6 +97,21 @@ console.log("RPC returned:", data);
 };
   return (
     <div className="container mx-auto py-8 px-4">
+      <div className="mb-6 flex items-center justify-between">
+  <Button asChild variant="outline">
+    <Link to="/buyer/orders">
+      <ArrowLeft className="mr-2 h-4 w-4" />
+      Back to My Orders
+    </Link>
+  </Button>
+
+  <Button asChild>
+    <Link to="/products">
+      <ShoppingBag className="mr-2 h-4 w-4" />
+      Continue Shopping
+    </Link>
+  </Button>
+</div>
       <Card>
         <CardHeader>
           <CardTitle>
