@@ -78,15 +78,14 @@ const orderSteps = [
 ];
   const confirmDelivery = async (orderItemId: string) => {
   try {
-    const { error } = await (supabase as any).rpc(
-      "update_farmer_order_status",
-      {
-        p_order_item_id: orderItemId,
-        p_status: "Delivered",
-      }
-    );
+    const { data, error } = await (supabase as any).rpc(
+  "confirm_order_delivery",
+  {
+    p_order_item_id: orderItemId,
+  }
+);
+
 console.log("RPC returned:", data);
-    if (error) throw error;
 
     toast.success("Order confirmed as delivered.");
 
