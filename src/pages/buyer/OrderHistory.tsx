@@ -7,6 +7,7 @@ import { ShoppingBag, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import LoadingSpinner from "@/components/shared/LoadingSpinner";
 
 export default function BuyerOrderHistory() {
   const { user } = useAuth();
@@ -114,13 +115,8 @@ const getStatusBadge = (status: string) => {
 };
 
   if (loading) {
-    return (
-      <div className="container mx-auto py-12 flex justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
-
+  return <LoadingSpinner />;
+}
   return (
     <div className="container mx-auto py-8 px-4 space-y-6">
       <div className="flex items-center justify-between">
