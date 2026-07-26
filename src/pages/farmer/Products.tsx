@@ -53,13 +53,10 @@ export default function FarmerProducts() {
         fetchMyProducts();
     }, [user, showArchived]);
 
-    if (loading) {
-        return (
-            <div className="p-4 md:p-6 lg:p-8 flex justify-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-            </div>
-        );
-    }
+if (loading) {
+  return <LoadingSpinner />;
+}
+    
 const deleteProduct = async (productId: string) => {
   const confirmed = window.confirm(
     "Are you sure you want to delete this product?"
