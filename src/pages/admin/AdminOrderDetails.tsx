@@ -4,17 +4,12 @@ import { supabase } from "@/integrations/supabase/client";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function AdminOrderDetails() {
   const { orderId } = useParams();
 
   const [order, setOrder] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-
-  const [open, setOpen] = useState(false);
-const [newStatus, setNewStatus] = useState("");
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -45,40 +40,6 @@ const [newStatus, setNewStatus] = useState("");
     fetchOrder();
   }, [orderId]);
 
-  const updateOrderStatus = async () => {
-  if (!newStatus) {
-    toast.error("Please select a status.");
-    return;
-  }
-
-  const { data, error } = await supabase
-  .from("order_items")
-  .update({
-    status: newStatus,
-  })
-  .eq("order_id", order.id)
-  .select();
-
-alert(JSON.stringify(data));
-
-  if (error) {
-    console.log(error);
-    toast.error(error.message);
-    return;
-  }
-
-  toast.success("Database updated successfully.");
-
-  setOrder({
-    ...order,
-    order_items: order.order_items.map((item: any) => ({
-      ...item,
-      status: newStatus,
-    })),
-  });
-
-  setOpen(false);
-};
   
   if (loading) return <LoadingSpinner />;
 
@@ -96,14 +57,14 @@ alert(JSON.stringify(data));
       (item.status || "").toLowerCase()
     ) || [];
 
-  if (statuses.length === 0) return "pending";
+  if (statuses.length === 0) return "Pending";
 
-  if (statuses.every((s) => s === "cancelled")) return "Cancelled";
-  if (statuses.every((s) => s === "delivered")) return "Delivered";
-  if (statuses.every((s) => s === "accepted")) return "Accepted";
-  if (statuses.every((s) => s === "processing")) return "Processing";
-  if (statuses.every((s) => s === "packed")) return "Packed";
-  if (statuses.every((s) => s === "shipped")) return "Shipped";
+  if (statuses.every((s) => s === "Cancelled")) return "Cancelled";
+  if (statuses.every((s) => s === "Delivered")) return "Delivered";
+  if (statuses.every((s) => s === "Accepted")) return "Accepted";
+  if (statuses.every((s) => s === "Processing")) return "Processing";
+  if (statuses.every((s) => s === "Packed")) return "Packed";
+  if (statuses.every((s) => s === "Shipped")) return "Shipped";
 
   return "Mixed";
 };
@@ -146,11 +107,6 @@ alert(JSON.stringify(data));
 
   <strong>Overall Status:</strong> {getOverallOrderStatus(order)}
 
-</div>
-      <div className="mt-6 flex justify-end">
-  <Button onClick={() => setOpen(true)}>
-  Update Status
-</Button>
 </div>
       
       <h2 className="mt-8 mb-3 text-lg font-semibold">
@@ -195,46 +151,6 @@ alert(JSON.stringify(data));
     </div>
   ))}
 </div>
-      <Dialog open={open} onOpenChange={setOpen}>
-  <DialogContent>
-
-    <DialogHeader>
-      <DialogTitle>
-        Update Order Status
-      </DialogTitle>
-    </DialogHeader>
-
-    <Select
-      value={newStatus}
-      onValueChange={setNewStatus}
-    >
-      <SelectTrigger>
-        <SelectValue placeholder="Select a status" />
-      </SelectTrigger>
-
-      <SelectContent>
-        <SelectItem value="pending">Pending</SelectItem>
-        <SelectItem value="accepted">Accepted</SelectItem>
-        <SelectItem value="processing">Processing</SelectItem>
-        <SelectItem value="packed">Packed</SelectItem>
-        <SelectItem value="shipped">Shipped</SelectItem>
-        <SelectItem value="delivered">Delivered</SelectItem>
-        <SelectItem value="cancelled">Cancelled</SelectItem>
-      </SelectContent>
-    </Select>
-
-    <DialogFooter>
-      <Button variant="outline" onClick={() => setOpen(false)}>
-        Cancel
-      </Button>
-
-      <Button onClick={updateOrderStatus}>
-  Save
-</Button>
-    </DialogFooter>
-
-  </DialogContent>
-</Dialog>
     </div>
   );
 }
