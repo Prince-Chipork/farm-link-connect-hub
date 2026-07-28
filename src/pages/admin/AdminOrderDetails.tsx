@@ -11,6 +11,7 @@ export default function AdminOrderDetails() {
 
   const [order, setOrder] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [itemStatuses, setItemStatuses] = useState<Record<string, string>>({});
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -33,6 +34,14 @@ export default function AdminOrderDetails() {
         toast.error(error.message);
       } else {
         setOrder(data);
+
+const initialStatuses: Record<string, string> = {};
+
+data.order_items?.forEach((item: any) => {
+  initialStatuses[item.id] = item.status;
+});
+
+setItemStatuses(initialStatuses);
       }
 
       setLoading(false);
@@ -173,7 +182,15 @@ export default function AdminOrderDetails() {
     ₦{Number(item.quantity * item.price).toLocaleString()}
   </p>
 
-  <Select value={item.status}>
+  <Select
+  value={itemStatuses[item.id]}
+  onValueChange={(value) =>
+    setItemStatuses((prev) => ({
+      ...prev,
+      [item.id]: value,
+    }))
+  }
+>
     
     <SelectTrigger className="w-[170px]">
       <SelectValue />
@@ -191,11 +208,17 @@ export default function AdminOrderDetails() {
   </Select>
 
   <Button
-    size="sm"
-    variant="outline"
-  >
-    Save
-  </Button>
+  size="sm"
+  variant="outline"
+  onClick={() =>
+    updateItemStatus(
+      item.id,
+      itemStatuses[item.id]
+    )
+  }
+>
+  Save
+</Button>
 
 </div>
     </div>
