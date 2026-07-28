@@ -60,12 +60,12 @@ export default function AdminOrderDetails() {
 
   if (statuses.length === 0) return "Pending";
 
-  if (statuses.every((s) => s === "Cancelled")) return "Cancelled";
-  if (statuses.every((s) => s === "Delivered")) return "Delivered";
-  if (statuses.every((s) => s === "Accepted")) return "Accepted";
-  if (statuses.every((s) => s === "Processing")) return "Processing";
-  if (statuses.every((s) => s === "Packed")) return "Packed";
-  if (statuses.every((s) => s === "Shipped")) return "Shipped";
+  if (statuses.every((s) => s === "cancelled")) return "Cancelled";
+  if (statuses.every((s) => s === "delivered")) return "Delivered";
+  if (statuses.every((s) => s === "accepted")) return "Accepted";
+  if (statuses.every((s) => s === "processing")) return "Processing";
+  if (statuses.every((s) => s === "packed")) return "Packed";
+  if (statuses.every((s) => s === "shipped")) return "Shipped";
 
   return "Mixed";
 };
