@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import { toast } from "sonner";
@@ -9,6 +9,7 @@ import { getOverallOrderStatus } from "@/lib/orderStatus";
 
 export default function AdminOrderDetails() {
   const { orderId } = useParams();
+  const navigate = useNavigate();
 
   const [order, setOrder] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -120,6 +121,14 @@ try {
   }
   return (
     <div className="container mx-auto py-8">
+      <div className="mb-6">
+  <Button
+    variant="outline"
+    onClick={() => navigate("/admin/orders")}
+  >
+    ← Back to Orders
+  </Button>
+</div>
 
       <h1 className="text-2xl font-bold">
         Order Details
