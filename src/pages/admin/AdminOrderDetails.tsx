@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function AdminOrderDetails() {
   const { orderId } = useParams();
@@ -139,15 +140,38 @@ export default function AdminOrderDetails() {
         </p>
       </div>
 
-      <div className="text-right">
-        <p className="font-bold">
-          ₦{Number(item.quantity * item.price).toLocaleString()}
-        </p>
+      <div className="text-right space-y-3">
 
-        <p className="text-sm text-muted-foreground">
-          {item.status}
-        </p>
-      </div>
+  <p className="font-bold">
+    ₦{Number(item.quantity * item.price).toLocaleString()}
+  </p>
+
+  <Select
+    defaultValue={item.status}
+  >
+    <SelectTrigger className="w-[170px]">
+      <SelectValue />
+    </SelectTrigger>
+
+    <SelectContent>
+      <SelectItem value="pending">Pending</SelectItem>
+      <SelectItem value="accepted">Accepted</SelectItem>
+      <SelectItem value="processing">Processing</SelectItem>
+      <SelectItem value="packed">Packed</SelectItem>
+      <SelectItem value="shipped">Shipped</SelectItem>
+      <SelectItem value="delivered">Delivered</SelectItem>
+      <SelectItem value="cancelled">Cancelled</SelectItem>
+    </SelectContent>
+  </Select>
+
+  <Button
+    size="sm"
+    variant="outline"
+  >
+    Save
+  </Button>
+
+</div>
     </div>
   ))}
 </div>
