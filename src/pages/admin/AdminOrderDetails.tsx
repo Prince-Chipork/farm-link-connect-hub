@@ -81,7 +81,17 @@ setOrder(updatedOrder);
 
 const overallStatus = getOverallOrderStatus(updatedOrder);
 };
-  
+  const { error: orderError } = await supabase
+  .from("orders")
+  .update({
+    status: overallStatus.charAt(0).toUpperCase() + overallStatus.slice(1),
+  })
+  .eq("id", order.id);
+
+if (orderError) {
+  toast.error(orderError.message);
+  return;
+}
   if (loading) return <LoadingSpinner />;
 
   if (!order) {
