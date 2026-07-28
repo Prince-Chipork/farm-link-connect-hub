@@ -55,6 +55,9 @@ setItemStatuses(initialStatuses);
   itemId: string,
   status: string
 ) => {
+
+  toast("updateItemStatus started");
+
   const { error } = await supabase
     .from("order_items")
     .update({ status })
