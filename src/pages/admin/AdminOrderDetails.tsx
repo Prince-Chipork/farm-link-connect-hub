@@ -152,9 +152,6 @@ setItemStatuses(initialStatuses);
 
 <div className="space-y-4">
   {order.order_items?.map((item: any) => (
-  <p className="text-sm text-muted-foreground">
-  Farmer: {item.products?.farmer?.full_name}
-</p>
     <div
       key={item.id}
       className="flex items-center gap-4 rounded-lg border p-4"
@@ -166,6 +163,9 @@ setItemStatuses(initialStatuses);
       />
 
       <div className="flex-1">
+        <p className="text-sm text-muted-foreground">
+  Farmer: {item.products?.farmer?.full_name}
+</p>
         <h3 className="font-semibold">
           {item.products?.name}
         </h3>
