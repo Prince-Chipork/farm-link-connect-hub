@@ -47,7 +47,7 @@ export default function AdminManageOrders() {
       setLoading(true);
       const { data, error } = await supabase.from('orders').select(`
   *,
-  buyer:profiles!orders_buyer_id_fkey(full_name),
+  buyer:profiles!orders_buyer_id_fkey(full_name)
 `);
     
       if (error) {
