@@ -55,13 +55,10 @@ setItemStatuses(initialStatuses);
   itemId: string,
   status: string
 ) => {
-  const { data, error } = await supabase
-  .from("order_items")
-  .update({
-    status,
-  })
-  .eq("id", itemId)
-  .select();
+  const { error } = await supabase
+    .from("order_items")
+    .update({ status })
+    .eq("id", itemId);
 
   if (error) {
     toast.error(error.message);
@@ -69,29 +66,34 @@ setItemStatuses(initialStatuses);
   }
 
   const updatedOrder = {
-  ...order,
-  order_items: order.order_items.map((item: any) =>
-    item.id === itemId
-      ? { ...item, status }
-      : item
-  ),
-};
+    ...order,
+    order_items: order.order_items.map((item: any) =>
+      item.id === itemId
+        ? { ...item, status }
+        : item
+    ),
+  };
 
-setOrder(updatedOrder);
+  setOrder(updatedOrder);
 
-const overallStatus = getOverallOrderStatus(updatedOrder);
-};
+  const overallStatus = getOverallOrderStatus(updatedOrder);
+
   const { error: orderError } = await supabase
-  .from("orders")
-  .update({
-    status: overallStatus.charAt(0).toUpperCase() + overallStatus.slice(1),
-  })
-  .eq("id", order.id);
+    .from("orders")
+    .update({
+      status:
+        overallStatus.charAt(0).toUpperCase() +
+        overallStatus.slice(1),
+    })
+    .eq("id", order.id);
 
-if (orderError) {
-  toast.error(orderError.message);
-  return;
-}
+  if (orderError) {
+    toast.error(orderError.message);
+    return;
+  }
+
+  toast.success("Item status updated.");
+};
   if (loading) return <LoadingSpinner />;
 
   if (!order) {
