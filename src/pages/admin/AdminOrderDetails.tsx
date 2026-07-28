@@ -24,6 +24,7 @@ export default function AdminOrderDetails() {
           order_items(
             *,
             products(*, farmer:profiles!products_farmer_id_fkey(full_name)
+            )
           )
         `)
         .eq("id", orderId)
@@ -96,12 +97,12 @@ setItemStatuses(initialStatuses);
 
   if (statuses.length === 0) return "Pending";
 
-  if (statuses.every((s) => s === "Cancelled")) return "Cancelled";
-  if (statuses.every((s) => s === "Delivered")) return "Delivered";
-  if (statuses.every((s) => s === "Accepted")) return "Accepted";
-  if (statuses.every((s) => s === "Processing")) return "Processing";
-  if (statuses.every((s) => s === "Packed")) return "Packed";
-  if (statuses.every((s) => s === "Shipped")) return "Shipped";
+  if (statuses.every((s) => s === "cancelled")) return "Cancelled";
+  if (statuses.every((s) => s === "delivered")) return "Delivered";
+  if (statuses.every((s) => s === "accepted")) return "Accepted";
+  if (statuses.every((s) => s === "processing")) return "Processing";
+  if (statuses.every((s) => s === "packed")) return "Packed";
+  if (statuses.every((s) => s === "shipped")) return "Shipped";
 
   return "Mixed";
 };
@@ -115,10 +116,6 @@ setItemStatuses(initialStatuses);
 
       <p className="mt-4">
         Buyer: {order.buyer?.full_name}
-      </p>
-
-      <p>
-        Farmer: {order.farmer?.full_name}
       </p>
 
       <p>
