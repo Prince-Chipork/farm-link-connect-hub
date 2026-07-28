@@ -52,12 +52,15 @@ const [newStatus, setNewStatus] = useState("");
     return;
   }
 
-  const { error } = await supabase
-    .from("order_items")
-    .update({
-      status: newStatus,
-    })
-    .eq("order_id", order.id);
+  const { data, error } = await supabase
+  .from("order_items")
+  .update({
+    status: newStatus,
+  })
+  .eq("order_id", order.id)
+  .select();
+
+console.log("Updated rows:", data);
 
   if (error) {
     console.log(error);
