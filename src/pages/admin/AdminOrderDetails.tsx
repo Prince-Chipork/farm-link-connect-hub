@@ -4,6 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function AdminOrderDetails() {
   const { orderId } = useParams();
@@ -159,6 +161,46 @@ const [newStatus, setNewStatus] = useState("");
     </div>
   ))}
 </div>
+      <Dialog open={open} onOpenChange={setOpen}>
+  <DialogContent>
+
+    <DialogHeader>
+      <DialogTitle>
+        Update Order Status
+      </DialogTitle>
+    </DialogHeader>
+
+    <Select
+      value={newStatus}
+      onValueChange={setNewStatus}
+    >
+      <SelectTrigger>
+        <SelectValue placeholder="Select a status" />
+      </SelectTrigger>
+
+      <SelectContent>
+        <SelectItem value="pending">Pending</SelectItem>
+        <SelectItem value="accepted">Accepted</SelectItem>
+        <SelectItem value="processing">Processing</SelectItem>
+        <SelectItem value="packed">Packed</SelectItem>
+        <SelectItem value="shipped">Shipped</SelectItem>
+        <SelectItem value="delivered">Delivered</SelectItem>
+        <SelectItem value="cancelled">Cancelled</SelectItem>
+      </SelectContent>
+    </Select>
+
+    <DialogFooter>
+      <Button variant="outline" onClick={() => setOpen(false)}>
+        Cancel
+      </Button>
+
+      <Button>
+        Save
+      </Button>
+    </DialogFooter>
+
+  </DialogContent>
+</Dialog>
     </div>
   );
 }
