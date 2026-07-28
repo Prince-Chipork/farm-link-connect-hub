@@ -41,6 +41,33 @@ export default function AdminOrderDetails() {
     fetchOrder();
   }, [orderId]);
 
+  const updateItemStatus = async (
+  itemId: string,
+  status: string
+) => {
+  const { error } = await supabase
+    .from("order_items")
+    .update({
+      status,
+    })
+    .eq("id", itemId);
+
+  if (error) {
+    toast.error(error.message);
+    return;
+  }
+
+  toast.success("Item status updated.");
+
+  setOrder({
+    ...order,
+    order_items: order.order_items.map((item: any) =>
+      item.id === itemId
+        ? { ...item, status }
+        : item
+    ),
+  });
+};
   
   if (loading) return <LoadingSpinner />;
 
