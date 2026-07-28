@@ -11,6 +11,9 @@ export default function AdminOrderDetails() {
   const [order, setOrder] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
+  const [open, setOpen] = useState(false);
+const [newStatus, setNewStatus] = useState("");
+
   useEffect(() => {
     const fetchOrder = async () => {
       if (!orderId) return;
@@ -109,9 +112,9 @@ export default function AdminOrderDetails() {
 
 </div>
       <div className="mt-6 flex justify-end">
-  <Button>
-    Update Status
-  </Button>
+  <Button onClick={() => setOpen(true)}>
+  Update Status
+</Button>
 </div>
       
       <h2 className="mt-8 mb-3 text-lg font-semibold">
