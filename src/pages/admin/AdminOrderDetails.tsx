@@ -21,10 +21,9 @@ export default function AdminOrderDetails() {
         .from("orders")
         .select(`*,
           buyer:profiles!orders_buyer_id_fkey(full_name),
-          farmer:profiles!orders_farmer_id_fkey(full_name),
           order_items(
             *,
-            products(*)
+            products(*, farmer:profiles!products_farmer_id_fkey(full_name)
           )
         `)
         .eq("id", orderId)
@@ -153,6 +152,9 @@ setItemStatuses(initialStatuses);
 
 <div className="space-y-4">
   {order.order_items?.map((item: any) => (
+  <p className="text-sm text-muted-foreground">
+  Farmer: {item.products?.farmer?.full_name}
+</p>
     <div
       key={item.id}
       className="flex items-center gap-4 rounded-lg border p-4"
