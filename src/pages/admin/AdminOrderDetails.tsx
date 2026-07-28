@@ -45,7 +45,7 @@ const [newStatus, setNewStatus] = useState("");
 
     fetchOrder();
   }, [orderId]);
-  
+
   const updateOrderStatus = async () => {
   if (!newStatus) {
     toast.error("Please select a status.");
