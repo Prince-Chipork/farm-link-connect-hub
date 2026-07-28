@@ -1,4 +1,10 @@
-export function getOverallOrderStatus(order: any) {
+type OrderWithItems = {
+  order_items?: {
+    status?: string;
+  }[];
+};
+
+export function getOverallOrderStatus(order: OrderWithItems) {
   const statuses =
     order.order_items?.map((item: any) =>
       (item.status || "").toLowerCase()
