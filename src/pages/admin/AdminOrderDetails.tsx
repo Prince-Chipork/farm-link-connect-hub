@@ -60,8 +60,12 @@ const [newStatus, setNewStatus] = useState("");
     .eq("order_id", order.id);
 
   if (error) {
-    toast.error(error.message);
-    return;
+  console.log(error);
+  toast.error(error.message);
+  return;
+}
+
+toast.success("Database updated successfully.");
   }
 
   toast.success("Order status updated.");
