@@ -95,17 +95,10 @@ if (orderError) {
   return;
 }
 
+console.log("Orders table updated:", updatedOrder);
+
 toast.success(`Order status saved as ${newOverallStatus}`);
-
-console.log(updatedOrder);
-
-  if (orderError) {
-    toast.error(orderError.message);
-    return;
-  }
-
-  toast.success("Item status updated.");
-};
+    
   if (loading) return <LoadingSpinner />;
 
   if (!order) {
