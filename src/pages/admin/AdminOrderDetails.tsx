@@ -225,9 +225,9 @@ const [newStatus, setNewStatus] = useState("");
         Cancel
       </Button>
 
-      <Button>
-        Save
-      </Button>
+      <Button onClick={updateOrderStatus}>
+  Save
+</Button>
     </DialogFooter>
 
   </DialogContent>
