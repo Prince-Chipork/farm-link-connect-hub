@@ -68,16 +68,18 @@ setItemStatuses(initialStatuses);
     return;
   }
 
-  toast.success("Item status updated.");
+  const updatedOrder = {
+  ...order,
+  order_items: order.order_items.map((item: any) =>
+    item.id === itemId
+      ? { ...item, status }
+      : item
+  ),
+};
 
-  setOrder({
-    ...order,
-    order_items: order.order_items.map((item: any) =>
-      item.id === itemId
-        ? { ...item, status }
-        : item
-    ),
-  });
+setOrder(updatedOrder);
+
+const overallStatus = getOverallOrderStatus(updatedOrder);
 };
   
   if (loading) return <LoadingSpinner />;
