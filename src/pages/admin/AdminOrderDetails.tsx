@@ -5,7 +5,7 @@ import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { getOverallOrderStatus } from "@/lib/OrderStatus";
+import { getOverallOrderStatus } from "@/lib/orderStatus";
 
 export default function AdminOrderDetails() {
   const { orderId } = useParams();
