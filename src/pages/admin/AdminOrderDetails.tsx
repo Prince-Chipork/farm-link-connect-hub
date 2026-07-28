@@ -104,6 +104,7 @@ try {
 } catch (err: any) {
   toast.error(err.message);
 }
+  };
   
   if (loading) return <LoadingSpinner />;
 
