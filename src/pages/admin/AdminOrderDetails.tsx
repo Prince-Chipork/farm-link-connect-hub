@@ -78,11 +78,7 @@ setItemStatuses(initialStatuses);
 
   const overallStatus = getOverallOrderStatus(updatedOrder);
 
-  const newOverallStatus =
-  overallStatus.charAt(0).toUpperCase() +
-  overallStatus.slice(1);
-
-const newStatus =
+    const newStatus =
   overallStatus.charAt(0).toUpperCase() +
   overallStatus.slice(1);
 
