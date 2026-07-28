@@ -146,9 +146,8 @@ export default function AdminOrderDetails() {
     ₦{Number(item.quantity * item.price).toLocaleString()}
   </p>
 
-  <Select
-    defaultValue={item.status}
-  >
+  <Select value={item.status}>
+    
     <SelectTrigger className="w-[170px]">
       <SelectValue />
     </SelectTrigger>
