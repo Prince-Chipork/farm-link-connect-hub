@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 export default function AdminOrderDetails() {
   const { orderId } = useParams();
@@ -106,6 +107,11 @@ export default function AdminOrderDetails() {
 
   <strong>Overall Status:</strong> {getOverallOrderStatus(order)}
 
+</div>
+      <div className="mt-6 flex justify-end">
+  <Button>
+    Update Status
+  </Button>
 </div>
       
       <h2 className="mt-8 mb-3 text-lg font-semibold">
