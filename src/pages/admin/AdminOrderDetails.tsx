@@ -78,14 +78,26 @@ setItemStatuses(initialStatuses);
 
   const overallStatus = getOverallOrderStatus(updatedOrder);
 
-  const { error: orderError } = await supabase
-    .from("orders")
-    .update({
-      status:
-        overallStatus.charAt(0).toUpperCase() +
-        overallStatus.slice(1),
-    })
-    .eq("id", order.id);
+  const newOverallStatus =
+  overallStatus.charAt(0).toUpperCase() +
+  overallStatus.slice(1);
+
+const { data: updatedOrder, error: orderError } = await supabase
+  .from("orders")
+  .update({
+    status: newOverallStatus,
+  })
+  .eq("id", order.id)
+  .select();
+
+if (orderError) {
+  toast.error(orderError.message);
+  return;
+}
+
+toast.success(`Order status saved as ${newOverallStatus}`);
+
+console.log(updatedOrder);
 
   if (orderError) {
     toast.error(orderError.message);
