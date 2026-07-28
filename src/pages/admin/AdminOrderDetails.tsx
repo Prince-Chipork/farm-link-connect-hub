@@ -54,13 +54,16 @@ setItemStatuses(initialStatuses);
   itemId: string,
   status: string
 ) => {
-  const { error } = await supabase
-    .from("order_items")
-    .update({
-      status,
-    })
-    .eq("id", itemId);
+  const { data, error } = await supabase
+  .from("order_items")
+  .update({
+    status,
+  })
+  .eq("id", itemId)
+  .select();
 
+toast.info(`Updated rows: ${data?.length ?? 0}`);
+    
   if (error) {
     toast.error(error.message);
     return;
