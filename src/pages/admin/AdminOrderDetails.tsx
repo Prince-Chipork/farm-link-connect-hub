@@ -59,7 +59,7 @@ const [newStatus, setNewStatus] = useState("");
   .eq("order_id", order.id)
   .select();
 
-console.log("Updated rows:", data);
+alert(JSON.stringify(data));
 
   if (error) {
     console.log(error);
