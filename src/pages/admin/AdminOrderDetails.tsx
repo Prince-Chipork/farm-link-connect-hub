@@ -22,8 +22,7 @@ const [newStatus, setNewStatus] = useState("");
 
       const { data, error } = await supabase
         .from("orders")
-        .select(`
-          *,
+        .select(`*,
           buyer:profiles!orders_buyer_id_fkey(full_name),
           farmer:profiles!orders_farmer_id_fkey(full_name),
           order_items(
