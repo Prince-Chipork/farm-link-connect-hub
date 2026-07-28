@@ -50,6 +50,24 @@ export default function AdminOrderDetails() {
     );
   }
 
+  const getOverallOrderStatus = (order: any) => {
+  const statuses =
+    order.order_items?.map((item: any) =>
+      (item.status || "").toLowerCase()
+    ) || [];
+
+  if (statuses.length === 0) return "pending";
+
+  if (statuses.every((s) => s === "cancelled")) return "cancelled";
+  if (statuses.every((s) => s === "delivered")) return "delivered";
+  if (statuses.every((s) => s === "accepted")) return "accepted";
+  if (statuses.every((s) => s === "processing")) return "processing";
+  if (statuses.every((s) => s === "packed")) return "packed";
+  if (statuses.every((s) => s === "shipped")) return "shipped";
+
+  return "Mixed";
+};
+  
   return (
     <div className="container mx-auto py-8">
 
@@ -86,10 +104,7 @@ export default function AdminOrderDetails() {
     ₦{Number(order.shipping_cost || 0).toLocaleString()}
   </p>
 
-  <p>
-    <strong>Overall Status:</strong>{" "}
-    {order.status}
-  </p>
+  <strong>Overall Status:</strong> {getOverallOrderStatus(order)}
 
 </div>
       
