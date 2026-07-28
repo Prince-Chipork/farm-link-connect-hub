@@ -82,22 +82,23 @@ setItemStatuses(initialStatuses);
   overallStatus.charAt(0).toUpperCase() +
   overallStatus.slice(1);
 
-const { data: updatedOrders, error: orderError } = await supabase
+const newStatus =
+  overallStatus.charAt(0).toUpperCase() +
+  overallStatus.slice(1);
+
+const { data, error: orderError } = await supabase
   .from("orders")
-  .update({
-    status: newOverallStatus,
-  })
+  .update({ status: newStatus })
   .eq("id", order.id)
   .select();
 
-if (orderError) {
-  toast.error(orderError.message);
-  return;
-}
-
-console.log("Orders table updated:", updatedOrders);
-
-toast.success(`Order status saved as ${newOverallStatus}`);
+toast(
+  JSON.stringify({
+    newStatus,
+    updatedRows: data?.length ?? 0,
+    error: orderError?.message ?? null,
+  })
+);
   };
   
   if (loading) return <LoadingSpinner />;
