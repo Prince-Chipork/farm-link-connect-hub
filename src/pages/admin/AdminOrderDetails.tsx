@@ -92,12 +92,13 @@ const { data, error: orderError } = await supabase
   .eq("id", order.id)
   .select();
 
-toast(
-  JSON.stringify({
-    newStatus,
-    updatedRows: data?.length ?? 0,
-    error: orderError?.message ?? null,
-  })
+if (orderError) {
+  toast.error("Orders update failed: " + orderError.message);
+  return;
+}
+
+toast.success(
+  `Orders updated. Rows: ${data?.length ?? 0}, Status: ${newStatus}`
 );
   };
   
