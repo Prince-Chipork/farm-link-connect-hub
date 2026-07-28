@@ -48,7 +48,6 @@ export default function AdminManageOrders() {
       const { data, error } = await supabase.from('orders').select(`
   *,
   buyer:profiles!orders_buyer_id_fkey(full_name),
-  farmer:profiles!orders_farmer_id_fkey(full_name)
 `);
     
       if (error) {
@@ -140,10 +139,6 @@ export default function AdminManageOrders() {
   <div className="space-y-1">
     <p>
       <strong>Buyer:</strong> {order.buyer?.full_name || "Unknown"}
-    </p>
-
-    <p className="text-xs text-muted-foreground">
-      <strong>Farmer:</strong> {order.farmer?.full_name || "Unknown"}
     </p>
   </div>
 </TableCell>
