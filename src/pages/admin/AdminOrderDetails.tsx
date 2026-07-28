@@ -160,13 +160,15 @@ setItemStatuses(initialStatuses);
       />
 
       <div className="flex-1">
-        <p className="text-sm text-muted-foreground">
-  Farmer: {item.products?.farmer?.full_name}
-</p>
+        
         <h3 className="font-semibold">
           {item.products?.name}
         </h3>
 
+        <p className="text-sm text-muted-foreground">
+  Farmer: {item.products?.farmer?.full_name}
+</p>
+       
         <p className="text-sm text-muted-foreground">
           Qty: {item.quantity}
         </p>
