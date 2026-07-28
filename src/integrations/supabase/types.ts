@@ -14,12 +14,13 @@ export type Database = {
     Tables: {
       order_items: {
         Row: {
-          created_at: string | null
-          id: string
-          order_id: string
-          price: number
-          product_id: string
-          quantity: number
+  created_at: string | null
+  id: string
+  order_id: string
+  price: number
+  product_id: string
+  quantity: number
+  status: string
         }
         Insert: {
           created_at?: string | null
@@ -28,6 +29,7 @@ export type Database = {
           price: number
           product_id: string
           quantity: number
+          status?: string
         }
         Update: {
           created_at?: string | null
@@ -36,6 +38,7 @@ export type Database = {
           price?: number
           product_id?: string
           quantity?: number
+          status?: string
         }
         Relationships: [
           {
