@@ -82,21 +82,28 @@ setItemStatuses(initialStatuses);
   overallStatus.charAt(0).toUpperCase() +
   overallStatus.slice(1);
 
-const { data, error: orderError } = await supabase
-  .from("orders")
-  .update({ status: newStatus })
-  .eq("id", order.id)
-  .select();
+try {
+  toast("Reached orders update");
 
-if (orderError) {
-  toast.error("Orders update failed: " + orderError.message);
-  return;
+  const { data, error: orderError } = await supabase
+    .from("orders")
+    .update({ status: newStatus })
+    .eq("id", order.id)
+    .select();
+
+  toast("Orders query finished");
+
+  if (orderError) {
+    toast.error(orderError.message);
+    return;
+  }
+
+  toast.success(
+    `Rows updated: ${data?.length ?? 0}`
+  );
+} catch (err: any) {
+  toast.error(err.message);
 }
-
-toast.success(
-  `Orders updated. Rows: ${data?.length ?? 0}, Status: ${newStatus}`
-);
-  };
   
   if (loading) return <LoadingSpinner />;
 
