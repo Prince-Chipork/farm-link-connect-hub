@@ -45,7 +45,38 @@ const [newStatus, setNewStatus] = useState("");
 
     fetchOrder();
   }, [orderId]);
+  
+  const updateOrderStatus = async () => {
+  if (!newStatus) {
+    toast.error("Please select a status.");
+    return;
+  }
 
+  const { error } = await supabase
+    .from("order_items")
+    .update({
+      status: newStatus,
+    })
+    .eq("order_id", order.id);
+
+  if (error) {
+    toast.error(error.message);
+    return;
+  }
+
+  toast.success("Order status updated.");
+
+  setOrder({
+    ...order,
+    order_items: order.order_items.map((item: any) => ({
+      ...item,
+      status: newStatus,
+    })),
+  });
+
+  setOpen(false);
+};
+  
   if (loading) return <LoadingSpinner />;
 
   if (!order) {
