@@ -69,7 +69,7 @@ setItemStatuses(initialStatuses);
 
   toast.success("Item status updated.");
 
-  setOrder({
+  await fetchOrder({
     ...order,
     order_items: order.order_items.map((item: any) =>
       item.id === itemId
