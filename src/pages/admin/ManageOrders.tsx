@@ -93,7 +93,7 @@ export default function AdminManageOrders() {
   <Button asChild variant="outline" size="sm">
       <Link to="/admin/dashboard">
         <ArrowLeft className="mr-2 h-4 w-4" />
-        Dashboard
+        Back to Dashboard
       </Link>
     </Button>
 </div>
