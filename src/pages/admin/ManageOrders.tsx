@@ -89,8 +89,7 @@ export default function AdminManageOrders() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-   <div className="mb-6">
+         <div className="mb-6">
   <Button asChild variant="outline" size="sm">
       <Link to="/admin/dashboard">
         <ArrowLeft className="mr-2 h-4 w-4" />
@@ -98,6 +97,8 @@ export default function AdminManageOrders() {
       </Link>
     </Button>
 </div>
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+
         <div className="flex items-center gap-3">
 
     <h1 className="text-3xl font-bold tracking-tight">
