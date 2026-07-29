@@ -40,14 +40,7 @@ import {
 } from 'recharts';
 import { toast } from 'sonner';
 
-const revenueData = [
-  { name: "Jan", revenue: 450000 },
-  { name: "Feb", revenue: 380000 },
-  { name: "Mar", revenue: 620000 },
-  { name: "Apr", revenue: 540000 },
-  { name: "May", revenue: 780000 },
-  { name: "Jun", revenue: 690000 },
-];
+const [revenueData, setRevenueData] = useState<any[]>([]);
 
 export default function AdminDashboard() {
   const [users, setUsers] = useState<any[]>([]);
@@ -78,6 +71,29 @@ export default function AdminDashboard() {
 
       if (ordersRes.error) toast.error(ordersRes.error.message);
       else setOrders(ordersRes.data || []);
+      const monthlyRevenue: Record<string, number> = {};
+
+(ordersRes.data || []).forEach((order: any) => {
+  const month = new Date(order.created_at).toLocaleString(
+    "default",
+    {
+      month: "short",
+    }
+  );
+
+  monthlyRevenue[month] =
+    (monthlyRevenue[month] || 0) +
+    Number(order.total || 0);
+});
+
+setRevenueData(
+  Object.entries(monthlyRevenue).map(
+    ([name, revenue]) => ({
+      name,
+      revenue,
+    })
+  )
+);
 
       setLoading(false);
     };
