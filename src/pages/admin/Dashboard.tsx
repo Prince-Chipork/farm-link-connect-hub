@@ -46,8 +46,7 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [revenueData, setRevenueData] = useState<any[]>([]);
 
-  useEffect(() => {
-    const fetchDashboardData = async () => {
+  const fetchDashboardData = async () => {
       setLoading(true);
       const [usersRes, ordersRes] = await Promise.all([
         supabase.from('profiles').select('*'),
@@ -88,7 +87,7 @@ export default function AdminDashboard() {
     (monthlyRevenue[month] || 0) +
     Number(order.total || 0);
 });
-
+      
 const chartData = Object.entries(monthlyRevenue)
   .map(([name, revenue]) => ({
     name,
@@ -104,9 +103,41 @@ setRevenueData(chartData);
 
       setLoading(false);
     };
-    fetchDashboardData();
-  }, []);
+  
+  useEffect(() => {
+  fetchDashboardData();
 
+  const channel = supabase
+    .channel("admin-dashboard")
+    .on(
+      "postgres_changes",
+      {
+        event: "*",
+        schema: "public",
+        table: "orders",
+      },
+      () => {
+        fetchDashboardData();
+      }
+    )
+    .on(
+      "postgres_changes",
+      {
+        event: "*",
+        schema: "public",
+        table: "profiles",
+      },
+      () => {
+        fetchDashboardData();
+      }
+    )
+    .subscribe();
+
+  return () => {
+    supabase.removeChannel(channel);
+  };
+}, []);
+  
   const stats = {
   totalFarmers: users.filter(u => u.role === "farmer").length,
 
