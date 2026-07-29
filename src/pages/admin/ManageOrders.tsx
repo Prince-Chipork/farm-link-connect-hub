@@ -49,7 +49,7 @@ export default function AdminManageOrders() {
       const { data, error } = await supabase.from('orders').select(`
   *,
   buyer:profiles!orders_buyer_id_fkey(full_name),
-  order_items(status)
+  order_items(id, status)
 `)
     
       if (error) {
