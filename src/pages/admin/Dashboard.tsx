@@ -164,7 +164,7 @@ setRevenueData(
           <CardContent>
             <div className="text-2xl font-bold">₦{stats.totalRevenue.toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">
-  From {stats.completedOrders} completed orders
+  From {stats.deliveredOrders} completed orders
 </p>
           </CardContent>
         </Card>
