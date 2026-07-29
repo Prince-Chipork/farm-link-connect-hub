@@ -86,13 +86,26 @@ export default function AdminDashboard() {
     Number(order.total || 0);
 });
 
+const months = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
 setRevenueData(
-  Object.entries(monthlyRevenue).map(
-    ([name, revenue]) => ({
-      name,
-      revenue,
-    })
-  )
+  months.map((month) => ({
+    name: month,
+    revenue: monthlyRevenue[month] || 0,
+  }))
 );
 
       setLoading(false);
