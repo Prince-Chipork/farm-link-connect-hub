@@ -54,12 +54,11 @@ setItemStatuses(initialStatuses);
   }, [orderId]);
 
   const updateItemStatus = async (
+  const updateItemStatus = async (
   itemId: string,
   status: string
 ) => {
-
-  toast("updateItemStatus started");
-
+  // Update the selected order item
   const { error } = await supabase
     .from("order_items")
     .update({ status })
@@ -70,6 +69,7 @@ setItemStatuses(initialStatuses);
     return;
   }
 
+  // Update local state
   const updatedOrder = {
     ...order,
     order_items: order.order_items.map((item: any) =>
@@ -81,35 +81,26 @@ setItemStatuses(initialStatuses);
 
   setOrder(updatedOrder);
 
+  // Calculate overall order status
   const overallStatus = getOverallOrderStatus(updatedOrder);
 
-    const newStatus =
-  overallStatus.charAt(0).toUpperCase() +
-  overallStatus.slice(1);
+  const newStatus =
+    overallStatus.charAt(0).toUpperCase() +
+    overallStatus.slice(1);
 
-try {
-  toast("Reached orders update");
-
-  const { data, error: orderError } = await supabase
+  // Save overall status to orders table
+  const { error: orderError } = await supabase
     .from("orders")
     .update({ status: newStatus })
-    .eq("id", order.id)
-    .select();
-
-  toast("Orders query finished");
+    .eq("id", order.id);
 
   if (orderError) {
     toast.error(orderError.message);
     return;
   }
 
-  toast.success(
-    `Rows updated: ${data?.length ?? 0}`
-  );
-} catch (err: any) {
-  toast.error(err.message);
-}
-  };
+  toast.success("Order status updated successfully.");
+};
   
   if (loading) return <LoadingSpinner />;
 
