@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { getOverallOrderStatus } from "@/lib/orderStatus";
+import OrderTimeline from "@/components/orders/OrderTimeline";
 
 export default function AdminOrderDetails() {
   const { orderId } = useParams();
@@ -160,6 +161,9 @@ try {
   </p>
 
   <strong>Overall Status:</strong> {getOverallOrderStatus(order)}
+        <OrderTimeline
+  status={getOverallOrderStatus(order)}
+/>
 
 </div>
       
