@@ -126,7 +126,7 @@ try {
     variant="outline"
     onClick={() => navigate("/admin/orders")}
   >
-    ← Back to Orders
+    🔙 to Orders
   </Button>
 </div>
 
