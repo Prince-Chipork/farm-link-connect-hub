@@ -66,7 +66,7 @@ export default function AdminManageOrders() {
   o.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
   (o.buyer?.full_name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
   (o.farmer?.full_name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-  getOverallOrderStatus(order)
+  getOverallOrderStatus(o)
   .toLowerCase()
   .includes(searchTerm.toLowerCase())
 );
