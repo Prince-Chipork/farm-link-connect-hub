@@ -258,7 +258,7 @@ export default function AdminDashboard() {
               {recentOrders.map((order) => (
                 <TableRow key={order.id}>
                   <TableCell className="font-medium">#{order.id.split('-')[0].toUpperCase()}</TableCell>
-                  <TableCell>{order.profiles?.full_name}</TableCell>
+                  <TableCell>{order.buyer?.full_name || "Unknown"}</TableCell>
                   <TableCell>{new Date(order.created_at).toLocaleDateString()}</TableCell>
                   <TableCell>
                     ₦{Number(order.total || 0).toLocaleString()}
