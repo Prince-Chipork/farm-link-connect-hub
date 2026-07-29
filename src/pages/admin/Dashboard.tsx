@@ -163,7 +163,9 @@ setRevenueData(
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">₦{stats.totalRevenue.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">  Based on {stats.totalOrders} orders</p>
+            <p className="text-xs text-muted-foreground">
+  From {stats.completedOrders} completed orders
+</p>
           </CardContent>
         </Card>
         <Card className="border-l-4 border-l-blue-500">
@@ -173,7 +175,9 @@ setRevenueData(
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.totalFarmers}</div>
-            <p className="text-xs text-muted-foreground">{stats.pendingFarmers} awaiting verification</p>
+            <p className="text-xs text-muted-foreground">
+  Out of {stats.totalOrders} total orders
+</p>
           </CardContent>
         </Card>
         <Card className="border-l-4 border-l-orange-500">
@@ -209,8 +213,12 @@ setRevenueData(
     </div>
 
     <p className="text-xs text-muted-foreground">
-      Successfully completed
-    </p>
+  {Math.round(
+    (stats.deliveredOrders /
+      (stats.totalOrders || 1)) *
+      100
+  )}% completion rate
+</p>
   </CardContent>
 </Card>
         <Card className="border-l-4 border-l-green-500">
