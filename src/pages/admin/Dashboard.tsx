@@ -128,7 +128,12 @@ setRevenueData(
     (acc, order) => acc + Number(order.total || 0),
     0
   ),
-
+    
+activeOrders: orders.filter(
+  o =>
+    !["Delivered", "Cancelled"].includes(o.status)
+).length,
+    
   totalOrders: orders.length,
 
   pendingOrders: orders.filter(
