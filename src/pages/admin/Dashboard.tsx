@@ -135,10 +135,14 @@ setRevenueData(
     0
   ),
     
-activeOrders: orders.filter(
-  o =>
-    !["Delivered", "Cancelled"].includes(o.status)
-).length,
+activeOrders: orders.filter((order) => {
+  const status = getOverallOrderStatus(order);
+
+  return (
+    status !== "delivered" &&
+    status !== "cancelled"
+  );
+}).length,
     
   totalOrders: orders.length,
 
