@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import { getOverallOrderStatus } from "@/lib/orderStatus";
 import { 
   Users, 
   ShoppingBag, 
@@ -264,12 +265,7 @@ export default function AdminDashboard() {
                     ₦{Number(order.total || 0).toLocaleString()}
                   </TableCell>
                   <TableCell>
-                    <Badge 
-                      variant={order.status === 'delivered' ? 'default' : 'outline'}
-                      className="capitalize"
-                    >
-                      {order.status}
-                    </Badge>
+                    <Badge variant={getOverallOrderStatus(order) === "delivered"? "default": "outline"}className="capitalize">{getOverallOrderStatus(order)} </Badge>
                   </TableCell>
                   <TableCell className="text-right">
                     <Button variant="ghost" size="sm">Details</Button>
