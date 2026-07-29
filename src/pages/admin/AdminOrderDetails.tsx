@@ -54,7 +54,6 @@ setItemStatuses(initialStatuses);
   }, [orderId]);
 
   const updateItemStatus = async (
-  const updateItemStatus = async (
   itemId: string,
   status: string
 ) => {
