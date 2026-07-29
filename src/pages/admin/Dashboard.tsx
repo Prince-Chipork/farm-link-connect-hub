@@ -40,12 +40,11 @@ import {
 } from 'recharts';
 import { toast } from 'sonner';
 
-const [revenueData, setRevenueData] = useState<any[]>([]);
-
 export default function AdminDashboard() {
   const [users, setUsers] = useState<any[]>([]);
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [revenueData, setRevenueData] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -71,6 +70,7 @@ export default function AdminDashboard() {
 
       if (ordersRes.error) toast.error(ordersRes.error.message);
       else setOrders(ordersRes.data || []);
+      
       const monthlyRevenue: Record<string, number> = {};
 
 (ordersRes.data || []).forEach((order: any) => {
@@ -142,7 +142,7 @@ setRevenueData(
       </div>
 
       {/* Stats Grid */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
         <Card className="border-l-4 border-l-primary">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
@@ -334,7 +334,11 @@ setRevenueData(
                     <Badge variant={getOverallOrderStatus(order) === "delivered"? "default": "outline"}className="capitalize">{getOverallOrderStatus(order)} </Badge>
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button variant="ghost" size="sm">Details</Button>
+                    <Button asChild variant="ghost" size="sm">
+  <Link to={`/admin/orders/${order.id}`}>
+    Details
+  </Link>
+</Button>
                   </TableCell>
                 </TableRow>
               ))}
