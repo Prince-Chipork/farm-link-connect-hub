@@ -75,11 +75,12 @@ export default function AdminDashboard() {
 
 (ordersRes.data || []).forEach((order: any) => {
   const month = new Date(order.created_at).toLocaleString(
-    "default",
-    {
-      month: "short",
-    }
-  );
+  "default",
+  {
+    month: "short",
+    year: "2-digit",
+  }
+);
 
   monthlyRevenue[month] =
     (monthlyRevenue[month] || 0) +
@@ -124,7 +125,12 @@ setRevenueData(
     u => u.role === "buyer"
   ).length,
 
-  totalRevenue: orders.reduce(
+  totalRevenue: orders
+  .filter(
+    order =>
+      getOverallOrderStatus(order) === "delivered"
+  )
+  .reduce(
     (acc, order) => acc + Number(order.total || 0),
     0
   ),
@@ -181,7 +187,7 @@ activeOrders: orders.filter(
           <CardContent>
             <div className="text-2xl font-bold">{stats.totalFarmers}</div>
             <p className="text-xs text-muted-foreground">
-  Out of {stats.totalOrders} total orders
+  {stats.totalFarmers - stats.pendingFarmers} verified
 </p>
           </CardContent>
         </Card>
