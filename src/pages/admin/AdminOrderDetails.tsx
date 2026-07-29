@@ -110,6 +110,15 @@ setItemStatuses(initialStatuses);
       </div>
     );
   }
+  const payableTotal =
+  order.order_items?.reduce((sum: number, item: any) => {
+    if ((item.status || "").toLowerCase() === "cancelled") {
+      return sum;
+    }
+
+    return sum + item.price * item.quantity;
+  }, 0) ?? 0;
+  
   return (
     <div className="container mx-auto py-8">
       <div className="mb-6">
@@ -130,7 +139,7 @@ setItemStatuses(initialStatuses);
       </p>
 
       <p>
-        Total: ₦{Number(order.total).toLocaleString()}
+        Total: ₦{payableTotal.toLocaleString()}
       </p>
 
       <div className="mt-6 space-y-2 rounded-lg border p-4 bg-muted/20">
