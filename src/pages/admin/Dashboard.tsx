@@ -220,7 +220,7 @@ setRevenueData(
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.totalBuyers}</div>
-            <p className="text-xs text-muted-foreground">+4 new this week</p>
+            <p className="text-xs text-muted-foreground">Registered buyers</p>
           </CardContent>
         </Card>
       </div>
