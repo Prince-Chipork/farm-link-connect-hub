@@ -74,13 +74,15 @@ export default function AdminDashboard() {
       const monthlyRevenue: Record<string, number> = {};
 
 (ordersRes.data || []).forEach((order: any) => {
+  if (getOverallOrderStatus(order) !== "delivered") return;
+
   const month = new Date(order.created_at).toLocaleString(
-  "default",
-  {
-    month: "short",
-    year: "2-digit",
-  }
-);
+    "default",
+    {
+      month: "short",
+      year: "2-digit",
+    }
+  );
 
   monthlyRevenue[month] =
     (monthlyRevenue[month] || 0) +
