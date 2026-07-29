@@ -66,7 +66,9 @@ export default function AdminManageOrders() {
   o.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
   (o.buyer?.full_name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
   (o.farmer?.full_name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-  (o.status || "").toLowerCase().includes(searchTerm.toLowerCase())
+  getOverallOrderStatus(order)
+  .toLowerCase()
+  .includes(searchTerm.toLowerCase())
 );
 
   const getStatusBadge = (status: string) => {
