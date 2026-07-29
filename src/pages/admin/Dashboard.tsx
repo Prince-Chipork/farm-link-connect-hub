@@ -64,7 +64,11 @@ export default function AdminDashboard() {
   .select(`
     *,
     buyer:profiles!orders_buyer_id_fkey(full_name),
-    farmer:profiles!orders_farmer_id_fkey(full_name)
+    farmer:profiles!orders_farmer_id_fkey(full_name),
+    order_items(
+      id,
+      status
+    )
   `)
         
       ]);
@@ -81,12 +85,31 @@ export default function AdminDashboard() {
   }, []);
 
   const stats = {
-    totalFarmers: users.filter(u => u.role === 'farmer').length,
-    pendingFarmers: users.filter(u => u.role === 'farmer' && !u.is_verified).length,
-    totalBuyers: users.filter(u => u.role === 'buyer').length,
-    totalRevenue: orders.reduce((acc, curr) => acc + Number(curr.total || 0), 0),
-    totalOrders: orders.length,
-  };
+  totalFarmers: users.filter(u => u.role === "farmer").length,
+
+  pendingFarmers: users.filter(
+    u => u.role === "farmer" && !u.is_verified
+  ).length,
+
+  totalBuyers: users.filter(
+    u => u.role === "buyer"
+  ).length,
+
+  totalRevenue: orders.reduce(
+    (acc, order) => acc + Number(order.total || 0),
+    0
+  ),
+
+  totalOrders: orders.length,
+
+  pendingOrders: orders.filter(
+    o => getOverallOrderStatus(o) === "pending"
+  ).length,
+
+  deliveredOrders: orders.filter(
+    o => getOverallOrderStatus(o) === "delivered"
+  ).length,
+};
 
   const pendingFarmersList = users.filter(u => u.role === 'farmer' && !u.is_verified).slice(0, 5);
   const recentOrders = [...orders].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).slice(0, 5);
