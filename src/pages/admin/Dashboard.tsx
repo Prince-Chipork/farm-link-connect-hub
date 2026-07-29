@@ -87,27 +87,18 @@ export default function AdminDashboard() {
     Number(order.total || 0);
 });
 
-const months = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-
-setRevenueData(
-  months.map((month) => ({
-    name: month,
-    revenue: monthlyRevenue[month] || 0,
+const chartData = Object.entries(monthlyRevenue)
+  .map(([name, revenue]) => ({
+    name,
+    revenue,
   }))
-);
+  .sort((a, b) => {
+    const da = new Date("01 " + a.name);
+    const db = new Date("01 " + b.name);
+    return da.getTime() - db.getTime();
+  });
+
+setRevenueData(chartData);
 
       setLoading(false);
     };
