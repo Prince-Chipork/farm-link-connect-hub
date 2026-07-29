@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { getOverallOrderStatus } from "@/lib/orderStatus";
+import { Link } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 import { 
   Search, 
   MoreHorizontal, 
@@ -89,23 +91,36 @@ export default function AdminManageOrders() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-3xl font-bold tracking-tight">Manage Orders</h1>
-        <div className="flex items-center gap-2">
-          <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search orders..."
-              className="pl-8 w-full sm:w-[300px]"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          <Button variant="outline">
-            <Download className="mr-2 h-4 w-4" />
-            Export CSV
-          </Button>
-        </div>
-      </div>
+  <div className="flex items-center gap-3">
+    <Button asChild variant="outline" size="sm">
+      <Link to="/admin">
+        <ArrowLeft className="mr-2 h-4 w-4" />
+        Dashboard
+      </Link>
+    </Button>
+
+    <h1 className="text-3xl font-bold tracking-tight">
+      Manage Orders
+    </h1>
+  </div>
+
+  <div className="flex items-center gap-2">
+    <div className="relative">
+      <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+      <Input
+        placeholder="Search orders..."
+        className="pl-8 w-full sm:w-[300px]"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+    </div>
+
+    <Button variant="outline">
+      <Download className="mr-2 h-4 w-4" />
+      Export CSV
+    </Button>
+  </div>
+</div>
 
       <Card>
         <CardHeader>
