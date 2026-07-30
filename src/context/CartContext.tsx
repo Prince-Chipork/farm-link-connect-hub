@@ -5,6 +5,7 @@ type CartItem = {
   id: string;
   name: string;
   price: number;
+  delivery_fee: number;
   quantity: number;
   image?: string;
 };
