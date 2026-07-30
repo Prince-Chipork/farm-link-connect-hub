@@ -28,6 +28,7 @@ export interface Product {
   farmerName: string; // denormalized for convenience
   farmerVerified: boolean; // denormalized
   farmerTrustLevel: TrustLevel; // denormalized
+  delivery_fee: number;
 }
 
 export type OrderStatus =
