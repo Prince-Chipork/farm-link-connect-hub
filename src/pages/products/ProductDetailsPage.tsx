@@ -64,15 +64,13 @@ export default function ProductDetailsPage() {
   const handleAddToCart = () => {
   if (!product) return;
 
-  addToCart(
-    {
-      id: product.id,
-      name: product.name,
-      price: Number(product.price),
-      image: product.images?.[0],
-    },
-    quantity
-  );
+  addToCart({
+  id: product.id,
+  name: product.name,
+  price: Number(product.price),
+  delivery_fee: Number(product.delivery_fee ?? 0),
+  image: product.images?.[0],
+});
 
   toast.success(`${product.name} added to cart!`);
 };
