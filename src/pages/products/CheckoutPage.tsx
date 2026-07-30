@@ -63,7 +63,7 @@ export default function CheckoutPage() {
   delivery_fee: shippingCost,
 }));
 
-      const { error: itemsError } = await supabase.from('order_items').insert(items);
+      const { error: itemsError } = await (supabase as any).from('order_items').insert(items);
       if (itemsError) throw itemsError;
 
       setIsSuccess(true);
