@@ -16,4 +16,5 @@ export interface Product {
   farmerName: string;
   farmerVerified: boolean;
   farmerTrustLevel: TrustLevel;
+  delivery_fee: number;
 }
