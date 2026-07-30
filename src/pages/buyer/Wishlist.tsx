@@ -113,11 +113,12 @@ if (loading) {
                     disabled={(product.stock_quantity || 0) <= 0}
                     onClick={() => {
                       addToCart({
-                        id: product.id,
-                        name: product.name,
-                        price: Number(product.price),
-                        image: product.image_url
-                      });
+  id: product.id,
+  name: product.name,
+  price: Number(product.price),
+  delivery_fee: Number(product.delivery_fee ?? 0),
+  image: product.images?.[0],
+});
                       toast.success("Added to cart");
                     }}
                   >
