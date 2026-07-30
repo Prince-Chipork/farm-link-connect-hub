@@ -139,8 +139,22 @@ setItemStatuses(initialStatuses);
       </p>
 
       <p>
-        Total: ₦{payableTotal.toLocaleString()}
-      </p>
+  Total: ₦{
+    order.order_items
+      ?.filter(
+        (item: any) =>
+          item.status?.toLowerCase() !== "cancelled"
+      )
+      .reduce(
+        (sum: number, item: any) =>
+          sum +
+          item.price * item.quantity +
+          Number(item.delivery_fee || 0),
+        0
+      )
+      .toLocaleString()
+  }
+</p>
 
       <div className="mt-6 space-y-2 rounded-lg border p-4 bg-muted/20">
 
