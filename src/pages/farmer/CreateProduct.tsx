@@ -142,7 +142,8 @@ export default function CreateProduct() {
       toast.success("Product created successfully!");
       navigate("/farmer/products");
     } catch (error: any) {
-      toast.error(error.message);
+  console.error(error);
+  toast.error(JSON.stringify(error));
     } finally {
       setLoading(false);
     }
