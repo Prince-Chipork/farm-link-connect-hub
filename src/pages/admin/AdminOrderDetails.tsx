@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { getOverallOrderStatus } from "@/lib/orderStatus";
+import { calculateOrderTotal, calculateProductSubtotal, calculateDeliveryTotal } from "@/lib/orderCalculations";
 import OrderTimeline from "@/components/orders/OrderTimeline";
 
 export default function AdminOrderDetails() {
@@ -139,23 +140,8 @@ setItemStatuses(initialStatuses);
       </p>
 
       <p>
-  Total: ₦{
-    order.order_items
-      ?.filter(
-        (item: any) =>
-          item.status?.toLowerCase() !== "cancelled"
-      )
-      .reduce(
-        (sum: number, item: any) =>
-          sum +
-          item.price * item.quantity +
-          Number(item.delivery_fee || 0),
-        0
-      )
-      .toLocaleString()
-  }
+  Total: ₦{calculateOrderTotal(order).toLocaleString()}
 </p>
-
       <div className="mt-6 space-y-2 rounded-lg border p-4 bg-muted/20">
 
   <p>
@@ -169,9 +155,19 @@ setItemStatuses(initialStatuses);
   </p>
 
   <p>
-    <strong>Shipping Cost:</strong>{" "}
-    ₦{Number(order.shipping_cost || 0).toLocaleString()}
-  </p>
+  <strong>Products:</strong>{" "}
+  ₦{calculateProductSubtotal(order).toLocaleString()}
+</p>
+
+<p>
+  <strong>Delivery:</strong>{" "}
+  ₦{calculateDeliveryTotal(order).toLocaleString()}
+</p>
+
+<p className="font-bold">
+  <strong>Total:</strong>{" "}
+  ₦{calculateOrderTotal(order).toLocaleString()}
+</p>
 
   <strong>Overall Status:</strong> {getOverallOrderStatus(order)}
         <OrderTimeline
