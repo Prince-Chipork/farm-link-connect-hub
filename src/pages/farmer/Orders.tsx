@@ -196,7 +196,7 @@ return (
 
                 <div>
                   <p className="text-xs font-semibold uppercase text-muted-foreground">
-  Your Earnings
+  Item Total
 </p>
 
 <p className="text-sm font-medium text-primary">
