@@ -11,6 +11,7 @@ import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import { getOverallOrderStatus } from "@/lib/orderStatus";
 import type { Order } from "@/types";
 import OrderCard from "@/components/orders/OrderCard";
+import { calculateOrderTotal } from "@/lib/orderCalculations";
 
 export default function BuyerOrderHistory() {
   const { user } = useAuth();
@@ -85,7 +86,7 @@ export default function BuyerOrderHistory() {
                   </div>
                   <div>
                     <p className="text-[10px] text-muted-foreground uppercase font-semibold">Total</p>
-                    <p className="text-sm font-medium text-primary font-bold">₦{Number(order.total || 0).toLocaleString()}</p>
+                    <p className="text-sm font-medium text-primary font-bold">{calculateOrderTotal(order).toLocaleString()}</p>
                   </div>
                   <div>
   <p className="text-[10px] text-muted-foreground uppercase font-semibold">
@@ -154,8 +155,13 @@ export default function BuyerOrderHistory() {
   <p className="font-bold text-primary">
     ₦{Number(item.quantity * item.price).toLocaleString()}
   </p>
-</div>
 
+  {item.status?.toLowerCase() !== "cancelled" && (
+    <p className="text-xs text-muted-foreground">
+      + Delivery ₦{Number(item.delivery_fee || 0).toLocaleString()}
+    </p>
+  )}
+</div>
 </div>
 
 </div>
