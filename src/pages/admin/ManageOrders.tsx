@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { getOverallOrderStatus } from "@/lib/orderStatus";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import { calculateOrderTotal } from "@/lib/orderCalculations";
 import { 
   Search, 
   MoreHorizontal, 
@@ -47,10 +48,16 @@ export default function AdminManageOrders() {
   useEffect(() => {
     const fetchOrders = async () => {
       setLoading(true);
-      const { data, error } = await supabase.from('orders').select(`
+      const { data, error } = await supabase.from("orders")
+.select(`
   *,
   buyer:profiles!orders_buyer_id_fkey(full_name),
-  order_items(id, status)
+  order_items(
+    quantity,
+    price,
+    delivery_fee,
+    status
+  )
 `)
     
       if (error) {
@@ -164,7 +171,7 @@ export default function AdminManageOrders() {
   </div>
 </TableCell>
                     <TableCell>{new Date(order.created_at).toLocaleDateString()}</TableCell>
-                    <TableCell>₦{Number(order.total || 0).toLocaleString()}</TableCell>
+                    <TableCell>₦{calculateOrderTotal(order).toLocaleString()}</TableCell>
                     <TableCell>{getStatusBadge(getOverallOrderStatus(order))}</TableCell>
                     <TableCell className="text-right">
                       <DropdownMenu>
