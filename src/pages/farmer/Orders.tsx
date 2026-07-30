@@ -296,9 +296,7 @@ return (
 
         <p className="text-sm">
           {order.delivery_address ?? "No address provided"}</p>
-        <p className="mt-2 text-sm font-semibold text-primary">
-  Shipping Fee: ₦{Number(order.shipping_cost ?? 0).toLocaleString()}
-</p>
+        
       </div>
     </div>
 
