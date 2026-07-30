@@ -250,7 +250,12 @@ export default function BuyerDashboard() {
                     size="sm"
                     className="h-8 text-xs px-2"
                     onClick={() => {
-                      addToCart({ id: product.id, name: product.name, price: product.price, image: product.images[0] });
+                      addToCart({
+  id: product.id,
+  name: product.name,
+  price: product.price,
+  image: product.images[0],
+});
                       toast.success("Added to cart");
                     }}
                   >
