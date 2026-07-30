@@ -7,6 +7,7 @@ import { Clock, Package, Truck, CheckCircle2, ArrowLeft, ShoppingBag } from "luc
 import { Button } from "@/components/ui/button";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import OrderTimeline from "@/components/orders/OrderTimeline";
+import { calculateProductSubtotal, calculateDeliveryTotal, calculateOrderTotal } from "@/lib/orderCalculations";
 
 export default function TrackOrder() {
   const { orderId } = useParams();
@@ -127,10 +128,16 @@ await fetchOrder();
         </div>
 
         <div className="text-right">
-          <p className="font-bold text-primary">
-            ₦{Number(item.price * item.quantity).toLocaleString()}
-          </p>
-        </div>
+  <p className="font-bold text-primary">
+    ₦{Number(item.price * item.quantity).toLocaleString()}
+  </p>
+
+  {item.status?.toLowerCase() !== "cancelled" && (
+    <p className="text-xs text-muted-foreground">
+      Delivery: ₦{Number(item.delivery_fee || 0).toLocaleString()}
+    </p>
+  )}
+</div>
 
       </div>
 
@@ -156,6 +163,23 @@ await fetchOrder();
     </div>
   ))}
 
+          <div className="border-t pt-4 space-y-2">
+  <p>
+    <strong>Products:</strong>{" "}
+    ₦{calculateProductSubtotal(order).toLocaleString()}
+  </p>
+
+  <p>
+    <strong>Delivery:</strong>{" "}
+    ₦{calculateDeliveryTotal(order).toLocaleString()}
+  </p>
+
+  <p className="text-lg font-bold">
+    <strong>Total Payable:</strong>{" "}
+    ₦{calculateOrderTotal(order).toLocaleString()}
+  </p>
+</div>
+          
   <div className="border-t pt-4">
     <p>
       <strong>Delivery Address:</strong>
