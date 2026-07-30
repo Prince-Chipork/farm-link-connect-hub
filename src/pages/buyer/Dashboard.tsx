@@ -253,8 +253,9 @@ export default function BuyerDashboard() {
                       addToCart({
   id: product.id,
   name: product.name,
-  price: product.price,
-  image: product.images[0],
+  price: Number(product.price),
+  delivery_fee: Number(product.delivery_fee ?? 0),
+  image: product.images?.[0],
 });
                       toast.success("Added to cart");
                     }}
