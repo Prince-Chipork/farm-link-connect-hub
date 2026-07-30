@@ -54,11 +54,14 @@ export default function CheckoutPage() {
       if (orderError) throw orderError;
 
       const items = cart.map(item => ({
-        order_id: orderData.id,
-        product_id: item.id,
-        quantity: item.quantity,
-        price: item.price,
-      }));
+  order_id: orderData.id,
+  product_id: item.id,
+  quantity: item.quantity,
+  price: item.price,
+
+  // Temporary until we build dynamic delivery calculation
+  delivery_fee: shippingCost,
+}));
 
       const { error: itemsError } = await supabase.from('order_items').insert(items);
       if (itemsError) throw itemsError;
