@@ -71,6 +71,13 @@ export default function CreateProduct() {
   const [loading, setLoading] = useState(false);
   const [images, setImages] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
+  const [deliveryOptions, setDeliveryOptions] = useState([
+  {
+    option_name: "Pickup",
+    delivery_fee: 0,
+    estimated_days: 0,
+  },
+]);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -287,6 +294,68 @@ export default function CreateProduct() {
                 />
               </div>
             </div>
+
+            <div className="space-y-4">
+  <Label className="text-lg font-semibold">
+    Delivery Options
+  </Label>
+
+  {deliveryOptions.map((option, index) => (
+    <div
+      key={index}
+      className="grid grid-cols-1 md:grid-cols-3 gap-4 border rounded-lg p-4"
+    >
+      <Input
+        placeholder="Option Name"
+        value={option.option_name}
+        onChange={(e) => {
+          const updated = [...deliveryOptions];
+          updated[index].option_name = e.target.value;
+          setDeliveryOptions(updated);
+        }}
+      />
+
+      <Input
+        type="number"
+        placeholder="Delivery Fee"
+        value={option.delivery_fee}
+        onChange={(e) => {
+          const updated = [...deliveryOptions];
+          updated[index].delivery_fee = Number(e.target.value);
+          setDeliveryOptions(updated);
+        }}
+      />
+
+      <Input
+        type="number"
+        placeholder="Estimated Days"
+        value={option.estimated_days}
+        onChange={(e) => {
+          const updated = [...deliveryOptions];
+          updated[index].estimated_days = Number(e.target.value);
+          setDeliveryOptions(updated);
+        }}
+      />
+    </div>
+  ))}
+
+  <Button
+    type="button"
+    variant="outline"
+    onClick={() =>
+      setDeliveryOptions([
+        ...deliveryOptions,
+        {
+          option_name: "",
+          delivery_fee: 0,
+          estimated_days: 1,
+        },
+      ])
+    }
+  >
+    + Add Delivery Option
+  </Button>
+</div>
 
             <div className="space-y-4">
               <Label>Product Images</Label>
