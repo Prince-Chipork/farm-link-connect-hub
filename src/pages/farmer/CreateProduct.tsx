@@ -131,21 +131,37 @@ export default function CreateProduct() {
         imageUrls.push(data.publicUrl);
       }
 
-      const { error } = await supabase.from('products').insert({
-        farmer_id: user.id,
-        name: formData.name,
-        category: formData.category,
-        description: formData.description,
-        price: parseFloat(formData.price),
-        quantity: parseInt(formData.quantity),
-        unit: formData.unit,
-        harvest_date: formData.harvestDate || null,
-        location: formData.location,
-        images: imageUrls,
-      });
+      const { data: product, error } = await supabase
+  .from("products")
+  .insert({
+    farmer_id: user.id,
+    name: formData.name,
+    category: formData.category,
+    description: formData.description,
+    price: parseFloat(formData.price),
+    quantity: parseInt(formData.quantity),
+    unit: formData.unit,
+    harvest_date: formData.harvestDate || null,
+    location: formData.location,
+    images: imageUrls,
+  })
+  .select()
+  .single();
 
       if (error) throw error;
+      
+const { error: deliveryError } = await supabase
+  .from("delivery_options")
+  .insert(
+    deliveryOptions.map((option) => ({
+      product_id: product.id,
+      option_name: option.option_name,
+      delivery_fee: option.delivery_fee,
+      estimated_days: option.estimated_days,
+    }))
+  );
 
+if (deliveryError) throw deliveryError;
       toast.success("Product created successfully!");
       navigate("/farmer/products");
     } catch (error: any) {
