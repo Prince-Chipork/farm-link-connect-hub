@@ -44,17 +44,8 @@ export default function ProductDetailsPage() {
     const fetchProduct = async () => {
       if (!id) return;
       setLoading(true);
-      const { data, error } = await supabase
-        .from("products")
-  .select(`
-    *,
-    delivery_options,
-    profiles(
-      full_name,
-      is_verified,
-      trust_level)')
-        .eq('id', id)
-        .single();
+      const { data, error } = await supabase.from("products").select(`*, profiles (full_name,
+      is_verified,trust_level)`).eq("id", id).single();
 
       if (error) {
         toast.error(error.message);
