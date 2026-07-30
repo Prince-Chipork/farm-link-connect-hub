@@ -45,8 +45,14 @@ export default function ProductDetailsPage() {
       if (!id) return;
       setLoading(true);
       const { data, error } = await supabase
-        .from('products')
-        .select('*, profiles(full_name, is_verified, trust_level)')
+        .from("products")
+  .select(`
+    *,
+    delivery_options,
+    profiles(
+      full_name,
+      is_verified,
+      trust_level)')
         .eq('id', id)
         .single();
 
@@ -287,19 +293,29 @@ console.log(product);
                         Standard delivery takes 1-3 working days within the same state, and 3-5 days across states.
                     </p>
                     <div className="space-y-2">
-                        <div className="flex justify-between text-sm py-2 border-b">
-                            <span>Same State Delivery</span>
-                            <span className="font-bold">₦1,500 - ₦3,000</span>
-                        </div>
-                        <div className="flex justify-between text-sm py-2 border-b">
-                            <span>Interstate Delivery</span>
-                            <span className="font-bold">₦5,000 - ₦15,000</span>
-                        </div>
-                        <div className="flex justify-between text-sm py-2">
-                            <span>Farm Pickup</span>
-                            <span className="font-bold text-green-600">Free</span>
-                        </div>
-                    </div>
+  {product.delivery_options?.length ? (
+    product.delivery_options.map((option: string, index: number) => (
+      <div
+        key={index}
+        className="flex justify-between text-sm py-2 border-b last:border-b-0"
+      >
+        <span>{option}</span>
+
+        {option === "Farm Pickup" ? (
+          <span className="font-bold text-green-600">Free</span>
+        ) : (
+          <span className="font-bold">
+            ₦{Number(product.delivery_fee ?? 0).toLocaleString()}
+          </span>
+        )}
+      </div>
+    ))
+  ) : (
+    <p className="text-sm text-muted-foreground">
+      No delivery options available.
+    </p>
+  )}
+</div>
                 </div>
             </div>
           </TabsContent>
