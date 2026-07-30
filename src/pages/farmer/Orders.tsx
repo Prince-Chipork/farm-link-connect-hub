@@ -196,12 +196,16 @@ return (
 
                 <div>
                   <p className="text-xs font-semibold uppercase text-muted-foreground">
-                    Total for you
-                  </p>
+  Your Earnings
+</p>
 
-                  <p className="text-sm font-medium text-primary">
-                    ₦{Number(order.total ?? 0).toLocaleString()}
-                  </p>
+<p className="text-sm font-medium text-primary">
+  ₦
+  {(
+    Number(order.price) *
+    Number(order.quantity)
+  ).toLocaleString()}
+</p>
                 </div>
               </div>
 
