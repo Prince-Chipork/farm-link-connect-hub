@@ -160,6 +160,49 @@ export type Database = {
           },
         ]
       }
+
+      delivery_options: {
+  Row: {
+    id: string
+    product_id: string
+    option_name: string
+    delivery_fee: number
+    estimated_days: number | null
+    is_active: boolean | null
+    created_at: string | null
+  }
+
+  Insert: {
+    id?: string
+    product_id: string
+    option_name: string
+    delivery_fee?: number
+    estimated_days?: number | null
+    is_active?: boolean | null
+    created_at?: string | null
+  }
+
+  Update: {
+    id?: string
+    product_id?: string
+    option_name?: string
+    delivery_fee?: number
+    estimated_days?: number | null
+    is_active?: boolean | null
+    created_at?: string | null
+  }
+
+  Relationships: [
+    {
+      foreignKeyName: "delivery_options_product_id_fkey"
+      columns: ["product_id"]
+      isOneToOne: false
+      referencedRelation: "products"
+      referencedColumns: ["id"]
+    }
+  ]
+      }
+      
       profiles: {
         Row: {
           avatar_url: string | null
