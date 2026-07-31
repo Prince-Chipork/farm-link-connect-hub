@@ -85,6 +85,7 @@ export default function BuyerDashboard() {
           farmerName: p.profiles?.full_name || "Unknown Farmer",
           farmerVerified: p.profiles?.is_verified || false,
           farmerTrustLevel: p.profiles?.trust_level || "Bronze",
+          delivery_fee: Number(p.delivery_fee ?? 0)
         }));
         setRecommendedProducts(mapped);
       } catch (error: any) {
