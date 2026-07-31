@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
+import { Navigate } from "react-router-dom";
 import { useCart } from "@/context/CartContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,6 +12,7 @@ import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tool
 import { ShoppingCart, Heart, Package, ArrowRight, Star, Award, MapPin, Leaf, Wheat,  Beef, Apple, Milk, Flower2, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
 import type { Product } from "@/types";
+
 
 const revenueData = [
   { name: "Jan", revenue: 450000 },
@@ -45,7 +47,7 @@ export default function BuyerDashboard() {
   const [recentOrders, setRecentOrders] = useState<any[]>([]);
   const [totalSpent, setTotalSpent] = useState(0);
   const [loading, setLoading] = useState(true);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchBuyerData = async () => {
       if (!user) return;
@@ -228,6 +230,11 @@ export default function BuyerDashboard() {
                     size="sm"
                     className="h-8 text-xs px-2"
                     onClick={() => {
+                      if (!user) {
+  toast.error("Please login first.");
+  navigate("/login");
+  return;
+                      }
                       addToCart({
   id: product.id,
   name: product.name,
