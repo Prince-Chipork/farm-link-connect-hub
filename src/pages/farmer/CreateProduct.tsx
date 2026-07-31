@@ -150,7 +150,7 @@ export default function CreateProduct() {
 
       if (error) throw error;
       
-const { error: deliveryError } = await supabase
+const { error: deliveryError } = await (supabase as any)
   .from("delivery_options")
   .insert(
     deliveryOptions.map((option) => ({
