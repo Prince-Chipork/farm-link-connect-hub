@@ -228,55 +228,48 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
                         <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium truncate">
-  {item.name}
-</p>
+  <p className="font-medium truncate">
+    {item.name}
+  </p>
 
-<p className="text-muted-foreground">
-  {item.quantity} × ₦{item.price.toLocaleString()}
-</p>
+  <p className="text-muted-foreground">
+    {item.quantity} × ₦{item.price.toLocaleString()}
+  </p>
 
-<div className="mt-2">
-  <Label className="text-xs">
-    Delivery Method
-  </Label>
+  <div className="mt-2">
+    <Label className="text-xs">
+      Delivery Method
+    </Label>
 
-  <select
-    className="w-full mt-1 border rounded-md p-2 text-sm"
-    value={selectedDelivery[item.id]?.id || ""}
-    onChange={(e) => {
-      const option =
-        deliveryOptions[item.id]?.find(
+    <select
+      className="w-full mt-1 border rounded-md p-2 text-sm"
+      value={selectedDelivery[item.id]?.id || ""}
+      onChange={(e) => {
+        const option = deliveryOptions[item.id]?.find(
           (d) => d.id === e.target.value
         );
 
-      if (!option) return;
+        if (!option) return;
 
-      setSelectedDelivery((prev) => ({
-        ...prev,
-        [item.id]: option,
-      }));
-    }}
-  >
-    <option value="">
-      Select delivery option
-    </option>
-
-    {(deliveryOptions[item.id] || []).map((option) => (
-      <option
-        key={option.id}
-        value={option.id}
-      >
-        {option.option_name} — ₦
-        {Number(option.delivery_fee).toLocaleString()}
+        setSelectedDelivery((prev) => ({
+          ...prev,
+          [item.id]: option,
+        }));
+      }}
+    >
+      <option value="">
+        Select delivery option
       </option>
-    ))}
-  </select>
-</div>
-                      <span className="font-bold">\u20a6{(item.quantity * item.price).toLocaleString()}</span>
-                    </div>
-                  ))
-                ) : (
+
+      {(deliveryOptions[item.id] || []).map((option) => (
+        <option key={option.id} value={option.id}>
+          {option.option_name} — ₦
+          {Number(option.delivery_fee).toLocaleString()}
+        </option>
+      ))}
+    </select>
+  </div>
+</div>))) : (
                   <p className="text-center py-4 text-muted-foreground italic">Your cart is empty</p>
                 )}
               </div>
