@@ -7,6 +7,7 @@ type CartItem = {
   price: number;
   delivery_fee: number;
   farmer_id: string;
+  farmer_name?: string;
   quantity: number;
   image?: string;
 };
