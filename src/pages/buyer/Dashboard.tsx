@@ -47,7 +47,7 @@ export default function BuyerDashboard() {
   const [recentOrders, setRecentOrders] = useState<any[]>([]);
   const [totalSpent, setTotalSpent] = useState(0);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const navigate = Navigate();
   useEffect(() => {
     const fetchBuyerData = async () => {
       if (!user) return;
