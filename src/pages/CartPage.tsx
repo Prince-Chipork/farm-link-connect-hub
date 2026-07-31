@@ -153,9 +153,14 @@ const deliveryTotal = cart.reduce(
       </div>
 
       <div className="flex justify-between">
-        <span>Subtotal</span>
-        <span>₦{cartTotal.toLocaleString()}</span>
-      </div>
+  <span>Products</span>
+  <span>₦{productsTotal.toLocaleString()}</span>
+</div>
+
+<div className="flex justify-between">
+  <span>Delivery</span>
+  <span>₦{deliveryTotal.toLocaleString()}</span>
+</div>
 
       <hr />
 
