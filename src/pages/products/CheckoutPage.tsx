@@ -65,13 +65,6 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
       toast.error("Please enter a delivery address");
       return;
     }
-const handlePlaceOrder = async () => {
-  if (cart.length === 0 || !user) return;
-
-  if (!address) {
-    toast.error("Please enter a delivery address");
-    return;
-  }
 
   // Check that every product has a delivery option selected
   const missingDelivery = cart.some(
@@ -330,7 +323,8 @@ const handlePlaceOrder = async () => {
                 onClick={handlePlaceOrder}
                 disabled={cart.length === 0 || isProcessing}
               >
-                {isProcessing ? "Processing..." : `Pay {\u20a6}${totalAmount.toLocaleString()}`}
+                {isProcessing ? "Processing...": `Pay ₦${totalAmount.toLocaleString()}`
+       }
               </Button>
               <div className="flex items-center justify-center gap-2 text-[10px] text-muted-foreground uppercase tracking-widest font-bold">
                 <ShieldCheck className="h-3 w-3" /> Secure Checkout
