@@ -125,7 +125,6 @@ if (loading) {
   id: product.id,
   name: product.name,
   price: Number(product.price),
-  delivery_fee: Number(product.delivery_fee ?? 0),
   farmer_id: product.farmer_id,
   farmer_name: product.profiles?.full_name,
   image: product.images?.[0],
