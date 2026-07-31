@@ -296,15 +296,15 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Subtotal</span>
-                  <span>\u20a6{cartTotal.toLocaleString()}</span>
+                  <span>{\u20a6}{cartTotal.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Shipping Fee</span>
-                  <span>\u20a6{shippingCost.toLocaleString()}</span>
+                  <span>{\u20a6}{shippingCost.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between text-lg font-bold pt-2">
                   <span>Total</span>
-                  <span className="text-primary">\u20a6{totalAmount.toLocaleString()}</span>
+                  <span className="text-primary">{\u20a6}{totalAmount.toLocaleString()}</span>
                 </div>
               </div>
             </CardContent>
@@ -314,7 +314,7 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
                 onClick={handlePlaceOrder}
                 disabled={cart.length === 0 || isProcessing}
               >
-                {isProcessing ? "Processing..." : `Pay \u20a6${totalAmount.toLocaleString()}`}
+                {isProcessing ? "Processing..." : `Pay {\u20a6}${totalAmount.toLocaleString()}`}
               </Button>
               <div className="flex items-center justify-center gap-2 text-[10px] text-muted-foreground uppercase tracking-widest font-bold">
                 <ShieldCheck className="h-3 w-3" /> Secure Checkout
