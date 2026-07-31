@@ -239,7 +239,6 @@ export default function BuyerDashboard() {
   id: product.id,
   name: product.name,
   price: Number(product.price),
-  delivery_fee: Number(product.delivery_fee ?? 0),
   farmer_id: product.farmerId,
   farmer_name: product.farmerName,
   image: product.images?.[0],
