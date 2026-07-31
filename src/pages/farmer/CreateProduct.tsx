@@ -165,7 +165,8 @@ if (deliveryError) throw deliveryError;
       toast.success("Product created successfully!");
       navigate("/farmer/products");
     } catch (error: any) {
-      toast.error(error.message);
+  toast.error(JSON.stringify(error, null, 2));
+  console.log(error);
     } finally {
       setLoading(false);
     }
