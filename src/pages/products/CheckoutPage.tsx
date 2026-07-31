@@ -65,7 +65,31 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
       toast.error("Please enter a delivery address");
       return;
     }
+const handlePlaceOrder = async () => {
+  if (cart.length === 0 || !user) return;
 
+  if (!address) {
+    toast.error("Please enter a delivery address");
+    return;
+  }
+
+  // Check that every product has a delivery option selected
+  const missingDelivery = cart.some(
+    (item) => !selectedDelivery[item.id]
+  );
+
+  if (missingDelivery) {
+    toast.error(
+      "Please select a delivery method for every product."
+    );
+    return;
+  }
+
+  setIsProcessing(true);
+
+  try {
+    ...
+    
     setIsProcessing(true);
     try {
       const { data: orderData, error: orderError } = await supabase
