@@ -8,11 +8,15 @@ import { Heart, ShoppingCart, Trash2, Star } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import { useAuth } from "@/context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function BuyerWishlist() {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
   const { addToCart } = useCart();
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchWishlist = async () => {
@@ -112,6 +116,11 @@ if (loading) {
                     className="h-8 text-xs"
                     disabled={(product.quantity || 0) <= 0}
                     onClick={() => {
+                      if (!user) {
+  toast.error("Please login first.");
+  navigate("/login");
+  return;
+}
                       addToCart({
   id: product.id,
   name: product.name,
