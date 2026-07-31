@@ -6,6 +6,7 @@ type CartItem = {
   name: string;
   price: number;
   delivery_fee: number;
+  farmer_id: string;
   quantity: number;
   image?: string;
 };
@@ -38,9 +39,7 @@ export const CartProvider = ({
   const { user } = useAuth();
 
   const cartKey = user ? `cart_${user.id}` : "cart_guest";
-  console.log("Current user:", user?.id);
-console.log("Cart key:", cartKey);
-
+  
   const [cart, setCart] = useState<CartItem[]>(() => {
     try {
       const saved = localStorage.getItem(cartKey);
@@ -94,7 +93,8 @@ console.log("Cart key:", cartKey);
   const clearCart = () => setCart([]);
 
   const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
-  const cartTotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
+  const cartTotal = cart.reduce(
+  (total, item) => total + (item.price * item.quantity) + item.delivery_fee );
 
   return (
     <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, clearCart, cartCount, cartTotal }}>
