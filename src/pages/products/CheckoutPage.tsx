@@ -50,7 +50,13 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
   loadDeliveryOptions();
 }, [cart]);
 
-  const shippingCost = cart.length > 0 ? 2500 : 0;
+  const shippingCost = Object.values(
+  selectedDelivery
+).reduce(
+  (sum: number, option: any) =>
+    sum + Number(option.delivery_fee || 0),
+  0
+);
   const totalAmount = cartTotal + shippingCost;
 
   const handlePlaceOrder = async () => {
@@ -222,9 +228,51 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
                         <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium truncate">{item.name}</p>
-                        <p className="text-muted-foreground">{item.quantity} x \u20a6{item.price.toLocaleString()}</p>
-                      </div>
+                        <p className="font-medium truncate">
+  {item.name}
+</p>
+
+<p className="text-muted-foreground">
+  {item.quantity} × ₦{item.price.toLocaleString()}
+</p>
+
+<div className="mt-2">
+  <Label className="text-xs">
+    Delivery Method
+  </Label>
+
+  <select
+    className="w-full mt-1 border rounded-md p-2 text-sm"
+    value={selectedDelivery[item.id]?.id || ""}
+    onChange={(e) => {
+      const option =
+        deliveryOptions[item.id]?.find(
+          (d) => d.id === e.target.value
+        );
+
+      if (!option) return;
+
+      setSelectedDelivery((prev) => ({
+        ...prev,
+        [item.id]: option,
+      }));
+    }}
+  >
+    <option value="">
+      Select delivery option
+    </option>
+
+    {(deliveryOptions[item.id] || []).map((option) => (
+      <option
+        key={option.id}
+        value={option.id}
+      >
+        {option.option_name} — ₦
+        {Number(option.delivery_fee).toLocaleString()}
+      </option>
+    ))}
+  </select>
+</div>
                       <span className="font-bold">\u20a6{(item.quantity * item.price).toLocaleString()}</span>
                     </div>
                   ))
