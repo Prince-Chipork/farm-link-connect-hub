@@ -84,12 +84,6 @@ const handlePlaceOrder = async () => {
     );
     return;
   }
-
-  setIsProcessing(true);
-
-  try {
-    ...
-    
     setIsProcessing(true);
     try {
       const { data: orderData, error: orderError } = await supabase
