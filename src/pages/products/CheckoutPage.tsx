@@ -9,26 +9,13 @@ import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { 
-  ArrowLeft, 
-  CreditCard, 
-  Truck, 
-  ShieldCheck, 
-  Package,
-  ShoppingBag,
-  CheckCircle2
-} from "lucide-react";
+import {  ArrowLeft,  CreditCard, Truck, ShieldCheck, Package, ShoppingBag, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 
 export default function CheckoutPage() {
   const { cart, cartTotal, clearCart } = useCart();
-  const [deliveryOptions, setDeliveryOptions] = useState<Record<string, any[]>>(
-  {}
-);
-
-const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>(
-  {}
-);
+  const [deliveryOptions, setDeliveryOptions] = useState<Record<string, any[]>>( {} );
+const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({} );
   const { user } = useAuth();
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
@@ -40,11 +27,7 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>(
 
     if (!productIds.length) return;
 
-    const { data, error } = await supabase
-      .from("delivery_options")
-      .select("*")
-      .in("product_id", productIds)
-      .eq("is_active", true);
+    const { data, error } = await supabase.from("delivery_options").select("*").in("product_id", productIds).eq("is_active", true);
 
     if (error) {
       toast.error(error.message);
