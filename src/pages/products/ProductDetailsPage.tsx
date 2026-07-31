@@ -61,6 +61,11 @@ export default function ProductDetailsPage() {
 const handleAddToCart = () => {
   if (!product) return;
 
+  if (!user) {
+    toast.error("Please login to add items to your cart.");
+    navigate("/login");
+    return;
+  }
   addToCart({
   id: product.id,
   name: product.name,
