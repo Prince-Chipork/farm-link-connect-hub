@@ -11,12 +11,6 @@ const CartDrawer = () => {
   (total, item) => total + item.price * item.quantity,
   0
 );
-
-const deliveryTotal = cart.reduce(
-  (total, item) => total + (item.delivery_fee ?? 0),
-  0
-);
-
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -62,16 +56,9 @@ const deliveryTotal = cart.reduce(
     ₦{item.price.toLocaleString()} × {item.quantity}
   </p>
 
-  <p className="text-xs text-muted-foreground">
-    Delivery: ₦{(item.delivery_fee ?? 0).toLocaleString()}
-  </p>
-
   <p className="text-sm font-bold">
-    ₦{(
-      item.price * item.quantity +
-      (item.delivery_fee ?? 0)
-    ).toLocaleString()}
-  </p>
+  Total: ₦{(item.price * item.quantity).toLocaleString()}
+</p>
 
 </div>
                 <div className="flex items-center gap-1">
@@ -115,18 +102,16 @@ const deliveryTotal = cart.reduce(
     <span>₦{productsTotal.toLocaleString()}</span>
   </div>
 
-  <div className="flex justify-between text-sm">
-    <span>Delivery</span>
-    <span>₦{deliveryTotal.toLocaleString()}</span>
-  </div>
-
   <hr />
 
   <div className="flex justify-between text-lg font-bold">
-    <span>Total</span>
+    <span>Product Total</span>
     <span className="text-primary">
       ₦{cartTotal.toLocaleString()}
     </span>
+    <p className="text-xs text-muted-foreground text-center">
+  Delivery charges will be selected during checkout.
+</p>
   </div>
 
 </div>
