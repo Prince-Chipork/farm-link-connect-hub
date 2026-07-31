@@ -76,7 +76,18 @@ const deliveryTotal = cart.reduce(
               className="h-20 w-20 rounded-lg object-cover border"
             />
 
-            <div className="space-y-1">
+            <div className="flex-1 space-y-1">
+
+  <h3 className="font-semibold">
+    {item.name}
+  </h3>
+
+  {item.farmer_name && (
+    <p className="text-xs text-muted-foreground">
+      Farmer: {item.farmer_name}
+    </p>
+  )}
+
   <p className="text-primary font-bold">
     ₦{item.price.toLocaleString()} × {item.quantity}
   </p>
@@ -92,6 +103,7 @@ const deliveryTotal = cart.reduce(
       (item.delivery_fee ?? 0)
     ).toLocaleString()}
   </p>
+
 </div>
             <div className="flex items-center gap-2">
 
