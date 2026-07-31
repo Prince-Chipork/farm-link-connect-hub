@@ -1,15 +1,26 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 
+export type DeliveryOption = {
+  id: string;
+  option_name: string;
+  delivery_fee: number;
+  estimated_days: number;
+};
+
 type CartItem = {
   id: string;
   name: string;
   price: number;
-  delivery_fee: number;
+
   farmer_id: string;
   farmer_name?: string;
+
   quantity: number;
   image?: string;
+
+  deliveryOptions?: DeliveryOption[];
+  selectedDelivery?: DeliveryOption | null;
 };
 
 type CartContextType = {
@@ -95,8 +106,10 @@ export const CartProvider = ({
   const clearCart = () => setCart([]);
 
   const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
-  const cartTotal = cart.reduce( (total, item) => total + (item.price * item.quantity) + item.delivery_fee, 0 );
- 
+  const cartTotal = cart.reduce(
+  (total, item) => total + (item.price * item.quantity),
+  0
+);
   return (
     <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, clearCart, cartCount, cartTotal }}>
       {children}
