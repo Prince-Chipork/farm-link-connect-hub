@@ -13,8 +13,8 @@ export default function CartPage() {
     removeFromCart,
   } = useCart();
 
-const deliveryTotal = cart.reduce(
-  (total, item) => total + (item.delivery_fee ?? 0),
+const productsTotal = cart.reduce(
+  (total, item) => total + item.price * item.quantity,
   0
 );
   
