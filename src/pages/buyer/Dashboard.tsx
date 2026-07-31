@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useCart } from "@/context/CartContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -47,7 +47,7 @@ export default function BuyerDashboard() {
   const [recentOrders, setRecentOrders] = useState<any[]>([]);
   const [totalSpent, setTotalSpent] = useState(0);
   const [loading, setLoading] = useState(true);
-  const navigate = Navigate();
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchBuyerData = async () => {
       if (!user) return;
