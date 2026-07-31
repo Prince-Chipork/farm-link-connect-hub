@@ -76,7 +76,7 @@ if (loading) {
             <Card key={product.id} className="overflow-hidden group border shadow-sm hover:shadow-md transition-shadow">
               <div className="relative aspect-video overflow-hidden">
                 <img
-                  src={product.image_url || "/placeholder.svg"}
+                  src={product.images?.[0] || "/placeholder.svg"}
                   alt={product.name}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
@@ -88,7 +88,7 @@ if (loading) {
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
-                {(product.stock_quantity || 0) <= 0 && (
+                {(product.quantity || 0) <= 0 && (
                   <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                     <Badge variant="destructive">Out of Stock</Badge>
                   </div>
@@ -110,13 +110,14 @@ if (loading) {
                   <Button
                     size="sm"
                     className="h-8 text-xs"
-                    disabled={(product.stock_quantity || 0) <= 0}
+                    disabled={(product.quantity || 0) <= 0}
                     onClick={() => {
                       addToCart({
   id: product.id,
   name: product.name,
   price: Number(product.price),
   delivery_fee: Number(product.delivery_fee ?? 0),
+  farmer_id: product.farmer_id,
   image: product.images?.[0],
 });
                       toast.success("Added to cart");
