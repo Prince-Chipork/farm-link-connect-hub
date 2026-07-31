@@ -82,15 +82,13 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
       if (orderError) throw orderError;
 
       const items = cart.map(item => ({
-  order_id: orderData.id,
-  product_id: item.id,
-  quantity: item.quantity,
-  price: item.price,
-
-  // Temporary until we build dynamic delivery calculation
-  delivery_fee: shippingCost,
+    order_id: orderData.id,
+    product_id: item.id,
+    quantity: item.quantity,
+    price: item.price,
+    delivery_fee:
+        selectedDelivery[item.id]?.delivery_fee ?? 0,
 }));
-
       const { error: itemsError } = await (supabase as any).from('order_items').insert(items);
       if (itemsError) throw itemsError;
 
