@@ -12,7 +12,17 @@ export default function CartPage() {
     updateQuantity,
     removeFromCart,
   } = useCart();
+  
+const productsTotal = cart.reduce(
+  (total, item) => total + (item.price * item.quantity),
+  0
+);
 
+const deliveryTotal = cart.reduce(
+  (total, item) => total + (item.delivery_fee ?? 0),
+  0
+);
+  
   return (
     <div className="container mx-auto max-w-6xl px-4 py-8">
       <Link
@@ -66,16 +76,23 @@ export default function CartPage() {
               className="h-20 w-20 rounded-lg object-cover border"
             />
 
-            <div className="flex-1">
-              <h3 className="font-semibold">
-                {item.name}
-              </h3>
+            <div className="space-y-1">
+  <p className="text-primary font-bold">
+    ₦{item.price.toLocaleString()} × {item.quantity}
+  </p>
 
-              <p className="text-primary font-bold">
-                ₦{item.price.toLocaleString()}
-              </p>
-            </div>
+  <p className="text-sm text-muted-foreground">
+    Delivery: ₦{(item.delivery_fee ?? 0).toLocaleString()}
+  </p>
 
+  <p className="text-sm font-semibold">
+    Item Total: ₦
+    {(
+      item.price * item.quantity +
+      (item.delivery_fee ?? 0)
+    ).toLocaleString()}
+  </p>
+</div>
             <div className="flex items-center gap-2">
 
               <Button
