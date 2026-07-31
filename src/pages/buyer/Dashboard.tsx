@@ -7,31 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
-import {
-  ResponsiveContainer,
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-} from "recharts";
-import {
-  ShoppingCart,
-  Heart,
-  Package,
-  ArrowRight,
-  Star,
-  Award,
-  MapPin,
-  Leaf,
-  Wheat,
-  Beef,
-  Apple,
-  Milk,
-  Flower2,
-  TrendingUp
-} from "lucide-react";
+import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
+import { ShoppingCart, Heart, Package, ArrowRight, Star, Award, MapPin, Leaf, Wheat,  Beef, Apple, Milk, Flower2, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
 import type { Product } from "@/types";
 
