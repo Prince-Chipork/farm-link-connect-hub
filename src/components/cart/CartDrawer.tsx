@@ -7,6 +7,15 @@ import { ShoppingCart, Trash2, Minus, Plus } from "lucide-react";
 const CartDrawer = () => {
   const { cart, removeFromCart, updateQuantity, cartCount, cartTotal } = useCart();
   const navigate = useNavigate();
+  const productsTotal = cart.reduce(
+  (total, item) => total + item.price * item.quantity,
+  0
+);
+
+const deliveryTotal = cart.reduce(
+  (total, item) => total + (item.delivery_fee ?? 0),
+  0
+);
 
   return (
     <Sheet>
@@ -37,10 +46,34 @@ const CartDrawer = () => {
                 {item.image && (
                   <img src={item.image} alt={item.name} className="h-14 w-14 rounded-md object-cover" />
                 )}
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-sm truncate">{item.name}</p>
-                  <p className="text-sm text-muted-foreground">₦{item.price.toLocaleString()}</p>
-                </div>
+                <div className="flex-1 min-w-0 space-y-1">
+
+  <p className="font-semibold text-sm">
+    {item.name}
+  </p>
+
+  {item.farmer_name && (
+    <p className="text-xs text-muted-foreground">
+      Farmer: {item.farmer_name}
+    </p>
+  )}
+
+  <p className="text-sm text-primary font-medium">
+    ₦{item.price.toLocaleString()} × {item.quantity}
+  </p>
+
+  <p className="text-xs text-muted-foreground">
+    Delivery: ₦{(item.delivery_fee ?? 0).toLocaleString()}
+  </p>
+
+  <p className="text-sm font-bold">
+    ₦{(
+      item.price * item.quantity +
+      (item.delivery_fee ?? 0)
+    ).toLocaleString()}
+  </p>
+
+</div>
                 <div className="flex items-center gap-1">
                   <Button
                     variant="outline"
@@ -75,11 +108,38 @@ const CartDrawer = () => {
         {cart.length > 0 && (
           <SheetFooter className="border-t pt-4">
             <div className="w-full space-y-3">
-              <div className="flex justify-between text-lg font-bold">
-                <span>Total:</span>
-                <span>₦{cartTotal.toLocaleString()}</span>
-              </div>
-              <Button
+              <div className="space-y-2">
+
+  <div className="flex justify-between text-sm">
+    <span>Products</span>
+    <span>₦{productsTotal.toLocaleString()}</span>
+  </div>
+
+  <div className="flex justify-between text-sm">
+    <span>Delivery</span>
+    <span>₦{deliveryTotal.toLocaleString()}</span>
+  </div>
+
+  <hr />
+
+  <div className="flex justify-between text-lg font-bold">
+    <span>Total</span>
+    <span className="text-primary">
+      ₦{cartTotal.toLocaleString()}
+    </span>
+  </div>
+
+</div>
+
+<Button
+  variant="outline"
+  className="w-full"
+  onClick={() => navigate("/cart")}
+>
+  View Full Cart
+</Button>
+
+<Button
   className="w-full"
   size="lg"
   onClick={() => navigate("/checkout")}
