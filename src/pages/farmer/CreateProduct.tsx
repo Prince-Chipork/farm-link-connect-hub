@@ -13,56 +13,15 @@ import { toast } from "sonner";
 
 const categories = ["Crops", "Poultry", "Fishery", "Processed", "Other"];
 const categoryUnits: Record<string, string[]> = {
-  Crops: [
-    "kg",
-    "g",
-    "ton",
-    "25kg bag",
-    "50kg bag",
-    "100kg bag",
-    "sack",
-    "basket",
-    "bundle",
-    "crate",
-    "bunch",
-  ],
+  Crops: [ "kg", "g", "ton", "25kg bag", "50kg bag", "100kg bag", "sack", "basket", "bundle", "crate", "bunch", "tuber" ],
 
-  Poultry: [
-    "bird",
-    "dozen",
-    "tray",
-    "crate",
-    "kg",
-  ],
+  Poultry: [ "bird", "dozen", "tray", "crate", "kg" ],
 
-  Fishery: [
-    "kg",
-    "g",
-    "basket",
-    "crate",
-    "piece",
-  ],
+  Fishery: [ "kg", "g", "basket", "crate", "piece", ],
 
-  Processed: [
-    "L",
-    "mL",
-    "bottle",
-    "carton",
-    "pack",
-    "box",
-    "sachet",
-  ],
+  Processed: [ "L", "mL", "bottle", "carton", "pack", "box", "sachet"],
 
-  Other: [
-    "piece",
-    "head",
-    "kg",
-    "bundle",
-    "box",
-    "pack",
-    "crate",
-    "basket",
-  ],
+  Other: [ "piece", "head", "kg", "bundle", "box", "pack", "crate", "basket" ],
 };
 
 export default function CreateProduct() {
@@ -114,24 +73,31 @@ export default function CreateProduct() {
       const imageUrls: string[] = [];
       
       for (const file of images) {
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${Math.random()}.${fileExt}`;
-        const filePath = `${user.id}/${fileName}`;
+  const fileExt = file.name.split(".").pop();
+  const fileName = `${Date.now()}-${Math.random()}.${fileExt}`;
+  const filePath = `${user.id}/${fileName}`;
 
-        const { error: uploadError } = await supabase.storage
-          .from('product-images')
-          .upload(filePath, file);
+  const { data: uploadData, error: uploadError } =
+    await supabase.storage
+      .from("product-images")
+      .upload(filePath, file);
 
-        if (uploadError) throw uploadError;
+  if (uploadError) {
+    toast.error(JSON.stringify(uploadError));
+    console.log(uploadError);
+    throw uploadError;
+  }
 
-        const { data } = supabase.storage
-          .from('product-images')
-          .getPublicUrl(filePath);
-          
-        imageUrls.push(data.publicUrl);
+  console.log(uploadData);
+
+  const { data } = supabase.storage
+    .from("product-images")
+    .getPublicUrl(filePath);
+
+  imageUrls.push(data.publicUrl);
       }
 
-      const { data: product, error } = await supabase
+        const { data: product, error } = await supabase
   .from("products")
   .insert({
     farmer_id: user.id,
