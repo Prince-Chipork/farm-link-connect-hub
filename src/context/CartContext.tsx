@@ -39,29 +39,30 @@ export const CartProvider = ({
 }) => {
   const { user } = useAuth();
 
-  const cartKey = user ? `cart_${user.id}` : "cart_guest";
-  
-  const [cart, setCart] = useState<CartItem[]>(() => {
-    try {
-      const saved = localStorage.getItem(cartKey);
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
+  const [cart, setCart] = useState<CartItem[]>([]);
 
   useEffect(() => {
-  localStorage.setItem(cartKey, JSON.stringify(cart));
-}, [cart, cartKey]);
+  if (!user) return;
+
+  localStorage.setItem(
+    `cart_${user.id}`,
+    JSON.stringify(cart)
+  );
+}, [cart, user]);
 
   useEffect(() => {
+  if (!user) {
+    setCart([]);
+    return;
+  }
+
   try {
-    const saved = localStorage.getItem(cartKey);
+    const saved = localStorage.getItem(`cart_${user.id}`);
     setCart(saved ? JSON.parse(saved) : []);
   } catch {
     setCart([]);
   }
-}, [cartKey]);
+}, [user]);
   
   const addToCart = (item: Omit<CartItem, 'quantity'>, quantity: number = 1) => {
     setCart((prevCart) => {
