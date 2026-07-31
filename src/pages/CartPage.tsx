@@ -12,11 +12,6 @@ export default function CartPage() {
     updateQuantity,
     removeFromCart,
   } = useCart();
-  
-const productsTotal = cart.reduce(
-  (total, item) => total + (item.price * item.quantity),
-  0
-);
 
 const deliveryTotal = cart.reduce(
   (total, item) => total + (item.delivery_fee ?? 0),
@@ -92,17 +87,9 @@ const deliveryTotal = cart.reduce(
     ₦{item.price.toLocaleString()} × {item.quantity}
   </p>
 
-  <p className="text-sm text-muted-foreground">
-    Delivery: ₦{(item.delivery_fee ?? 0).toLocaleString()}
-  </p>
-
   <p className="text-sm font-semibold">
-    Item Total: ₦
-    {(
-      item.price * item.quantity +
-      (item.delivery_fee ?? 0)
-    ).toLocaleString()}
-  </p>
+  Total: ₦{(item.price * item.quantity).toLocaleString()}
+</p>
 
 </div>
             <div className="flex items-center gap-2">
@@ -167,11 +154,6 @@ const deliveryTotal = cart.reduce(
       <div className="flex justify-between">
   <span>Products</span>
   <span>₦{productsTotal.toLocaleString()}</span>
-</div>
-
-<div className="flex justify-between">
-  <span>Delivery</span>
-  <span>₦{deliveryTotal.toLocaleString()}</span>
 </div>
 
       <hr />
