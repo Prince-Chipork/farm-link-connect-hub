@@ -296,15 +296,15 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Subtotal</span>
-                  <span>{\u20a6}{cartTotal.toLocaleString()}</span>
+                  <span>₦{cartTotal.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Shipping Fee</span>
-                  <span>{\u20a6}{shippingCost.toLocaleString()}</span>
+                  <span>₦{shippingCost.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between text-lg font-bold pt-2">
                   <span>Total</span>
-                  <span className="text-primary">{\u20a6}{totalAmount.toLocaleString()}</span>
+                  <span className="text-primary">₦{totalAmount.toLocaleString()}</span>
                 </div>
               </div>
             </CardContent>
