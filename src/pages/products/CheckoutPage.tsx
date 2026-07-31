@@ -223,54 +223,71 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
               <div className="space-y-3 max-h-60 overflow-y-auto pr-2">
                 {cart.length > 0 ? (
                   cart.map((item) => (
-                    <div key={item.id} className="flex gap-3 text-sm">
-                      <div className="h-12 w-12 rounded border bg-muted shrink-0 overflow-hidden">
-                        <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-  <p className="font-medium truncate">
-    {item.name}
-  </p>
+  <div key={item.id} className="flex gap-3 text-sm">
 
-  <p className="text-muted-foreground">
-    {item.quantity} × ₦{item.price.toLocaleString()}
-  </p>
+    <div className="h-12 w-12 rounded border bg-muted shrink-0 overflow-hidden">
+      <img
+        src={item.image}
+        alt={item.name}
+        className="w-full h-full object-cover"
+      />
+    </div>
 
-  <div className="mt-2">
-    <Label className="text-xs">
-      Delivery Method
-    </Label>
+    <div className="flex-1">
 
-    <select
-      className="w-full mt-1 border rounded-md p-2 text-sm"
-      value={selectedDelivery[item.id]?.id || ""}
-      onChange={(e) => {
-        const option = deliveryOptions[item.id]?.find(
-          (d) => d.id === e.target.value
-        );
+      <p className="font-medium">
+        {item.name}
+      </p>
 
-        if (!option) return;
+      <p className="text-muted-foreground">
+        {item.quantity} × ₦{item.price.toLocaleString()}
+      </p>
 
-        setSelectedDelivery((prev) => ({
-          ...prev,
-          [item.id]: option,
-        }));
-      }}
-    >
-      <option value="">
-        Select delivery option
-      </option>
+      <div className="mt-2">
+        <Label className="text-xs">
+          Delivery Method
+        </Label>
 
-      {(deliveryOptions[item.id] || []).map((option) => (
-        <option key={option.id} value={option.id}>
-          {option.option_name} — ₦
-          {Number(option.delivery_fee).toLocaleString()}
-        </option>
-      ))}
-    </select>
+        <select
+          className="w-full mt-1 border rounded-md p-2 text-sm"
+          value={selectedDelivery[item.id]?.id || ""}
+          onChange={(e) => {
+            const option = deliveryOptions[item.id]?.find(
+              (d) => d.id === e.target.value
+            );
+
+            if (!option) return;
+
+            setSelectedDelivery((prev) => ({
+              ...prev,
+              [item.id]: option,
+            }));
+          }}
+        >
+          <option value="">
+            Select delivery option
+          </option>
+
+          {(deliveryOptions[item.id] || []).map((option) => (
+            <option
+              key={option.id}
+              value={option.id}
+            >
+              {option.option_name} — ₦{Number(option.delivery_fee).toLocaleString()}
+            </option>
+          ))}
+        </select>
+      </div>
+
+    </div>
+
+    <div className="font-bold">
+      ₦{(item.price * item.quantity).toLocaleString()}
+    </div>
+
   </div>
-</div>))) : (
-                  <p className="text-center py-4 text-muted-foreground italic">Your cart is empty</p>
+))
+    ):( <p className="text-center py-4 text-muted-foreground italic">Your cart is empty</p>
                 )}
               </div>
 
