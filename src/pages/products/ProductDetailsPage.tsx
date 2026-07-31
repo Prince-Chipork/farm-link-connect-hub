@@ -39,6 +39,7 @@ export default function ProductDetailsPage() {
   const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProduct = async () => {
