@@ -66,9 +66,10 @@ const handleAddToCart = () => {
   name: product.name,
   price: Number(product.price),
   delivery_fee: Number(product.delivery_fee ?? 0),
-  farmer_id: product.farmerId,
+  farmer_id: product.farmer_id,
+  farmer_name: product.profiles?.full_name,
   image: product.images?.[0],
-});
+}, quantity);
   toast.success(`${product.name} added to cart!`);
 };
   
