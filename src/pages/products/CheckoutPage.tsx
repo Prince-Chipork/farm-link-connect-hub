@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { 
   ArrowLeft, 
@@ -22,11 +22,50 @@ import { toast } from "sonner";
 
 export default function CheckoutPage() {
   const { cart, cartTotal, clearCart } = useCart();
+  const [deliveryOptions, setDeliveryOptions] = useState<Record<string, any[]>>(
+  {}
+);
+
+const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>(
+  {}
+);
   const { user } = useAuth();
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [address, setAddress] = useState("");
+  useEffect(() => {
+  const loadDeliveryOptions = async () => {
+    const productIds = cart.map((item) => item.id);
+
+    if (!productIds.length) return;
+
+    const { data, error } = await supabase
+      .from("delivery_options")
+      .select("*")
+      .in("product_id", productIds)
+      .eq("is_active", true);
+
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+
+    const grouped: Record<string, any[]> = {};
+
+    data.forEach((option) => {
+      if (!grouped[option.product_id]) {
+        grouped[option.product_id] = [];
+      }
+
+      grouped[option.product_id].push(option);
+    });
+
+    setDeliveryOptions(grouped);
+  };
+
+  loadDeliveryOptions();
+}, [cart]);
 
   const shippingCost = cart.length > 0 ? 2500 : 0;
   const totalAmount = cartTotal + shippingCost;
