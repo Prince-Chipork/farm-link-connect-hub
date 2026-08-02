@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {  ArrowLeft,  CreditCard, Truck, ShieldCheck, Package, ShoppingBag, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
+import { PaystackButton } from "react-paystack";
 
 export default function CheckoutPage() {
   const { cart, cartTotal, clearCart } = useCart();
@@ -58,6 +59,12 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
   0
 );
   const totalAmount = cartTotal + shippingCost;
+  const paystackConfig = {
+  email: user?.email ?? "",
+  amount: totalAmount * 100, // Kobo
+  publicKey: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
+  text: `Pay ₦${totalAmount.toLocaleString()}`,
+};
 
   const handlePlaceOrder = async () => {
     if (cart.length === 0 || !user) return;
