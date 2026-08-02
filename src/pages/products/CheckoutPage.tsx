@@ -86,6 +86,9 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
         headers: {
           "Content-Type": "application/json",
         },
+        body: JSON.stringify({
+          reference: paymentReference,
+        }),
       }
     );
 
