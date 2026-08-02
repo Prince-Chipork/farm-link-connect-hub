@@ -65,7 +65,21 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
   publicKey: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
   text: `Pay ₦${totalAmount.toLocaleString()}`,
 };
+    const componentProps = {
+  ...paystackConfig,
 
+  onSuccess: (reference: any) => {
+    console.log("Payment successful:", reference);
+
+    // We'll verify the payment and create the order next
+    handlePlaceOrder();
+  },
+
+  onClose: () => {
+    toast.info("Payment cancelled.");
+  },
+};
+  
   const handlePlaceOrder = async () => {
     if (cart.length === 0 || !user) return;
     if (!address) {
