@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {  ArrowLeft,  CreditCard, Truck, ShieldCheck, Package, ShoppingBag, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
-import { PaystackButton, usePaystackPayment } from "react-paystack";
+import { PaystackButton } from "react-paystack";
 
 export default function CheckoutPage() {
   const { cart, cartTotal, clearCart } = useCart();
@@ -65,7 +65,6 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
   publicKey: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
   text: `Pay ₦${totalAmount.toLocaleString()}`,
 };
-  const initializePayment = usePaystackPayment(paystackConfig);
     const componentProps = {
   ...paystackConfig,
 
@@ -173,11 +172,21 @@ const handlePlaceOrder = async (
       const { data: orderData, error: orderError } = await supabase
         .from('orders')
         .insert({
-          buyer_id: user.id,
-          total: totalAmount,
-          delivery_address: address,
-          shipping_cost: shippingCost,
-        })
+  buyer_id: user.id,
+
+  total: totalAmount,
+
+  delivery_address: address,
+
+  shipping_cost: shippingCost,
+
+  // Save verified payment information
+  payment_reference: paymentReference,
+
+  payment_status: paymentStatus,
+
+  paid_at: paidAt,
+})
         .select()
         .single();
 
