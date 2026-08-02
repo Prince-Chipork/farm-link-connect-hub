@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {  ArrowLeft,  CreditCard, Truck, ShieldCheck, Package, ShoppingBag, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
-import { PaystackButton } from "react-paystack";
+import { usePaystackPayment } from "react-paystack";
 
 export default function CheckoutPage() {
   const { cart, cartTotal, clearCart } = useCart();
@@ -65,6 +65,7 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
   publicKey: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
   text: `Pay ₦${totalAmount.toLocaleString()}`,
 };
+  const initializePayment = usePaystackPayment(paystackConfig);
     const componentProps = {
   ...paystackConfig,
 
@@ -339,11 +340,25 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
               </div>
             </CardContent>
             <CardFooter className="flex-col gap-3">
-              <PaystackButton
-  {...componentProps}
-  className="w-full h-12 rounded-md bg-primary text-primary-foreground hover:opacity-90 disabled:opacity-50"
+              <Button
+  className="w-full h-12 text-lg shadow-lg"
   disabled={cart.length === 0 || isProcessing}
-/>
+  onClick={() => {
+    initializePayment({
+      onSuccess: (reference) => {
+        console.log(reference);
+        handlePlaceOrder();
+      },
+      onClose: () => {
+        toast.info("Payment cancelled.");
+      },
+    });
+  }}
+>
+  {isProcessing
+    ? "Processing..."
+    : `Pay ₦${totalAmount.toLocaleString()}`}
+</Button>
               <div className="flex items-center justify-center gap-2 text-[10px] text-muted-foreground uppercase tracking-widest font-bold">
                 <ShieldCheck className="h-3 w-3" /> Secure Checkout
               </div>
