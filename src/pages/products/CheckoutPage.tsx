@@ -139,7 +139,18 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
   },
 };
   
-  const handlePlaceOrder = async () => {
+  /**
+ * Creates an order after payment has been verified.
+ *
+ * @param paymentReference Paystack transaction reference
+ * @param paymentStatus Verified payment status
+ * @param paidAt Time payment was completed
+ */
+const handlePlaceOrder = async (
+  paymentReference: string,
+  paymentStatus: string,
+  paidAt: string
+) => {
     if (cart.length === 0 || !user) return;
     if (!address) {
       toast.error("Please enter a delivery address");
