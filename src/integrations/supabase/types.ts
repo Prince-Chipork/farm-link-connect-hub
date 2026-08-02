@@ -59,35 +59,71 @@ export type Database = {
       }
       orders: {
         Row: {
-          buyer_id: string
-          created_at: string | null
-          delivery_address: string | null
-          id: string
-          shipping_cost: number | null
-          status: string
-          total: number
-          updated_at: string | null
+  buyer_id: string
+  created_at: string | null
+  delivery_address: string |null
+  id: string
+
+  payment_reference: string | null
+
+  payment_status: string | null
+
+  paid_at: string | null
+
+  shipping_cost: number | null
+
+  status: string
+
+  total: number
+
+  updated_at: string | null
         }
         Insert: {
-          buyer_id: string
-          created_at?: string | null
-          delivery_address?: string | null
-          id?: string
-          shipping_cost?: number | null
-          status?: string
-          total?: number
-          updated_at?: string | null
+  buyer_id: string
+
+  created_at?: string | null
+
+  delivery_address?: string | null
+
+  id?: string
+
+  payment_reference?: string | null
+
+  payment_status?: string | null
+
+  paid_at?: string | null
+
+  shipping_cost?: number | null
+
+  status?: string
+
+  total?: number
+
+  updated_at?: string | null
         }
         Update: {
-          buyer_id?: string
-          created_at?: string | null
-          delivery_address?: string | null
-          id?: string
-          shipping_cost?: number | null
-          status?: string
-          total?: number
-          updated_at?: string | null
-        }
+  buyer_id?: string
+
+  created_at?: string | null
+
+  delivery_address?: string | null
+
+  id?: string
+
+  payment_reference?: string | null
+
+  payment_status?: string | null
+
+  paid_at?: string | null
+
+  shipping_cost?: number | null
+
+  status?: string
+
+  total?: number
+
+  updated_at?: string | null
+}
         Relationships: [
           {
             foreignKeyName: "orders_buyer_id_fkey"
