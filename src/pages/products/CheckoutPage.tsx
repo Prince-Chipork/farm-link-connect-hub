@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {  ArrowLeft,  CreditCard, Truck, ShieldCheck, Package, ShoppingBag, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
-import { PaystackButton } from "react-paystack";
+import { PaystackButton, usePaystackPayment } from "react-paystack";
 
 export default function CheckoutPage() {
   const { cart, cartTotal, clearCart } = useCart();
