@@ -44,7 +44,6 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
 
       grouped[option.product_id].push(option);
     });
-
     setDeliveryOptions(grouped);
   };
 
