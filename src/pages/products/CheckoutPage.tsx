@@ -68,28 +68,38 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
   ...paystackConfig,
 
   onSuccess: async (reference: any) => {
+
+  // Display exactly what Paystack returned
+  alert(JSON.stringify(reference));
+
   try {
 
-    // Tell the user we're verifying the payment.
-    toast.loading("Verifying payment...", {
-      id: "verify-payment",
-    });
+    const paymentReference =
+      reference?.reference ??
+      reference?.trxref ??
+      reference;
 
-    // Call our secure Edge Function.
     const response = await fetch(
       "https://tqsozciafuxrxumnxkjr.supabase.co/functions/v1/verify-payment",
       {
         method: "POST",
-
         headers: {
           "Content-Type": "application/json",
         },
-
         body: JSON.stringify({
-          reference: reference.reference,
+          reference: paymentReference,
         }),
       }
     );
+
+    const result = await response.json();
+
+    console.log(result);
+
+  } catch (error) {
+    console.error(error);
+  }
+}
 
     const result = await response.json();
 
