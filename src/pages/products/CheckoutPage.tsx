@@ -69,7 +69,7 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
 
   onSuccess: async (reference: any) => {
 
-  // Display exactly what Paystack returned
+  // Show exactly what Paystack returned
   alert(JSON.stringify(reference));
 
   try {
@@ -94,36 +94,13 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
 
     const result = await response.json();
 
-    console.log(result);
-
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-    const result = await response.json();
-
     if (!result.success) {
-
-      toast.error(
-        result.message || "Payment verification failed.",
-        {
-          id: "verify-payment",
-        }
-      );
-
+      toast.error(result.message || "Payment verification failed.");
       return;
     }
 
-    toast.success(
-      "Payment verified successfully.",
-      {
-        id: "verify-payment",
-      }
-    );
+    toast.success("Payment verified successfully.");
 
-    // Payment is genuine.
-    // Now create the order.
     await handlePlaceOrder(
       result.reference,
       result.payment_status,
@@ -131,15 +108,8 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
     );
 
   } catch (error) {
-
     console.error(error);
-
-    toast.error(
-      "Unable to verify payment.",
-      {
-        id: "verify-payment",
-      }
-    );
+    toast.error("Unable to verify payment.");
   }
 },
   onClose: () => {
