@@ -69,9 +69,6 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
 
   onSuccess: async (reference: any) => {
 
-  // Show exactly what Paystack returned
-  alert(JSON.stringify(reference));
-
   try {
 
     const paymentReference =
