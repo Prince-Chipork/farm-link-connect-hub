@@ -69,13 +69,71 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
     const componentProps = {
   ...paystackConfig,
 
-  onSuccess: (reference: any) => {
-    console.log("Payment successful:", reference);
+  onSuccess: async (reference: any) => {
+  try {
 
-    // We'll verify the payment and create the order next
-    handlePlaceOrder();
-  },
+    // Tell the user we're verifying the payment.
+    toast.loading("Verifying payment...", {
+      id: "verify-payment",
+    });
 
+    // Call our secure Edge Function.
+    const response = await fetch(
+      "https://tqsozciafuxrxumnxkjr.supabase.co/functions/v1/verify-payment",
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+          reference: reference.reference,
+        }),
+      }
+    );
+
+    const result = await response.json();
+
+    if (!result.success) {
+
+      toast.error(
+        result.message || "Payment verification failed.",
+        {
+          id: "verify-payment",
+        }
+      );
+
+      return;
+    }
+
+    toast.success(
+      "Payment verified successfully.",
+      {
+        id: "verify-payment",
+      }
+    );
+
+    // Payment is genuine.
+    // Now create the order.
+    await handlePlaceOrder(
+      result.reference,
+      result.payment_status,
+      result.paid_at
+    );
+
+  } catch (error) {
+
+    console.error(error);
+
+    toast.error(
+      "Unable to verify payment.",
+      {
+        id: "verify-payment",
+      }
+    );
+  }
+},
   onClose: () => {
     toast.info("Payment cancelled.");
   },
