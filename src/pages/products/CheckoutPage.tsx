@@ -67,8 +67,14 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
   text: `Pay ₦${totalAmount.toLocaleString()}`,
 
   metadata: {
-    order_id: currentOrderId,
-  },
+  custom_fields: [
+    {
+      display_name: "Order ID",
+      variable_name: "order_id",
+      value: currentOrderId ?? "",
+    },
+  ],
+},
 };
     const componentProps = {
   ...paystackConfig,
