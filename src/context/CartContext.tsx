@@ -12,13 +12,10 @@ type CartItem = {
   id: string;
   name: string;
   price: number;
-
   farmer_id: string;
   farmer_name?: string;
-
   quantity: number;
   image?: string;
-
   deliveryOptions?: DeliveryOption[];
   selectedDelivery?: DeliveryOption | null;
 };
