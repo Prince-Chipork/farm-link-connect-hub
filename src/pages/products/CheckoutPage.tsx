@@ -102,13 +102,13 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
     );
 
     const result = await response.json();
-    alert(JSON.stringify(reference));
 
-    if (!result.success) {
-      toast.error(result.message || "Payment verification failed.");
-      return;
-    }
+alert(JSON.stringify(result, null, 2));
 
+if (!result.success) {
+    toast.error(result.message);
+    return;
+}
     toast.success("Payment verified successfully.");
 
     await handlePlaceOrder(
