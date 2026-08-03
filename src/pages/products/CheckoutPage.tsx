@@ -75,9 +75,7 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
       });
 
       const paymentReference =
-        reference?.reference ??
-        reference?.trxref ??
-        reference;
+  reference.reference || reference.trxref;
 
       const response = await fetch(
         "https://tqsozciafuxrxumnxkjr.supabase.co/functions/v1/verify-payment",
