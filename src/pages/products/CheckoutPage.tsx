@@ -157,12 +157,13 @@ const handlePlaceOrder = async (
 
   shipping_cost: shippingCost,
 
-  // Save verified payment information
   payment_reference: paymentReference,
 
   payment_status: paymentStatus,
 
   paid_at: paidAt,
+
+  order_status: "pending",
 })
         .select()
         .single();
