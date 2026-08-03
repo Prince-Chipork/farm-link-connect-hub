@@ -22,7 +22,6 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [address, setAddress] = useState("");
-  const [currentOrderId, setCurrentOrderId] = useState<string | null>(null);
   
   useEffect(() => {
   const loadDeliveryOptions = async () => {
@@ -65,16 +64,6 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
   amount: totalAmount * 100,
   publicKey: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
   text: `Pay ₦${totalAmount.toLocaleString()}`,
-
-  metadata: {
-  custom_fields: [
-    {
-      display_name: "Order ID",
-      variable_name: "order_id",
-      value: currentOrderId ?? "",
-    },
-  ],
-},
 };
     const componentProps = {
   ...paystackConfig,
