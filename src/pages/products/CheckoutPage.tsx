@@ -22,6 +22,8 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [address, setAddress] = useState("");
+  const [currentOrderId, setCurrentOrderId] = useState<string | null>(null);
+  
   useEffect(() => {
   const loadDeliveryOptions = async () => {
     const productIds = cart.map((item) => item.id);
@@ -60,9 +62,13 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
   const totalAmount = cartTotal + shippingCost;
   const paystackConfig = {
   email: user?.email ?? "",
-  amount: totalAmount * 100, // Kobo
+  amount: totalAmount * 100,
   publicKey: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
   text: `Pay ₦${totalAmount.toLocaleString()}`,
+
+  metadata: {
+    order_id: currentOrderId,
+  },
 };
     const componentProps = {
   ...paystackConfig,
