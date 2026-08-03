@@ -80,53 +80,70 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
   ...paystackConfig,
 
   onSuccess: async (reference: any) => {
+    try {
+      toast.loading("Verifying payment...", {
+        id: "verify-payment",
+      });
 
-  try {
+      const paymentReference =
+        reference?.reference ??
+        reference?.trxref ??
+        reference;
 
-    const paymentReference =
-      reference?.reference ??
-      reference?.trxref ??
-      reference;
+      const response = await fetch(
+        "https://tqsozciafuxrxumnxkjr.supabase.co/functions/v1/verify-payment",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            reference: paymentReference,
+          }),
+        }
+      );
 
-    const response = await fetch(
-      "https://tqsozciafuxrxumnxkjr.supabase.co/functions/v1/verify-payment",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          reference: paymentReference,
-        }),
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        toast.error(
+          result.message || "Payment verification failed.",
+          {
+            id: "verify-payment",
+          }
+        );
+        return;
       }
-    );
 
-    const result = await response.json();
+      toast.success(
+        "Payment verified successfully.",
+        {
+          id: "verify-payment",
+        }
+      );
 
-alert(JSON.stringify(result, null, 2));
+      await handlePlaceOrder(
+        result.reference,
+        result.payment_status,
+        result.paid_at
+      );
 
-if (!result.success) {
-    toast.error(result.message);
-    return;
-}
-    toast.success("Payment verified successfully.");
+    } catch (error) {
+      console.error(error);
 
-    await handlePlaceOrder(
-      result.reference,
-      result.payment_status,
-      result.paid_at
-    );
+      toast.error(
+        "Unable to verify payment.",
+        {
+          id: "verify-payment",
+        }
+      );
+    }
+  },
 
-  } catch (error) {
-    console.error(error);
-    toast.error("Unable to verify payment.");
-  }
-},
   onClose: () => {
     toast.info("Payment cancelled.");
   },
 };
-  
   /**
  * Creates an order after payment has been verified.
  *
