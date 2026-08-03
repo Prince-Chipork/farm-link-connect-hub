@@ -229,14 +229,13 @@ return (
                   </SelectTrigger>
 
                   <SelectContent>
-  {getNextStatuses(order.status ?? "Pending").map((status) => (
-    <SelectItem
-      key={status}
-      value={status}
-    >
-      {status}
-    </SelectItem>
-  ))}
+  {[order.status ?? "Pending", ...getNextStatuses(order.status ?? "Pending")]
+    .filter((status, index, array) => array.indexOf(status) === index)
+    .map((status) => (
+      <SelectItem key={status} value={status}>
+        {status}
+      </SelectItem>
+    ))}
 </SelectContent>
                 </Select>
               </div>
