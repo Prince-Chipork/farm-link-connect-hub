@@ -164,12 +164,13 @@ const handlePlaceOrder = async (
       if (orderError) throw orderError;
 
       const items = cart.map(item => ({
-    order_id: orderData.id,
-    product_id: item.id,
-    quantity: item.quantity,
-    price: item.price,
-    delivery_fee:
-        selectedDelivery[item.id]?.delivery_fee ?? 0,
+  order_id: orderData.id,
+  product_id: item.id,
+  farmer_id: item.farmer_id,
+  quantity: item.quantity,
+  price: item.price,
+  delivery_fee:
+      selectedDelivery[item.id]?.delivery_fee ?? 0,
 }));
       const { error: itemsError } = await (supabase as any).from('order_items').insert(items);
       if (itemsError) throw itemsError;
