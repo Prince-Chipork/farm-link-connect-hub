@@ -150,18 +150,13 @@ const handlePlaceOrder = async (
         .from('orders')
         .insert({
   buyer_id: user.id,
-
   total: totalAmount,
-
   delivery_address: address,
-
   shipping_cost: shippingCost,
-
   payment_reference: paymentReference,
-
   payment_status: paymentStatus,
-
   paid_at: paidAt,
+  status: "Pending",
 })
         .select()
         .single();
