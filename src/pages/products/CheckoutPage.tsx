@@ -162,8 +162,6 @@ const handlePlaceOrder = async (
   payment_status: paymentStatus,
 
   paid_at: paidAt,
-
-  order_status: "pending",
 })
         .select()
         .single();
