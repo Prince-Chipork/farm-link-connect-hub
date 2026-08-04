@@ -211,7 +211,7 @@ return (
               </div>
 
               <div className="flex items-center gap-3">
-  <<StatusSelect
+  <StatusSelect
   value={order.status ?? "Pending"}
   options={getNextStatuses(order.status ?? "Pending")}
   disabled={
