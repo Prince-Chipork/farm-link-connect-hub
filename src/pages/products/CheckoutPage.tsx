@@ -241,10 +241,7 @@ const handleCheckout = () => {
     return;
   }
 
-  initializePayment(
-    verifyPayment,
-    () => toast.info("Payment cancelled.")
-  );
+  initializePayment(verifyPayment);
 
 };
 
