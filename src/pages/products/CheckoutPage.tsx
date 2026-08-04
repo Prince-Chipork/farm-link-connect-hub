@@ -66,64 +66,6 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
   text: `Pay ₦${totalAmount.toLocaleString()}`,
 };
     const initializePayment = usePaystackPayment(paystackConfig);
-
-      const paymentReference =
-  reference.reference || reference.trxref;
-
-      const response = await fetch(
-        "https://tqsozciafuxrxumnxkjr.supabase.co/functions/v1/verify-payment",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            reference: paymentReference,
-          }),
-        }
-      );
-
-      const result = await response.json();
-
-      if (!response.ok || !result.success) {
-        toast.error(
-          result.message || "Payment verification failed.",
-          {
-            id: "verify-payment",
-          }
-        );
-        return;
-      }
-
-      toast.success(
-        "Payment verified successfully.",
-        {
-          id: "verify-payment",
-        }
-      );
-
-      await handlePlaceOrder(
-        result.reference,
-        result.payment_status,
-        result.paid_at
-      );
-
-    } catch (error) {
-      console.error(error);
-
-      toast.error(
-        "Unable to verify payment.",
-        {
-          id: "verify-payment",
-        }
-      );
-    }
-  },
-
-  onClose: () => {
-    toast.info("Payment cancelled.");
-  },
-};
   /**
  * Creates an order after payment has been verified.
  *
