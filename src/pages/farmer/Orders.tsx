@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import StatusBadge from "@/components/orders/StatusBadge";
 import OrderCard from "@/components/orders/OrderCard";
+import StatusSelect from "@/components/orders/StatusSelect";
 
 type FarmerOrder = {
   order_id: string;
