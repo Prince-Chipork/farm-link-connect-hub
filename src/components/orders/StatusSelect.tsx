@@ -11,8 +11,8 @@ import StatusBadge from "./StatusBadge";
 type Props = {
   value: string;
   options: string[];
+  onChange?: (value: string) => void;
   disabled?: boolean;
-  onChange: (value: string) => void;
 };
 
 export default function StatusSelect({
@@ -24,7 +24,7 @@ export default function StatusSelect({
   return (
     <Select
       value={value}
-      onValueChange={onChange}
+      onValueChange={(value) => onChange?.(value)}
       disabled={disabled}
     >
       <SelectTrigger className="w-[160px]">
