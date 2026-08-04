@@ -61,7 +61,7 @@ export default function ResetPasswordPage() {
 setTimeout(() => {
   navigate("/login");
 }, 1500);
-
+  };
   return (
     <div className="flex min-h-[80vh] items-center justify-center">
       <Card className="w-full max-w-sm">
@@ -130,4 +130,3 @@ setTimeout(() => {
     </div>
   );
             }
-}
