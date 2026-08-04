@@ -29,18 +29,24 @@ export async function createNotification({
   link,
   metadata = {},
 }: CreateNotificationParams) {
-  const { error } = await supabase
-    .from("notifications")
-    .insert({
-      user_id: userId,
-      title,
-      message,
-      type,
-      link,
-      metadata,
-    });
+  const { data, error } = await supabase.functions.invoke(
+    "create-notification",
+    {
+      body: {
+        user_id: userId,
+        title,
+        message,
+        type,
+        link,
+        metadata,
+      },
+    }
+  );
 
   if (error) {
-    console.error("Notification Error:", error);
+    console.error("Notification Function Error:", error);
+    return;
   }
+
+  return data;
 }
