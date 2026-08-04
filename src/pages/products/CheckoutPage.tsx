@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {  ArrowLeft,  CreditCard, Truck, ShieldCheck, Package, ShoppingBag, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
-import { PaystackButton } from "react-paystack";
+import { usePaystackPayment } from "react-paystack";
 import { createNotification } from "@/lib/notifications";
 
 export default function CheckoutPage() {
@@ -65,14 +65,7 @@ const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({}
   publicKey: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
   text: `Pay ₦${totalAmount.toLocaleString()}`,
 };
-    const componentProps = {
-  ...paystackConfig,
-
-  onSuccess: async (reference: any) => {
-    try {
-      toast.loading("Verifying payment...", {
-        id: "verify-payment",
-      });
+    const initializePayment = usePaystackPayment(paystackConfig);
 
       const paymentReference =
   reference.reference || reference.trxref;
