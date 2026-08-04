@@ -241,7 +241,12 @@ const handleCheckout = () => {
     return;
   }
 
-  initializePayment(verifyPayment);
+  initializePayment({
+  onSuccess: verifyPayment,
+  onClose: () => {
+    toast.info("Payment cancelled.");
+  },
+});
 
 };
 
