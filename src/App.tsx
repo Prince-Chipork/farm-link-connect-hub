@@ -10,6 +10,7 @@ import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
 import ProductsPage from './pages/products/ProductsPage';
 import ProductDetailsPage from './pages/products/ProductDetailsPage';
 import CheckoutPage from './pages/products/CheckoutPage';
+import ResetPasswordPage from './pages/auth/ResetPasswordPage';
 
 import FarmerDashboard from './pages/farmer/Dashboard';
 import FarmerProducts from './pages/farmer/Products';
@@ -46,6 +47,7 @@ function App() {
           <Route path="/products/:id" element={<ProductDetailsPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
 
         </Route>
 
