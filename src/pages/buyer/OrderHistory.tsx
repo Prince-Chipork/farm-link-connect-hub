@@ -94,7 +94,11 @@ export default function BuyerOrderHistory() {
   </p>
 
   <div className="mt-1">
-   <StatusBadge status={getOverallOrderStatus(order)} />
+   <StatusSelect
+  value={getOverallOrderStatus(order)}
+  options={[]}
+  disabled
+/>
   </div>
 </div>
                 </div>
