@@ -512,10 +512,13 @@ for (const farmerId of uniqueFarmers) {
               </div>
             </CardContent>
             <CardFooter className="flex-col gap-3">
-              <PaystackButton
-  {...componentProps}
-  className="w-full h-12 rounded-md bg-primary text-primary-foreground hover:opacity-90"
-/>
+              <Button
+  onClick={handleCheckout}
+  className="w-full h-12"
+  disabled={isProcessing}
+>
+  Pay ₦{totalAmount.toLocaleString()}
+</Button>
               <div className="flex items-center justify-center gap-2 text-[10px] text-muted-foreground uppercase tracking-widest font-bold">
                 <ShieldCheck className="h-3 w-3" /> Secure Checkout
               </div>
