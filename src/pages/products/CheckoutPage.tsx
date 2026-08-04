@@ -204,19 +204,27 @@ await createNotification({
 });
 
 // Notify every farmer involved in this order
-const uniqueFarmers = [...new Set(items.map((item) => item.farmer_id))];
+const uniqueFarmers = [...new Set(items.map(item => item.farmer_id))];
+
+toast.success(`Found ${uniqueFarmers.length} farmer(s)`);
 
 for (const farmerId of uniqueFarmers) {
-  await createNotification({
+  toast.success(`Sending notification to ${farmerId}`);
+
+  const result = await createNotification({
     userId: farmerId,
     title: "New Order Received",
-    message: `You have received a new order (#${orderData.id.slice(0, 8)}).`,
+    message: "You have received a new order from a buyer.",
     type: "new_order",
     link: "/farmer/orders",
     metadata: {
       order_id: orderData.id,
     },
   });
+
+  console.log(result);
+
+  toast.success("Notification function finished");
 }
 
       setIsSuccess(true);
