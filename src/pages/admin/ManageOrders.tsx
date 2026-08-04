@@ -4,6 +4,7 @@ import { getOverallOrderStatus } from "@/lib/orderStatus";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { calculateOrderTotal } from "@/lib/orderCalculations";
+import StatusBadge from "@/components/orders/StatusBadge";
 import { 
   Search, 
   MoreHorizontal, 
