@@ -3,9 +3,7 @@ import { toast } from "sonner";
 
 export async function createNotification(params: any) {
   try {
-    toast.info("Calling Edge Function...");
-
-    const response = await supabase.functions.invoke(
+    const { data, error } = await supabase.functions.invoke(
       "create-notification",
       {
         body: {
@@ -19,17 +17,14 @@ export async function createNotification(params: any) {
       }
     );
 
-    console.log(response);
-
-    toast.success("Edge Function response received");
-
-    if (response.error) {
-      toast.error(JSON.stringify(response.error));
+    if (error) {
+      toast.error("Notification Error: " + JSON.stringify(error));
+      return;
     }
 
-    return response.data;
-  } catch (e) {
-    console.error(e);
-    toast.error(String(e));
+    toast.success("Notification OK: " + JSON.stringify(data));
+    return data;
+  } catch (err: any) {
+    toast.error("Invoke Failed: " + err.message);
   }
 }
