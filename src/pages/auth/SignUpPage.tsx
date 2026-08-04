@@ -27,7 +27,7 @@ export default function SignUpPage() {
           full_name: fullName,
           role: role,
         },
-        emailRedirectTo: `https://8d322e49.mydala.app/login`
+        emailRedirectTo: "https://farm-link-connect-hub.vercel.app/login"
       }
     });
 
