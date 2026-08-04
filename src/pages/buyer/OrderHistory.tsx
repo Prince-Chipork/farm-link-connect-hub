@@ -12,6 +12,8 @@ import { getOverallOrderStatus } from "@/lib/orderStatus";
 import type { Order } from "@/types";
 import OrderCard from "@/components/orders/OrderCard";
 import { calculateOrderTotal } from "@/lib/orderCalculations";
+import StatusSelect from "@/components/orders/StatusSelect";
+
 
 export default function BuyerOrderHistory() {
   const { user } = useAuth();
