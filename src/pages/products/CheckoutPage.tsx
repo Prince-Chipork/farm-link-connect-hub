@@ -190,16 +190,29 @@ const handlePlaceOrder = async (
 }));
       const { error: itemsError } = await (supabase as any).from('order_items').insert(items);
       if (itemsError) throw itemsError;
-      // Notify every farmer involved in this order
-const uniqueFarmers = [...new Set(items.map(item => item.farmer_id))];
+
+// Notify the buyer
+await createNotification({
+  userId: user.id,
+  title: "Order Placed Successfully",
+  message: `Your order #${orderData.id.slice(0, 8)} has been placed successfully and is awaiting farmer acceptance.`,
+  type: "order",
+  link: `/buyer/orders/${orderData.id}/track`,
+  metadata: {
+    order_id: orderData.id,
+  },
+});
+
+// Notify every farmer involved in this order
+const uniqueFarmers = [...new Set(items.map((item) => item.farmer_id))];
 
 for (const farmerId of uniqueFarmers) {
   await createNotification({
     userId: farmerId,
     title: "New Order Received",
-    message: "You have received a new order from a buyer.",
+    message: `You have received a new order (#${orderData.id.slice(0, 8)}).`,
     type: "new_order",
-    link: `/farmer/orders`,
+    link: "/farmer/orders",
     metadata: {
       order_id: orderData.id,
     },
