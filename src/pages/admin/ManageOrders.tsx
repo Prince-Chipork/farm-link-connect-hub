@@ -4,7 +4,6 @@ import { getOverallOrderStatus } from "@/lib/orderStatus";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { calculateOrderTotal } from "@/lib/orderCalculations";
-import StatusBadge from "@/components/orders/StatusBadge";
 import { 
   Search, 
   MoreHorizontal, 
@@ -79,23 +78,7 @@ export default function AdminManageOrders() {
   .toLowerCase()
   .includes(searchTerm.toLowerCase())
 );
-
-  const getStatusBadge = (status: string) => {
-    switch (status?.toLowerCase()) {
-      case 'delivered':
-        return <Badge className="bg-green-500 hover:bg-green-600">Delivered</Badge>;
-      case 'processing':
-        return <Badge variant="secondary">Processing</Badge>;
-      case 'shipped':
-        return <Badge className="bg-blue-500 hover:bg-blue-600">Shipped</Badge>;
-      case 'cancelled':
-        return <Badge variant="destructive">Cancelled</Badge>;
-      default:
-        return <Badge variant="outline">{status}</Badge>;
-    }
-  };
-
-  return (
+ return (
     <div className="flex flex-col gap-6">
          <div className="mb-6">
   <Button asChild variant="outline" size="sm">
@@ -173,7 +156,9 @@ export default function AdminManageOrders() {
 </TableCell>
                     <TableCell>{new Date(order.created_at).toLocaleDateString()}</TableCell>
                     <TableCell>₦{calculateOrderTotal(order).toLocaleString()}</TableCell>
-                    <TableCell>{getStatusBadge(getOverallOrderStatus(order))}</TableCell>
+                    <TableCell>
+  <StatusBadge status={getOverallOrderStatus(order)} />
+</TableCell>
                     <TableCell className="text-right">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
