@@ -9,7 +9,6 @@ import { toast } from "sonner";
 import StatusBadge from "@/components/orders/StatusBadge"; 
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import { getOverallOrderStatus } from "@/lib/orderStatus";
-import type { Order } from "@/types";
 import OrderCard from "@/components/orders/OrderCard";
 import { calculateOrderTotal } from "@/lib/orderCalculations";
 import StatusSelect from "@/components/orders/StatusSelect";
@@ -153,7 +152,11 @@ export default function BuyerOrderHistory() {
   </p>
 
   <div className="mt-2">
-    <StatusBadge status={item.status} />
+    <StatusSelect
+  value={item.status ?? "Pending"}
+  options={[]}
+  disabled
+/>
   </div>
 </div>
 
