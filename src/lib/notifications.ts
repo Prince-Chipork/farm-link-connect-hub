@@ -1,52 +1,34 @@
 import { supabase } from "@/integrations/supabase/client";
 
-type NotificationType =
-  | "general"
-  | "new_order"
-  | "order_accepted"
-  | "order_processing"
-  | "order_packed"
-  | "order_shipped"
-  | "order_delivered"
-  | "order_cancelled"
-  | "payment_received"
-  | "system";
+export async function createNotification(params: any) {
+  try {
+    toast.info("Calling Edge Function...");
 
-type CreateNotificationParams = {
-  userId: string;
-  title: string;
-  message: string;
-  type?: NotificationType;
-  link?: string;
-  metadata?: Record<string, any>;
-};
+    const response = await supabase.functions.invoke(
+      "create-notification",
+      {
+        body: {
+          user_id: params.userId,
+          title: params.title,
+          message: params.message,
+          type: params.type,
+          link: params.link,
+          metadata: params.metadata,
+        },
+      }
+    );
 
-export async function createNotification({
-  userId,
-  title,
-  message,
-  type = "general",
-  link,
-  metadata = {},
-}: CreateNotificationParams) {
-  const { data, error } = await supabase.functions.invoke(
-    "create-notification",
-    {
-      body: {
-        user_id: userId,
-        title,
-        message,
-        type,
-        link,
-        metadata,
-      },
+    console.log(response);
+
+    toast.success("Edge Function response received");
+
+    if (response.error) {
+      toast.error(JSON.stringify(response.error));
     }
-  );
 
-  if (error) {
-    console.error("Notification Function Error:", error);
-    return;
+    return response.data;
+  } catch (e) {
+    console.error(e);
+    toast.error(String(e));
   }
-
-  return data;
 }
