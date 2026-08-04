@@ -16,7 +16,7 @@ export default function ForgotPasswordPage() {
     e.preventDefault();
     setLoading(true);
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `https://8d322e49.mydala.app/`,
+      redirectTo: `https://farm-link-connect-hub.vercel.app/reset-password`,
     });
     setLoading(false);
     if (error) {
