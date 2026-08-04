@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import StatusSelect from "@/components/orders/StatusSelect";
 import { getOverallOrderStatus } from "@/lib/orderStatus";
 import { calculateOrderTotal, calculateProductSubtotal, calculateDeliveryTotal } from "@/lib/orderCalculations";
 import OrderTimeline from "@/components/orders/OrderTimeline";
@@ -217,30 +217,24 @@ setItemStatuses(initialStatuses);
     ₦{Number(item.quantity * item.price).toLocaleString()}
   </p>
 
-  <Select
+  <StatusSelect
   value={itemStatuses[item.id]}
-  onValueChange={(value) =>
+  options={[
+    "Pending",
+    "Accepted",
+    "Processing",
+    "Packed",
+    "Shipped",
+    "Delivered",
+    "Cancelled",
+  ]}
+  onChange={(value) =>
     setItemStatuses((prev) => ({
       ...prev,
       [item.id]: value,
     }))
   }
->
-    
-    <SelectTrigger className="w-[170px]">
-      <SelectValue />
-    </SelectTrigger>
-
-    <SelectContent>
-      <SelectItem value="Pending">Pending</SelectItem>
-      <SelectItem value="Accepted">Accepted</SelectItem>
-      <SelectItem value="Processing">Processing</SelectItem>
-      <SelectItem value="Packed">Packed</SelectItem>
-      <SelectItem value="Shipped">Shipped</SelectItem>
-      <SelectItem value="Delivered">Delivered</SelectItem>
-      <SelectItem value="Cancelled">Cancelled</SelectItem>
-    </SelectContent>
-  </Select>
+/>
         
   <Button
   size="sm"
