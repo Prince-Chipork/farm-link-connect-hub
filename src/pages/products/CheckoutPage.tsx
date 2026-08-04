@@ -12,6 +12,7 @@ import { Link, useNavigate } from "react-router-dom";
 import {  ArrowLeft,  CreditCard, Truck, ShieldCheck, Package, ShoppingBag, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { PaystackButton } from "react-paystack";
+import { createNotification } from "@/lib/notifications";
 
 export default function CheckoutPage() {
   const { cart, cartTotal, clearCart } = useCart();
@@ -190,6 +191,21 @@ const handlePlaceOrder = async (
 }));
       const { error: itemsError } = await (supabase as any).from('order_items').insert(items);
       if (itemsError) throw itemsError;
+      // Notify every farmer involved in this order
+const uniqueFarmers = [...new Set(items.map(item => item.farmer_id))];
+
+for (const farmerId of uniqueFarmers) {
+  await createNotification({
+    userId: farmerId,
+    title: "New Order Received",
+    message: "You have received a new order from a buyer.",
+    type: "new_order",
+    link: `/farmer/orders`,
+    metadata: {
+      order_id: orderData.id,
+    },
+  });
+}
 
       setIsSuccess(true);
       clearCart();
