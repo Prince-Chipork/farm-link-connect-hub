@@ -100,56 +100,56 @@ const handleCheckout = () => {
     return;
   }
 
-  initializePayment(
-    async (reference: any) => {
-      try {
-        toast.loading("Verifying payment...", {
-          id: "verify-payment",
-        });
+  initializePayment({
+  onSuccess: async (reference: any) => {
+    try {
+      toast.loading("Verifying payment...", {
+        id: "verify-payment",
+      });
 
-        const paymentReference =
-          reference.reference || reference.trxref;
+      const paymentReference =
+        reference.reference || reference.trxref;
 
-        const response = await fetch(
-          "https://tqsozciafuxrxumnxkjr.supabase.co/functions/v1/verify-payment",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              reference: paymentReference,
-            }),
-          }
-        );
-
-        const result = await response.json();
-
-        if (!response.ok || !result.success) {
-          toast.error(result.message, {
-            id: "verify-payment",
-          });
-          return;
+      const response = await fetch(
+        "https://tqsozciafuxrxumnxkjr.supabase.co/functions/v1/verify-payment",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            reference: paymentReference,
+          }),
         }
+      );
 
-        toast.success("Payment verified.", {
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        toast.error(result.message || "Payment verification failed.", {
           id: "verify-payment",
         });
-
-        await handlePlaceOrder(
-          result.reference,
-          result.payment_status,
-          result.paid_at
-        );
-      } catch {
-        toast.error("Payment verification failed.");
+        return;
       }
-    },
-    () => {
-      toast.info("Payment cancelled.");
+
+      toast.success("Payment verified.", {
+        id: "verify-payment",
+      });
+
+      await handlePlaceOrder(
+        result.reference,
+        result.payment_status,
+        result.paid_at
+      );
+    } catch {
+      toast.error("Payment verification failed.");
     }
-  );
-};
+  },
+
+  onClose: () => {
+    toast.info("Payment cancelled.");
+  },
+});
 const handlePlaceOrder = async (
   paymentReference: string,
   paymentStatus: string,
