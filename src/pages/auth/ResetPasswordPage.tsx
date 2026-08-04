@@ -56,12 +56,11 @@ export default function ResetPasswordPage() {
       return;
     }
 
-    toast.success(
-      "Password updated successfully."
-    );
+    toast.success("Password updated successfully.");
 
-    navigate("/login");
-  };
+setTimeout(() => {
+  navigate("/login");
+}, 1500);
 
   return (
     <div className="flex min-h-[80vh] items-center justify-center">
