@@ -210,35 +210,16 @@ return (
               </div>
 
               <div className="flex items-center gap-3">
-  <Select
-    value={order.status ?? "Pending"}
-    disabled={getNextStatuses(order.status ?? "Pending").length === 0}
-    onValueChange={(value) => {
-      if (!order.order_item_id) {
-        toast.error("Order Item ID is missing.");
-        return;
-      }
-
-      updateOrderStatus(order.order_item_id, value);
-    }}
-  >
-    <SelectTrigger className="h-9 w-[150px]">
-      <SelectValue />
-    </SelectTrigger>
-
-    <SelectContent>
-      {[order.status ?? "Pending", ...getNextStatuses(order.status ?? "Pending")]
-        .filter((status, index, array) => array.indexOf(status) === index)
-        .map((status) => (
-          <SelectItem
-            key={status}
-            value={status}
-          >
-            {status}
-          </SelectItem>
-        ))}
-    </SelectContent>
-  </Select>
+  <<StatusSelect
+  value={order.status ?? "Pending"}
+  options={getNextStatuses(order.status ?? "Pending")}
+  disabled={
+    getNextStatuses(order.status ?? "Pending").length === 0
+  }
+  onChange={(value) => {
+    updateOrderStatus(order.order_item_id, value);
+  }}
+/>
 </div>
             </CardHeader>
 
