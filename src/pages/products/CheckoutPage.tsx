@@ -399,3 +399,325 @@ if (isSuccess) {
   );
 }
 
+return (
+  <div className="container mx-auto max-w-6xl px-4 py-8">
+
+    <Link
+      to="/products"
+      className="mb-6 inline-flex items-center text-sm text-muted-foreground hover:text-primary"
+    >
+      <ArrowLeft className="mr-1 h-4 w-4" />
+      Back to Shopping
+    </Link>
+
+    <h1 className="mb-8 text-3xl font-bold">
+      Checkout
+    </h1>
+
+    <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+
+      {/* LEFT SIDE */}
+
+      <div className="space-y-6 lg:col-span-2">
+
+        <Card>
+
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Truck className="h-5 w-5 text-primary" />
+              Delivery Information
+            </CardTitle>
+          </CardHeader>
+
+          <CardContent className="space-y-4">
+
+            <div className="grid gap-4 md:grid-cols-2">
+
+              <div>
+                <Label>First Name</Label>
+                <Input
+                  value={firstName}
+                  onChange={(e) =>
+                    setFirstName(e.target.value)
+                  }
+                />
+              </div>
+
+              <div>
+                <Label>Last Name</Label>
+                <Input
+                  value={lastName}
+                  onChange={(e) =>
+                    setLastName(e.target.value)
+                  }
+                />
+              </div>
+
+            </div>
+
+            <div>
+              <Label>Address</Label>
+              <Input
+                value={address}
+                onChange={(e) =>
+                  setAddress(e.target.value)
+                }
+              />
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-3">
+
+              <div>
+                <Label>City</Label>
+                <Input
+                  value={city}
+                  onChange={(e) =>
+                    setCity(e.target.value)
+                  }
+                />
+              </div>
+
+              <div>
+                <Label>State</Label>
+                <Input
+                  value={state}
+                  onChange={(e) =>
+                    setState(e.target.value)
+                  }
+                />
+              </div>
+
+              <div>
+                <Label>Phone</Label>
+                <Input
+                  value={phone}
+                  onChange={(e) =>
+                    setPhone(e.target.value)
+                  }
+                />
+              </div>
+
+            </div>
+
+          </CardContent>
+
+        </Card>
+
+        <Card>
+
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <CreditCard className="h-5 w-5 text-primary" />
+              Payment Method
+            </CardTitle>
+          </CardHeader>
+
+          <CardContent>
+
+            <RadioGroup
+              value={paymentMethod}
+              onValueChange={setPaymentMethod}
+            >
+
+              <div className="flex items-center gap-3 border rounded-lg p-4">
+
+                <RadioGroupItem
+                  value="paystack"
+                  id="paystack"
+                />
+
+                <Label htmlFor="paystack">
+                  Paystack
+                </Label>
+
+              </div>
+
+              <div className="mt-3 flex items-center gap-3 border rounded-lg p-4">
+
+                <RadioGroupItem
+                  value="cod"
+                  id="cod"
+                />
+
+                <Label htmlFor="cod">
+                  Pay on Delivery
+                </Label>
+
+              </div>
+
+            </RadioGroup>
+
+          </CardContent>
+
+        </Card>
+
+      </div>
+
+      {/* RIGHT SIDE */}
+
+      <div>
+
+        <Card>
+
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <ShoppingBag className="h-5 w-5 text-primary" />
+              Order Summary
+            </CardTitle>
+          </CardHeader>
+
+          <CardContent>
+
+            {cart.map((item) => (
+              <div
+                key={item.id}
+                className="mb-5 border-b pb-4"
+              >
+
+                <div className="flex justify-between">
+
+                  <div>
+
+                    <p className="font-medium">
+                      {item.name}
+                    </p>
+
+                    <p className="text-sm text-muted-foreground">
+                      Qty: {item.quantity}
+                    </p>
+
+                  </div>
+
+                  <strong>
+                    ₦
+                    {(item.price * item.quantity).toLocaleString()}
+                  </strong>
+
+                </div>
+
+                <div className="mt-3">
+
+                  <Label>
+                    Delivery Option
+                  </Label>
+
+                  <select
+                    className="mt-1 w-full rounded-md border p-2"
+                    value={
+                      selectedDelivery[item.id]?.id || ""
+                    }
+                    onChange={(e) => {
+
+                      const option =
+                        deliveryOptions[item.id]?.find(
+                          (o) =>
+                            o.id === e.target.value
+                        );
+
+                      if (!option) return;
+
+                      setSelectedDelivery((prev) => ({
+                        ...prev,
+                        [item.id]: option,
+                      }));
+
+                    }}
+                  >
+
+                    <option value="">
+                      Select Delivery
+                    </option>
+
+                    {(deliveryOptions[item.id] || []).map(
+                      (option) => (
+                        <option
+                          key={option.id}
+                          value={option.id}
+                        >
+                          {option.option_name} -
+                          ₦
+                          {Number(
+                            option.delivery_fee
+                          ).toLocaleString()}
+                        </option>
+                      )
+                    )}
+
+                  </select>
+
+                </div>
+
+              </div>
+            ))}
+
+            <Separator className="my-4" />
+
+            <div className="space-y-2">
+
+              <div className="flex justify-between">
+                <span>Subtotal</span>
+                <span>
+                  ₦{cartTotal.toLocaleString()}
+                </span>
+              </div>
+
+              <div className="flex justify-between">
+                <span>Shipping</span>
+                <span>
+                  ₦{shippingCost.toLocaleString()}
+                </span>
+              </div>
+
+              <div className="flex justify-between text-lg font-bold">
+                <span>Total</span>
+                <span>
+                  ₦{totalAmount.toLocaleString()}
+                </span>
+              </div>
+
+            </div>
+
+          </CardContent>
+
+          <CardFooter className="flex-col gap-3">
+
+            <Button
+              onClick={handleCheckout}
+              disabled={isProcessing}
+              className="w-full"
+            >
+              {isProcessing
+                ? "Processing..."
+                : `Pay ₦${totalAmount.toLocaleString()}`}
+            </Button>
+
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <ShieldCheck className="h-4 w-4" />
+              Secure Checkout
+            </div>
+
+          </CardFooter>
+
+        </Card>
+
+        <div className="mt-6 rounded-lg border border-dashed p-4 text-xs text-muted-foreground">
+
+          <p className="mb-2 flex items-center gap-2 font-bold text-foreground">
+
+            <Package className="h-4 w-4" />
+
+            FarmLink Escrow Protection
+
+          </p>
+
+          Your payment is securely held until your order is delivered successfully.
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+);
+              }
