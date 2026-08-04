@@ -196,7 +196,7 @@ await createNotification({
   userId: user.id,
   title: "Order Placed Successfully",
   message: `Your order #${orderData.id.slice(0, 8)} has been placed successfully and is awaiting farmer acceptance.`,
-  type: "order",
+  type: "new_order",
   link: `/buyer/orders/${orderData.id}/track`,
   metadata: {
     order_id: orderData.id,
