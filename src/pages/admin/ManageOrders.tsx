@@ -1,42 +1,17 @@
-import { useEffect, useState } from 'react';
+33import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { getOverallOrderStatus } from "@/lib/orderStatus";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { calculateOrderTotal } from "@/lib/orderCalculations";
-import { 
-  Search, 
-  MoreHorizontal, 
-  Eye, 
-  Truck,
-  XCircle,
-  Download
-} from 'lucide-react';
-import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardHeader, 
-  CardTitle 
-} from '@/components/ui/card';
+import { Search, MoreHorizontal, Eye, Truck, XCircle, Download } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import StatusBadge from "@/components/orders/StatusBadge";
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from '@/components/ui/table';
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger 
-} from '@/components/ui/dropdown-menu';
+  
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { you DropdownMenu,  DropdownMenuContent,  DropdownMenuItem,  DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { toast } from 'sonner';
 
 export default function AdminManageOrders() {
