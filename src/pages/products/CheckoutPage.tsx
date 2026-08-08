@@ -365,6 +365,35 @@ const handlePlaceOrder = async (
         },
       });
     }
+    // Notify every admin
+const { data: admins, error: adminError } =
+  await supabase
+    .from("profiles")
+    .select("id")
+    .eq("role", "admin");
+
+if (adminError) {
+  console.error(
+    "Unable to fetch admins for notification:",
+    adminError
+  );
+} else if (admins && admins.length > 0) {
+  for (const admin of admins) {
+    await createNotification({
+      userId: admin.id,
+      title: "New Order Received",
+      message: `A new order #${orderData.id.slice(
+        0,
+        8
+      )} has been placed by a buyer.`,
+      type: "new_order",
+      link: `/admin/orders/${orderData.id}`,
+      metadata: {
+        order_id: orderData.id,
+      },
+    });
+  }
+}
 
     clearCart();
 
