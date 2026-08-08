@@ -170,11 +170,17 @@ const verifyPayment = async (reference: any) => {
       result.paid_at
     );
 
-  } catch (err) {
+    } catch (err) {
 
-    toast.error("Unable to verify payment.", {
-      id: "verify-payment",
-    });
+    console.error("Payment verification error:", err);
+
+    toast.error(
+      "We couldn't confirm your payment because of a network problem. Please check your payment status before trying again.",
+      {
+        id: "verify-payment",
+        duration: 10000,
+      }
+    );
 
   }
 };
@@ -244,7 +250,12 @@ const handleCheckout = () => {
   initializePayment({
   onSuccess: verifyPayment,
   onClose: () => {
-    toast.info("Payment cancelled.");
+    toast.info(
+      "Payment window closed. If you completed the payment, we will check its status before you try again.",
+      {
+        duration: 8000,
+      }
+    );
   },
 });
 
