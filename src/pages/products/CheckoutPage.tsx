@@ -151,21 +151,7 @@ export default function CheckoutPage() {
           )
         ),
       ];
-
-      for (const farmerId of uniqueFarmers) {
-        await createNotification({
-          userId: farmerId,
-          title: "New Paid Order",
-          message:
-            "A buyer has successfully completed payment for a new order.",
-          type: "new_order",
-          link: "/farmer/orders",
-          metadata: {
-            order_id: orderId,
-          },
-        });
-      }
-
+    
     /*
      * Create all order items.
      */
