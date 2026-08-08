@@ -258,11 +258,14 @@ const handleCheckout = () => {
 
   initializePayment({
   onSuccess: verifyPayment,
+
   onClose: () => {
-    toast.info(
-      "Payment window closed. If you completed the payment, we will check its status before you try again.",
+    setPaymentStatusUnknown(true);
+
+    toast.warning(
+      "Payment window closed. We could not confirm whether your payment was completed.",
       {
-        duration: 8000,
+        duration: 10000,
       }
     );
   },
