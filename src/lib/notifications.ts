@@ -1,30 +1,50 @@
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
 
-export async function createNotification(params: any) {
+interface NotificationParams {
+  userId: string;
+  title: string;
+  message: string;
+  type: string;
+  link?: string;
+  metadata?: Record<string, any>;
+}
+
+export async function createNotification(
+  params: NotificationParams
+) {
   try {
-    const { data, error } = await supabase.functions.invoke(
-      "create-notification",
-      {
-        body: {
-          user_id: params.userId,
-          title: params.title,
-          message: params.message,
-          type: params.type,
-          link: params.link,
-          metadata: params.metadata,
-        },
-      }
-    );
+    const { data, error } =
+      await supabase.functions.invoke(
+        "create-notification",
+        {
+          body: {
+            user_id: params.userId,
+            title: params.title,
+            message: params.message,
+            type: params.type,
+            link: params.link ?? null,
+            metadata: params.metadata ?? {},
+          },
+        }
+      );
 
     if (error) {
-      toast.error("Notification Error: " + JSON.stringify(error));
-      return;
+      console.error(
+        "Notification error:",
+        error
+      );
+
+      return null;
     }
 
-    toast.success("Notification OK: " + JSON.stringify(data));
     return data;
-  } catch (err: any) {
-    toast.error("Invoke Failed: " + err.message);
+
+  } catch (error) {
+    console.error(
+      "Notification request failed:",
+      error
+    );
+
+    return null;
   }
 }
