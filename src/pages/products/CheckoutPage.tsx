@@ -44,16 +44,10 @@ export default function CheckoutPage() {
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-
-  const [paymentReference, setPaymentReference] =
-    useState("");
-
-  const [paymentStatusUnknown, setPaymentStatusUnknown] =
-    useState(false);
-
-  const [pendingOrderId, setPendingOrderId] =
-    useState("");
-
+  const [paymentReference, setPaymentReference] = useState("");
+  const [paymentStatusUnknown, setPaymentStatusUnknown] = useState(false);
+  const [initializedOrderId, setInitializedOrderId] = useState("");
+  const [pendingOrderId, setPendingOrderId] =useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
@@ -61,14 +55,11 @@ export default function CheckoutPage() {
   const [state, setState] = useState("");
   const [address, setAddress] = useState("");
 
-  const [paymentMethod, setPaymentMethod] =
-    useState("paystack");
+  const [paymentMethod, setPaymentMethod] = useState("paystack");
 
-  const [deliveryOptions, setDeliveryOptions] =
-    useState<Record<string, any[]>>({});
+  const [deliveryOptions, setDeliveryOptions] = useState<Record<string, any[]>>({});
 
-  const [selectedDelivery, setSelectedDelivery] =
-    useState<Record<string, any>>({});
+  const [selectedDelivery, setSelectedDelivery] = useState<Record<string, any>>({});
 
   /*
    * ---------------------------------------------------------
