@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface NotificationParams {
   userId: string;
@@ -29,20 +30,41 @@ export async function createNotification(
       );
 
     if (error) {
+      console.error("Notification error:", error);
+
+      toast.error(
+        `Notification failed: ${error.message}`
+      );
+
+      return null;
+    }
+
+    if (!data?.success) {
       console.error(
-        "Notification error:",
-        error
+        "Notification function returned failure:",
+        data
+      );
+
+      toast.error(
+        `Notification failed: ${
+          data?.error || "Unknown error"
+        }`
       );
 
       return null;
     }
 
     return data;
-
-  } catch (error) {
+  } catch (error: any) {
     console.error(
       "Notification request failed:",
       error
+    );
+
+    toast.error(
+      `Notification failed: ${
+        error?.message || "Unknown error"
+      }`
     );
 
     return null;
