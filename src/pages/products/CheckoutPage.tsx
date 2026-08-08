@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { useCart } from "@/context/CartContext";
@@ -47,6 +47,7 @@ export default function CheckoutPage() {
   const [paymentReference, setPaymentReference] = useState("");
   const [paymentStatusUnknown, setPaymentStatusUnknown] = useState(false);
   const [initializedOrderId, setInitializedOrderId] = useState("");
+  const initializedOrderIdRef = useRef("");
   const [pendingOrderId, setPendingOrderId] =useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
