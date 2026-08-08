@@ -9,6 +9,7 @@ import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import StatusBadge from "@/components/orders/StatusBadge";
 import OrderCard from "@/components/orders/OrderCard";
 import StatusSelect from "@/components/orders/StatusSelect";
+import { updateOrderStatus } from "@/lib/orderActions";
 
 type FarmerOrder = {
   order_id: string;
@@ -64,38 +65,7 @@ setOrders((data ?? []) as FarmerOrder[]);
     fetchOrders();
   }, [user]);
   
-const updateOrderStatus = async (
-  orderItemId: string,
-  newStatus: string
-) => {
-  try {
-    const { data, error } = await (supabase as any).rpc(
-  "update_farmer_order_status",
-  {
-    p_order_item_id: orderItemId,
-    p_status: newStatus,
-  }
-);
-
-if (error) throw error;
-
-setOrders((current) =>
-  current.map((order) =>
-    order.order_item_id === orderItemId
-      ? { ...order, status: newStatus }
-      : order)
-);
-
-toast.success("Order status updated successfully.");
-
-await fetchOrders();
-    
-  } catch (error: any) {
-    console.error(error);
-    toast.error(error.message ?? "Failed to update order.");
-  }
-};
-  const getNextStatuses = (status: string) => {
+ const getNextStatuses = (status: string) => {
   switch (status) {
     case "Pending":
       return ["Accepted", "Cancelled"];
