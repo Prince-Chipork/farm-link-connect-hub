@@ -230,13 +230,15 @@ export default function CheckoutPage() {
     return;
   }
 
-  if (!initializedOrderId) {
-    toast.error(
-      "Your order could not be identified. Please do not pay again."
-    );
-    return;
-  }
+  const orderId = initializedOrderIdRef.current;
 
+if (!orderId) {
+  toast.error(
+    "Your order could not be identified. Please do not pay again."
+  );
+  return;
+}
+    
   setPaymentReference(referenceValue);
   setPaymentStatusUnknown(false);
 
@@ -253,8 +255,8 @@ export default function CheckoutPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          orderId: initializedOrderId,
-          reference: referenceValue,
+  orderId: orderId,
+  reference: referenceValue,
         }),
       }
     );
