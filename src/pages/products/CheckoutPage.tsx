@@ -127,7 +127,6 @@ export default function CheckoutPage() {
    * loses connection afterwards, the order still exists
    * in Supabase and can be recovered.
    */
-
   const initializeOrder = async (
     reference: string
   ) => {
@@ -137,36 +136,42 @@ export default function CheckoutPage() {
       );
     }
 
-          /*
-       * Notify the farmers involved in this order.
-       *
-       * We use the farmers already present in the cart
-       * instead of querying farmer_id from order_items.
-       */
+    /*
+     * Create the order BEFORE Paystack opens.
+     */
 
-      const uniqueFarmers = [
-        ...new Set(
-          cart.map(
-            (item) => item.farmer_id
-          )
-        ),
-      ];
-    
+    const {
+      data: orderData,
+      error: orderError,
+    } = await supabase
+      .from("orders")
+      .insert({
+        buyer_id: user.id,
+        total: totalAmount,
+        delivery_address: address,
+        shipping_cost: shippingCost,
+        payment_reference: reference,
+        payment_status: "pending",
+        paid_at: null,
+        status: "Pending",
+      })
+      .select()
+      .single();
+
+    if (orderError) {
+      throw orderError;
+    }
+
     /*
      * Create all order items.
      */
 
     const items = cart.map((item) => ({
       order_id: orderData.id,
-
       product_id: item.id,
-
       farmer_id: item.farmer_id,
-
       quantity: item.quantity,
-
       price: item.price,
-
       delivery_fee:
         selectedDelivery[item.id]
           ?.delivery_fee ?? 0,
@@ -179,10 +184,8 @@ export default function CheckoutPage() {
 
     if (itemError) {
       /*
-       * Payment has NOT started yet.
-       *
-       * Therefore it is safe to remove the incomplete
-       * order if its items could not be created.
+       * Payment has not started yet,
+       * so remove the incomplete order.
        */
 
       await supabase
@@ -195,11 +198,10 @@ export default function CheckoutPage() {
 
     return {
       orderId: orderData.id,
-
       paymentReference: reference,
     };
   };
-
+  
   /*
    * ---------------------------------------------------------
    * VERIFY PAYMENT
