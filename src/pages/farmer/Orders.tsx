@@ -187,9 +187,23 @@ return (
   disabled={
     getNextStatuses(order.status ?? "Pending").length === 0
   }
-  onChange={(value) => {
-    updateOrderStatus(order.order_item_id, value);
-  }}
+  onChange={async (value) => {
+  try {
+    await updateOrderStatus(
+      order.order_item_id!,
+      value
+    );
+
+    toast.success("Order status updated successfully.");
+
+    await fetchOrders();
+  } catch (error: any) {
+    console.error(error);
+    toast.error(
+      error.message ?? "Failed to update order."
+    );
+  }
+}}
 />
 </div>
             </CardHeader>
