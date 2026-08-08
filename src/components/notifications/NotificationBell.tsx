@@ -31,6 +31,9 @@ const NotificationBell = () => {
 
   const [loading, setLoading] = useState(true);
 
+  /*
+   * Load existing notifications
+   */
   useEffect(() => {
     if (!user) {
       setNotifications([]);
@@ -70,15 +73,72 @@ const NotificationBell = () => {
     fetchNotifications();
   }, [user]);
 
+  /*
+   * Realtime notification listener
+   */
+  useEffect(() => {
+    if (!user) return;
+
+    const channel = supabase
+      .channel(`notifications-${user.id}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "notifications",
+          filter: `user_id=eq.${user.id}`,
+        },
+        (payload) => {
+          console.log(
+            "Realtime notification received:",
+            payload.new
+          );
+
+          setNotifications((current) => {
+            // Prevent duplicate notifications
+            const alreadyExists = current.some(
+              (notification) =>
+                notification.id === payload.new.id
+            );
+
+            if (alreadyExists) {
+              return current;
+            }
+
+            return [
+              payload.new,
+              ...current,
+            ];
+          });
+        }
+      )
+      .subscribe((status) => {
+        console.log(
+          "Notification realtime status:",
+          status
+        );
+      });
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user]);
+
+  /*
+   * Count unread notifications
+   */
   const unreadCount = notifications.filter(
     (notification) => !notification.is_read
   ).length;
 
+  /*
+   * Mark notification as read and navigate
+   */
   const handleNotificationClick = async (
     notification: any
   ) => {
     try {
-      // Mark notification as read if it is unread
       if (!notification.is_read) {
         const { error } = await supabase
           .from("notifications")
@@ -97,7 +157,6 @@ const NotificationBell = () => {
           return;
         }
 
-        // Update UI immediately
         setNotifications((current) =>
           current.map((item) =>
             item.id === notification.id
@@ -110,7 +169,6 @@ const NotificationBell = () => {
         );
       }
 
-      // Navigate if notification has a link
       if (notification.link) {
         navigate(notification.link);
       }
