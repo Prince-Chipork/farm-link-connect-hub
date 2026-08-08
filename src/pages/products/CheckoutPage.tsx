@@ -511,7 +511,7 @@ export default function CheckoutPage() {
          */
 
         const { orderId, paymentReference } =
-  await initializeOrder();
+  await initializeOrder(reference);
 
 setInitializedOrderId(orderId);
 setPaymentReference(paymentReference);
