@@ -59,48 +59,44 @@ setItemStatuses(initialStatuses);
   itemId: string,
   status: string
 ) => {
-  // Update the selected order item
-  const { error } = await supabase
-    .from("order_items")
-    .update({ status })
-    .eq("id", itemId);
+  try {
+    await updateAdminOrderStatus(
+      itemId,
+      status
+    );
 
-  if (error) {
-    toast.error(error.message);
-    return;
+    // Update the selected item locally
+    const updatedOrder = {
+      ...order,
+      order_items: order.order_items.map((item: any) =>
+        item.id === itemId
+          ? { ...item, status }
+          : item
+      ),
+    };
+
+    setOrder(updatedOrder);
+
+    setItemStatuses((prev) => ({
+      ...prev,
+      [itemId]: status,
+    }));
+
+    toast.success(
+      `Order status updated to ${status}.`
+    );
+
+  } catch (error: any) {
+    console.error(
+      "Admin order status update failed:",
+      error
+    );
+
+    toast.error(
+      error?.message ||
+      "Failed to update order status."
+    );
   }
-
-  // Update local state
-  const updatedOrder = {
-    ...order,
-    order_items: order.order_items.map((item: any) =>
-      item.id === itemId
-        ? { ...item, status }
-        : item
-    ),
-  };
-
-  setOrder(updatedOrder);
-
-  // Calculate overall order status
-  const overallStatus = getOverallOrderStatus(updatedOrder);
-
-  const newStatus =
-    overallStatus.charAt(0).toUpperCase() +
-    overallStatus.slice(1);
-
-  // Save overall status to orders table
-  const { error: orderError } = await supabase
-    .from("orders")
-    .update({ status: newStatus })
-    .eq("id", order.id);
-
-  if (orderError) {
-    toast.error(orderError.message);
-    return;
-  }
-
-  toast.success("Order status updated successfully.");
 };
   
   if (loading) return <LoadingSpinner />;
