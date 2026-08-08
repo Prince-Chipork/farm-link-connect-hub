@@ -110,7 +110,6 @@ const shippingCost = Object.values(selectedDelivery).reduce(
 );
 
 const totalAmount = cartTotal + shippingCost;
-
 const paystackConfig = {
 
   email: user?.email ?? "",
@@ -123,7 +122,7 @@ const paystackConfig = {
   text: `Pay ₦${totalAmount.toLocaleString()}`,
 
 };
-
+  
 const initializePayment =
   usePaystackPayment(paystackConfig);
 
@@ -248,31 +247,134 @@ const handleCheckout = () => {
   }
 
   if (paymentMethod === "cod") {
-    handlePlaceOrder(
+  try {
+    setIsProcessing(true);
+
+    const { orderId } = await initializeOrder();
+
+    await handlePlaceOrder(
       "",
       "pending",
       ""
     );
-    return;
+
+  } catch (error: any) {
+    console.error("Order initialization error:", error);
+
+    toast.error(
+      error.message || "Unable to initialize your order."
+    );
+
+  } finally {
+    setIsProcessing(false);
   }
 
+  return;
+}
+
+try {
+  setIsProcessing(true);
+
+  const { orderId, paymentReference } =
+    await initializeOrder();
+
+  console.log("FarmLink order initialized:", orderId);
+  console.log(
+    "FarmLink payment reference:",
+    paymentReference
+  );
+
+  setIsProcessing(false);
+
   initializePayment({
-  onSuccess: verifyPayment,
+    onSuccess: verifyPayment,
 
-  onClose: () => {
-    setPaymentStatusUnknown(true);
+    onClose: () => {
+      setPaymentStatusUnknown(true);
 
-    toast.warning(
-      "Payment window closed. We could not confirm whether your payment was completed.",
-      {
-        duration: 10000,
-      }
-    );
-  },
-});
+      toast.warning(
+        "Payment window closed. Your order has been saved and can be recovered if payment was completed.",
+        {
+          duration: 10000,
+        }
+      );
+    },
+  });
 
+} catch (error: any) {
+
+  console.error(
+    "Order initialization error:",
+    error
+  );
+
+  setIsProcessing(false);
+
+  toast.error(
+    error.message ||
+    "Unable to initialize your order."
+  );
+}
+
+  const initializeOrder = async () => {
+  if (!user) {
+    throw new Error("You must be logged in.");
+  }
+
+  const farmLinkReference =
+    `FL-${crypto.randomUUID()}`;
+
+  const { data: orderData, error: orderError } =
+    await supabase
+      .from("orders")
+      .insert({
+        buyer_id: user.id,
+        total: totalAmount,
+        delivery_address: address,
+        shipping_cost: shippingCost,
+        payment_reference: farmLinkReference,
+        payment_status: "pending",
+        paid_at: null,
+        status: "Pending",
+      })
+      .select()
+      .single();
+
+  if (orderError) {
+    throw orderError;
+  }
+
+  const items = cart.map((item) => ({
+    order_id: orderData.id,
+    product_id: item.id,
+    farmer_id: item.farmer_id,
+    quantity: item.quantity,
+    price: item.price,
+    delivery_fee:
+      selectedDelivery[item.id]?.delivery_fee ?? 0,
+  }));
+
+  const { error: itemError } =
+    await (supabase as any)
+      .from("order_items")
+      .insert(items);
+
+  if (itemError) {
+    // Clean up the incomplete order if order_items creation fails.
+    await supabase
+      .from("orders")
+      .delete()
+      .eq("id", orderData.id);
+
+    throw itemError;
+  }
+
+  return {
+    orderId: orderData.id,
+    paymentReference: farmLinkReference,
+  };
 };
-
+  
 const handlePlaceOrder = async (
   paymentReference: string,
   paymentStatus: string,
