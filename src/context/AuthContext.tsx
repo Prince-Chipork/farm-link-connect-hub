@@ -18,8 +18,8 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 // Session inactivity settings
-const WARNING_TIME = 15 * 60 * 1000; // 15 minutes
-const LOGOUT_TIME = 20 * 60 * 1000;  // 20 minutes
+const WARNING_TIME = 1 * 60 * 1000; // 15 minutes
+const LOGOUT_TIME = 2 * 60 * 1000;  // 20 minutes
 
 export const AuthProvider = ({
   children,
