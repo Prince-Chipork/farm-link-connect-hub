@@ -8,6 +8,7 @@ import StatusSelect from "@/components/orders/StatusSelect";
 import { getOverallOrderStatus } from "@/lib/orderStatus";
 import { calculateOrderTotal, calculateProductSubtotal, calculateDeliveryTotal } from "@/lib/orderCalculations";
 import OrderTimeline from "@/components/orders/OrderTimeline";
+import { updateAdminOrderStatus } from "@/lib/orderActions";
 
 export default function AdminOrderDetails() {
   const { orderId } = useParams();
