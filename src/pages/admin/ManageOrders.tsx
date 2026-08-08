@@ -45,6 +45,34 @@ export default function AdminManageOrders() {
     fetchOrders();
   }, []);
 
+  const getNextStatuses = (status: string) => {
+  switch (status) {
+    case "Pending":
+      return ["Accepted", "Cancelled"];
+
+    case "Accepted":
+      return ["Processing", "Cancelled"];
+
+    case "Processing":
+      return ["Packed", "Cancelled"];
+
+    case "Packed":
+      return ["Shipped"];
+
+    case "Shipped":
+      return [];
+
+    case "Delivered":
+      return [];
+
+    case "Cancelled":
+      return [];
+
+    default:
+      return [];
+  }
+};
+
   const filteredOrders = orders.filter(o =>
   o.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
   (o.buyer?.full_name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -149,10 +177,7 @@ export default function AdminManageOrders() {
     View Details
   </Link>
 </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <Truck className="mr-2 h-4 w-4" />
-                            Update Status
-                          </DropdownMenuItem>
+            
                           <DropdownMenuSeparator />
                           <DropdownMenuItem className="text-red-600">
                             <XCircle className="mr-2 h-4 w-4" />
