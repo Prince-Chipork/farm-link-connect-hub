@@ -657,7 +657,9 @@ if (!orderId) {
          */
 
         const { orderId, paymentReference } =
-  await initializeOrder(reference);
+  await initializeOrder();
+
+initializedOrderIdRef.current = orderId;
 
 setInitializedOrderId(orderId);
 setPaymentReference(paymentReference);
