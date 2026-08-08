@@ -311,7 +311,173 @@ export default function CheckoutPage() {
     );
   }
 };
+  /*
+   * ---------------------------------------------------------
+   * COMPLETE EXISTING ORDER AFTER PAYMENT VERIFICATION
+   * ---------------------------------------------------------
+   *
+   * IMPORTANT:
+   * This function DOES NOT create another order.
+   *
+   * initializeOrder() already created the order before
+   * Paystack opened.
+   *
+   * Here we only update that existing order after Paystack
+   * confirms that payment was successful.
+   */
 
+  const handlePlaceOrder = async (
+    orderId: string,
+    reference: string,
+    paymentStatus: string,
+    paidAt: string
+  ) => {
+    if (!user) return;
+
+    setIsProcessing(true);
+
+    try {
+      /*
+       * Update the existing order.
+       */
+
+      const { error: orderError } =
+        await supabase
+          .from("orders")
+          .update({
+            payment_reference: reference,
+            payment_status: paymentStatus,
+            paid_at: paidAt || null,
+            status: "Pending",
+          })
+          .eq("id", orderId)
+          .eq("buyer_id", user.id);
+
+      if (orderError) {
+        throw orderError;
+      }
+
+      /*
+       * Notify the buyer.
+       */
+
+      await createNotification({
+        userId: user.id,
+        title: "Payment Confirmed",
+        message: `Payment for order #${orderId.slice(
+          0,
+          8
+        )} has been confirmed successfully.`,
+        type: "new_order",
+        link: `/buyer/orders/${orderId}/track`,
+        metadata: {
+          order_id: orderId,
+        },
+      });
+
+      /*
+       * Notify the farmers involved in the order.
+       */
+
+      const { data: orderItems, error: itemsError } =
+        await supabase
+          .from("order_items")
+          .select("farmer_id")
+          .eq("order_id", orderId);
+
+      if (itemsError) {
+        console.error(
+          "Unable to fetch order farmers:",
+          itemsError
+        );
+      } else if (orderItems) {
+        const uniqueFarmers = [
+          ...new Set(
+            orderItems.map(
+              (item) => item.farmer_id
+            )
+          ),
+        ];
+
+        for (const farmerId of uniqueFarmers) {
+          await createNotification({
+            userId: farmerId,
+            title: "New Paid Order",
+            message:
+              "A buyer has successfully completed payment for a new order.",
+            type: "new_order",
+            link: "/farmer/orders",
+            metadata: {
+              order_id: orderId,
+            },
+          });
+        }
+      }
+
+      /*
+       * Notify admins.
+       */
+
+      const {
+        data: admins,
+        error: adminError,
+      } = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("role", "admin");
+
+      if (adminError) {
+        console.error(
+          "Unable to fetch admins:",
+          adminError
+        );
+      } else if (admins) {
+        for (const admin of admins) {
+          await createNotification({
+            userId: admin.id,
+            title: "New Paid Order",
+            message: `A new paid order #${orderId.slice(
+              0,
+              8
+            )} has been received.`,
+            type: "new_order",
+            link: `/admin/orders/${orderId}`,
+            metadata: {
+              order_id: orderId,
+            },
+          });
+        }
+      }
+
+      /*
+       * Payment and order are now complete.
+       */
+
+      clearCart();
+
+      setIsSuccess(true);
+
+      setPaymentStatusUnknown(false);
+
+      toast.success(
+        "Payment confirmed and order placed successfully!"
+      );
+
+    } catch (error: any) {
+      console.error(
+        "Order completion error:",
+        error
+      );
+
+      toast.error(
+        error.message ||
+          "Payment was confirmed, but we could not complete the order."
+      );
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+  
   /*
    * ---------------------------------------------------------
    * PAYSTACK CONFIGURATION
