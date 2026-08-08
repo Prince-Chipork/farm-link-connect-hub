@@ -230,120 +230,87 @@ export default function CheckoutPage() {
    * is the order that gets completed.
    */
 
-  const verifyPayment = async (
-    reference: any
-  ) => {
-    const referenceValue =
-      reference.reference ||
-      reference.trxref;
+  const verifyPayment = async (reference: any) => {
+  const referenceValue =
+    reference.reference || reference.trxref;
 
-    if (!referenceValue) {
+  if (!referenceValue) {
+    toast.error("Payment reference was not received.");
+    return;
+  }
+
+  if (!initializedOrderId) {
+    toast.error(
+      "Your order could not be identified. Please do not pay again."
+    );
+    return;
+  }
+
+  setPaymentReference(referenceValue);
+  setPaymentStatusUnknown(false);
+
+  toast.loading("Verifying payment...", {
+    id: "verify-payment",
+  });
+
+  try {
+    const response = await fetch(
+      "https://tqsozciafuxrxumnxkjr.supabase.co/functions/v1/verify-payment",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          orderId: initializedOrderId,
+          reference: referenceValue,
+        }),
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
       toast.error(
-        "Payment reference was not received."
+        result.message ||
+          "Payment verification failed.",
+        {
+          id: "verify-payment",
+        }
       );
+
       return;
     }
 
-    setPaymentReference(
-      referenceValue
+    toast.success("Payment verified successfully.", {
+      id: "verify-payment",
+    });
+
+    await handlePlaceOrder(
+      result.orderId,
+      result.reference,
+      result.payment_status,
+      result.paid_at
     );
 
-    setPaymentStatusUnknown(false);
+  } catch (err) {
 
-    toast.loading(
-      "Verifying payment...",
+    console.error(
+      "Payment verification error:",
+      err
+    );
+
+    setPaymentStatusUnknown(true);
+
+    toast.error(
+      "We couldn't confirm your payment because of a network problem. Your order has been saved and can be recovered. Please do not pay again.",
       {
         id: "verify-payment",
+        duration: 10000,
       }
     );
-
-    try {
-      const response = await fetch(
-        "https://tqsozciafuxrxumnxkjr.supabase.co/functions/v1/verify-payment",
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
-
-          body: JSON.stringify({
-            reference:
-              referenceValue,
-          }),
-        }
-      );
-
-      const result =
-        await response.json();
-
-      if (
-        !response.ok ||
-        !result.success
-      ) {
-        toast.error(
-          result.message ||
-            "Payment verification failed.",
-          {
-            id: "verify-payment",
-          }
-        );
-
-        return;
-      }
-
-      toast.success(
-        "Payment verified.",
-        {
-          id: "verify-payment",
-        }
-      );
-
-      /*
-       * The verify-payment Edge Function is responsible
-       * for updating the existing order.
-       *
-       * Therefore this frontend does NOT insert another
-       * order here.
-       */
-
-      clearCart();
-
-      setIsSuccess(true);
-
-      toast.success(
-        "Order placed successfully!"
-      );
-
-    } catch (err) {
-      console.error(
-        "Payment verification error:",
-        err
-      );
-
-      /*
-       * IMPORTANT:
-       *
-       * The order already exists in the database.
-       *
-       * If the network fails here, we do NOT delete the
-       * order and we do NOT create another one.
-       *
-       * The payment can be recovered later.
-       */
-
-      setPaymentStatusUnknown(true);
-
-      toast.error(
-        "We couldn't confirm your payment because of a network problem. Your order has been saved and can be recovered.",
-        {
-          id: "verify-payment",
-          duration: 10000,
-        }
-      );
-    }
-  };
+  }
+};
 
   /*
    * ---------------------------------------------------------
@@ -543,30 +510,23 @@ export default function CheckoutPage() {
          * Create the database order BEFORE payment.
          */
 
-        const {
-          orderId,
-        } =
-          await initializeOrder(
-            reference
-          );
+        const { orderId, paymentReference } =
+  await initializeOrder();
 
-        setPendingOrderId(
-          orderId
-        );
+setInitializedOrderId(orderId);
+setPaymentReference(paymentReference);
 
-        console.log(
-          "FarmLink order initialized:",
-          orderId
-        );
+console.log(
+  "FarmLink order initialized:",
+  orderId
+);
 
-        console.log(
-          "FarmLink payment reference:",
-          reference
-        );
+console.log(
+  "FarmLink payment reference:",
+  paymentReference
+);
 
-        setIsProcessing(
-          false
-        );
+setIsProcessing(false);
 
         /*
          * Open Paystack.
