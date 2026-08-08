@@ -313,19 +313,19 @@ export default function CheckoutPage() {
     );
   }
 };
-  /*
+
+    /*
    * ---------------------------------------------------------
-   * COMPLETE EXISTING ORDER AFTER PAYMENT VERIFICATION
+   * COMPLETE EXISTING ORDER AFTER PAYMENT
    * ---------------------------------------------------------
    *
    * IMPORTANT:
-   * This function DOES NOT create another order.
+   * This does NOT create another order.
    *
-   * initializeOrder() already created the order before
-   * Paystack opened.
+   * initializeOrder() already created the order and
+   * order_items before Paystack opened.
    *
-   * Here we only update that existing order after Paystack
-   * confirms that payment was successful.
+   * This function only completes the existing order.
    */
 
   const handlePlaceOrder = async (
@@ -360,16 +360,16 @@ export default function CheckoutPage() {
       }
 
       /*
-       * Notify the buyer.
+       * Notify buyer.
        */
 
       await createNotification({
         userId: user.id,
-        title: "Payment Confirmed",
-        message: `Payment for order #${orderId.slice(
+        title: "Order Placed Successfully",
+        message: `Your order #${orderId.slice(
           0,
           8
-        )} has been confirmed successfully.`,
+        )} has been placed successfully.`,
         type: "new_order",
         link: `/buyer/orders/${orderId}/track`,
         metadata: {
@@ -378,46 +378,33 @@ export default function CheckoutPage() {
       });
 
       /*
-       * Notify the farmers involved in the order.
+       * Notify every farmer involved in the cart.
        */
 
-      const { data: orderItems, error: itemsError } =
-        await supabase
-          .from("order_items")
-          .select("farmer_id")
-          .eq("order_id", orderId);
+      const uniqueFarmers = [
+        ...new Set(
+          cart.map(
+            (item) => item.farmer_id
+          )
+        ),
+      ];
 
-      if (itemsError) {
-        console.error(
-          "Unable to fetch order farmers:",
-          itemsError
-        );
-      } else if (orderItems) {
-        const uniqueFarmers = [
-          ...new Set(
-            orderItems.map(
-              (item) => item.farmer_id
-            )
-          ),
-        ];
-
-        for (const farmerId of uniqueFarmers) {
-          await createNotification({
-            userId: farmerId,
-            title: "New Paid Order",
-            message:
-              "A buyer has successfully completed payment for a new order.",
-            type: "new_order",
-            link: "/farmer/orders",
-            metadata: {
-              order_id: orderId,
-            },
-          });
-        }
+      for (const farmerId of uniqueFarmers) {
+        await createNotification({
+          userId: farmerId,
+          title: "New Paid Order",
+          message:
+            "A buyer has successfully completed payment for a new order.",
+          type: "new_order",
+          link: "/farmer/orders",
+          metadata: {
+            order_id: orderId,
+          },
+        });
       }
 
       /*
-       * Notify admins.
+       * Notify administrators.
        */
 
       const {
@@ -452,7 +439,7 @@ export default function CheckoutPage() {
       }
 
       /*
-       * Payment and order are now complete.
+       * Payment and order are now completed.
        */
 
       clearCart();
