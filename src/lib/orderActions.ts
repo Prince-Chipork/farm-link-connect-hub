@@ -1,7 +1,12 @@
 import { supabase } from "@/integrations/supabase/client";
 import { createNotification } from "@/lib/notifications";
 
-export async function updateFarmerOrderStatus(
+
+// =====================================================
+// FARMER: Update order item status
+// =====================================================
+
+export async function updateOrderStatus(
   orderItemId: string,
   newStatus: string
 ) {
@@ -20,18 +25,21 @@ export async function updateFarmerOrderStatus(
   return data;
 }
 
+
+// =====================================================
+// ADMIN: Update order item status
+// =====================================================
+
 export async function updateAdminOrderStatus(
   orderItemId: string,
   newStatus: string
 ) {
-  // Get the order item and its related order/buyer/farmer
+  // Get the order item and related order
   const { data: item, error: fetchError } = await supabase
     .from("order_items")
     .select(`
       id,
       order_id,
-      farmer_id,
-      product_id,
       orders!inner(
         id,
         buyer_id
@@ -60,6 +68,22 @@ export async function updateAdminOrderStatus(
     throw updateError;
   }
 
+  // Get the farmer through the product
+  const { data: product, error: productError } = await supabase
+    .from("order_items")
+    .select(`
+      product_id,
+      products!inner(
+        farmer_id
+      )
+    `)
+    .eq("id", orderItemId)
+    .single();
+
+  if (productError) {
+    throw productError;
+  }
+
   // Notify buyer
   await createNotification({
     userId: item.orders.buyer_id,
@@ -75,18 +99,20 @@ export async function updateAdminOrderStatus(
   });
 
   // Notify farmer
-  await createNotification({
-    userId: item.farmer_id,
-    title: "Order Status Updated",
-    message: `An order item has been updated to ${newStatus}.`,
-    type: "order_status",
-    link: "/farmer/orders",
-    metadata: {
-      order_id: item.order_id,
-      order_item_id: orderItemId,
-      status: newStatus,
-    },
-  });
+  if (product?.products?.farmer_id) {
+    await createNotification({
+      userId: product.products.farmer_id,
+      title: "Order Status Updated",
+      message: `An order item has been updated to ${newStatus}.`,
+      type: "order_status",
+      link: "/farmer/orders",
+      metadata: {
+        order_id: item.order_id,
+        order_item_id: orderItemId,
+        status: newStatus,
+      },
+    });
+  }
 
   return {
     success: true,
