@@ -128,14 +128,23 @@ const initializePayment =
   usePaystackPayment(paystackConfig);
 
 const verifyPayment = async (reference: any) => {
+  const referenceValue =
+    reference.reference || reference.trxref;
+
+  if (!referenceValue) {
+    toast.error("Payment reference was not received.");
+    return;
+  }
+
+  setPaymentReference(referenceValue);
+
+  setPaymentStatusUnknown(false);
+
   toast.loading("Verifying payment...", {
     id: "verify-payment",
   });
 
   try {
-    const paymentReference =
-      reference.reference || reference.trxref;
-
     const response = await fetch(
       "https://tqsozciafuxrxumnxkjr.supabase.co/functions/v1/verify-payment",
       {
@@ -143,9 +152,7 @@ const verifyPayment = async (reference: any) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          reference: paymentReference,
-        }),
+        body: JSON.stringify({ reference: referenceValue }),
       }
     );
 
