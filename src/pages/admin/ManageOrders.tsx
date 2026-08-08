@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import StatusBadge from "@/components/orders/StatusBadge";
-  
+import { updateOrderStatus } from "@/lib/orderActions";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { DropdownMenu,  DropdownMenuContent,  DropdownMenuItem,  DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { toast } from 'sonner';
@@ -27,10 +27,11 @@ export default function AdminManageOrders() {
   *,
   buyer:profiles!orders_buyer_id_fkey(full_name),
   order_items(
-    quantity,
-    price,
-    delivery_fee,
-    status
+  id,
+  quantity,
+  price,
+  delivery_fee,
+  status
   )
 `)
     
