@@ -315,7 +315,7 @@ try {
     "Unable to initialize your order."
   );
 }
-
+};
   const initializeOrder = async () => {
   if (!user) {
     throw new Error("You must be logged in.");
