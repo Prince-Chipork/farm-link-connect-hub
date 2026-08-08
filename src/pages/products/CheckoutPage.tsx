@@ -137,32 +137,34 @@ export default function CheckoutPage() {
       );
     }
 
-    const { data: orderData, error: orderError } =
-      await supabase
-        .from("orders")
-        .insert({
-          buyer_id: user.id,
+          /*
+       * Notify the farmers involved in this order.
+       *
+       * We use the farmers already present in the cart
+       * instead of querying farmer_id from order_items.
+       */
 
-          total: totalAmount,
+      const uniqueFarmers = [
+        ...new Set(
+          cart.map(
+            (item) => item.farmer_id
+          )
+        ),
+      ];
 
-          delivery_address: address,
-
-          shipping_cost: shippingCost,
-
-          payment_reference: reference,
-
-          payment_status: "pending",
-
-          paid_at: null,
-
-          status: "Pending",
-        })
-        .select()
-        .single();
-
-    if (orderError) {
-      throw orderError;
-    }
+      for (const farmerId of uniqueFarmers) {
+        await createNotification({
+          userId: farmerId,
+          title: "New Paid Order",
+          message:
+            "A buyer has successfully completed payment for a new order.",
+          type: "new_order",
+          link: "/farmer/orders",
+          metadata: {
+            order_id: orderId,
+          },
+        });
+      }
 
     /*
      * Create all order items.
