@@ -45,6 +45,8 @@ export default function CheckoutPage() {
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [paymentReference, setPaymentReference] = useState("");
+const [paymentStatusUnknown, setPaymentStatusUnknown] = useState(false);
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
