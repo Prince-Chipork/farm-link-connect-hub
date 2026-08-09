@@ -226,43 +226,6 @@ export default function CreateProduct() {
   };
 
   /* =========================================================
-     DELIVERY OPTION UPDATE
-     ========================================================= */
-
-  const updateDeliveryOption = (
-  index: number,
-  field: "option_name" | "delivery_fee" | "estimated_days",
-  value: string | number
-) => {
-  setDeliveryOptions((prev) => {
-    const updated = [...prev];
-
-    if (field === "option_name") {
-      updated[index] = {
-        ...updated[index],
-        option_name: String(value),
-      };
-    }
-
-    if (field === "delivery_fee") {
-      updated[index] = {
-        ...updated[index],
-        delivery_fee: Number(value),
-      };
-    }
-
-    if (field === "estimated_days") {
-      updated[index] = {
-        ...updated[index],
-        estimated_days: Number(value),
-      };
-    }
-
-    return updated;
-  });
-};
-
-  /* =========================================================
      ADD DELIVERY OPTION
      ========================================================= */
 
@@ -1041,159 +1004,180 @@ export default function CreateProduct() {
             </div>
 
             {/* =================================================
-                DELIVERY OPTIONS
-                ================================================= */}
+    DELIVERY OPTIONS
+    ================================================= */}
 
-            <div className="space-y-4">
+<div className="space-y-4">
 
-              <div>
+  <div>
+    <Label className="text-lg font-semibold">
+      Delivery Options
+    </Label>
 
-                <Label className="text-lg font-semibold">
-                  Delivery Options
-                </Label>
+    <p className="text-sm text-muted-foreground mt-1">
+      These delivery options are currently used
+      for product-level delivery information.
+    </p>
+  </div>
 
-                <p className="text-sm text-muted-foreground mt-1">
-                  These are temporary product-level
-                  delivery options. FarmLink's
-                  central delivery pricing system
-                  can later calculate the actual
-                  delivery fee automatically.
-                </p>
+  {deliveryOptions.map((option, index) => (
+    <div
+      key={index}
+      className="grid grid-cols-1 md:grid-cols-4 gap-4 border rounded-lg p-4"
+    >
 
-              </div>
+      {/* OPTION NAME */}
 
-              {deliveryOptions.map(
-                (
-                  option,
-                  index
-                ) => (
+      <div className="space-y-2">
 
-                  <div
-                    key={index}
-                    className="grid grid-cols-1 md:grid-cols-4 gap-4 border rounded-lg p-4"
-                  >
+        <Label>
+          Option
+        </Label>
 
-                    {/* OPTION NAME */}
+        <Input
+          placeholder="e.g. Pickup"
+          value={option.option_name}
+          onChange={(e) => {
+            setDeliveryOptions((prev) =>
+              prev.map((item, i) =>
+                i === index
+                  ? {
+                      option_name:
+                        e.target.value,
+                      delivery_fee:
+                        item.delivery_fee,
+                      estimated_days:
+                        item.estimated_days,
+                    }
+                  : item
+              )
+            );
+          }}
+        />
 
-                    <div className="space-y-2">
+      </div>
 
-                      <Label>
-                        Option
-                      </Label>
+      {/* DELIVERY FEE */}
 
-                      <Input
-                        placeholder="e.g. Pickup"
-                        value={
-                          option.option_name
-                        }
-                        onChange={(e) =>
-                          updateDeliveryOption(
-                            index,
-                            "option_name",
-                            e.target
-                              .value
-                          )
-                        }
-                      />
+      <div className="space-y-2">
 
-                    </div>
+        <Label>
+          Delivery Fee
+        </Label>
 
-                    {/* DELIVERY FEE */}
+        <Input
+          type="number"
+          min="0"
+          step="0.01"
+          placeholder="0"
+          value={option.delivery_fee}
+          onChange={(e) => {
+            setDeliveryOptions((prev) =>
+              prev.map((item, i) =>
+                i === index
+                  ? {
+                      option_name:
+                        item.option_name,
+                      delivery_fee:
+                        Number(
+                          e.target.value
+                        ),
+                      estimated_days:
+                        item.estimated_days,
+                    }
+                  : item
+              )
+            );
+          }}
+        />
 
-                    <div className="space-y-2">
+      </div>
 
-                      <Label>
-                        Delivery Fee
-                      </Label>
+      {/* ESTIMATED DAYS */}
 
-                      <Input
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        placeholder="0"
-                        value={
-                          option.delivery_fee
-                        }
-                        onChange={(e) =>
-                          updateDeliveryOption(
-                            index,
-                            "delivery_fee",
-                            Number(
-                              e.target
-                                .value
-                            )
-                          )
-                        }
-                      />
+      <div className="space-y-2">
 
-                    </div>
+        <Label>
+          Estimated Days
+        </Label>
 
-                    {/* ESTIMATED DAYS */}
+        <Input
+          type="number"
+          min="0"
+          step="1"
+          placeholder="1"
+          value={option.estimated_days}
+          onChange={(e) => {
+            setDeliveryOptions((prev) =>
+              prev.map((item, i) =>
+                i === index
+                  ? {
+                      option_name:
+                        item.option_name,
+                      delivery_fee:
+                        item.delivery_fee,
+                      estimated_days:
+                        Number(
+                          e.target.value
+                        ),
+                    }
+                  : item
+              )
+            );
+          }}
+        />
 
-                    <div className="space-y-2">
+      </div>
 
-                      <Label>
-                        Estimated Days
-                      </Label>
+      {/* REMOVE */}
 
-                      <Input
-                        type="number"
-                        min="0"
-                        step="1"
-                        placeholder="1"
-                        value={
-                          option.estimated_days
-                        }
-                        onChange={(e) =>
-                          updateDeliveryOption(
-                            index,
-                            "estimated_days",
-                            Number(
-                              e.target
-                                .value
-                            )
-                          )
-                        }
-                      />
+      <div className="flex items-end">
 
-                    </div>
+        <Button
+          type="button"
+          variant="outline"
+          className="w-full"
+          onClick={() => {
+            if (deliveryOptions.length === 1) {
+              toast.error(
+                "At least one delivery option is required."
+              );
+              return;
+            }
 
-                    {/* REMOVE */}
+            setDeliveryOptions((prev) =>
+              prev.filter(
+                (_, i) => i !== index
+              )
+            );
+          }}
+        >
+          Remove
+        </Button>
 
-                    <div className="flex items-end">
+      </div>
 
-                      <Button
-                        type="button"
-                        variant="outline"
-                        className="w-full"
-                        onClick={() =>
-                          removeDeliveryOption(
-                            index
-                          )
-                        }
-                      >
-                        Remove
-                      </Button>
+    </div>
+  ))}
 
-                    </div>
+  <Button
+    type="button"
+    variant="outline"
+    onClick={() => {
+      setDeliveryOptions((prev) => [
+        ...prev,
+        {
+          option_name: "",
+          delivery_fee: 0,
+          estimated_days: 1,
+        },
+      ]);
+    }}
+  >
+    + Add Delivery Option
+  </Button>
 
-                  </div>
-
-                )
-              )}
-
-              <Button
-                type="button"
-                variant="outline"
-                onClick={
-                  addDeliveryOption
-                }
-              >
-                + Add Delivery Option
-              </Button>
-
-            </div>
-
+</div>
             {/* =================================================
                 PRODUCT IMAGES
                 ================================================= */}
