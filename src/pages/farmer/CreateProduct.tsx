@@ -253,24 +253,26 @@ export default function CreateProduct() {
     );
   };
 
-  const updateDeliveryOption = (
-    index: number,
-    field: keyof DeliveryOption,
-    value: string | number
-  ) => {
-    setDeliveryOptions((prev) =>
-      prev.map((option, i) => {
-        if (i !== index) {
-          return option;
-        }
+   const updateDeliveryOption = <
+  K extends keyof DeliveryOption
+>(
+  index: number,
+  field: K,
+  value: DeliveryOption[K]
+) => {
+  setDeliveryOptions((prev) =>
+    prev.map((option, i) => {
+      if (i !== index) {
+        return option;
+      }
 
-        return {
-          ...option,
-          [field]: value,
-        };
-      })
-    );
-  };
+      return {
+        ...option,
+        [field]: value,
+      };
+    })
+  );
+};
 
   /* =========================================================
      SUBMIT
