@@ -253,12 +253,10 @@ export default function CreateProduct() {
     );
   };
 
-   const updateDeliveryOption = <
-  K extends keyof DeliveryOption
->(
+    const updateDeliveryOption = (
   index: number,
-  field: K,
-  value: DeliveryOption[K]
+  field: "option_name" | "delivery_fee" | "estimated_days",
+  value: string | number
 ) => {
   setDeliveryOptions((prev) =>
     prev.map((option, i) => {
@@ -266,9 +264,23 @@ export default function CreateProduct() {
         return option;
       }
 
+      if (field === "option_name") {
+        return {
+          ...option,
+          option_name: String(value),
+        };
+      }
+
+      if (field === "delivery_fee") {
+        return {
+          ...option,
+          delivery_fee: Number(value),
+        };
+      }
+
       return {
         ...option,
-        [field]: value,
+        estimated_days: Number(value),
       };
     })
   );
