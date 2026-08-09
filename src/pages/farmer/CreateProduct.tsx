@@ -27,16 +27,36 @@ import {
   ArrowLeft,
   Upload,
   X,
-  Scale,
 } from "lucide-react";
 
 import { toast } from "sonner";
 
-/*
- * ---------------------------------------------------------
- * PRODUCT CATEGORIES
- * ---------------------------------------------------------
- */
+/* =========================================================
+   TYPES
+   ========================================================= */
+
+type DeliveryOption = {
+  option_name: string;
+  delivery_fee: number;
+  estimated_days: number;
+};
+
+type ProductFormData = {
+  name: string;
+  category: string;
+  description: string;
+  price: string;
+  quantity: string;
+  unit: string;
+  weight_kg: string;
+  weight_source: string;
+  harvestDate: string;
+  location: string;
+};
+
+/* =========================================================
+   CATEGORIES
+   ========================================================= */
 
 const categories = [
   "Crops",
@@ -46,11 +66,9 @@ const categories = [
   "Other",
 ];
 
-/*
- * ---------------------------------------------------------
- * UNITS BY CATEGORY
- * ---------------------------------------------------------
- */
+/* =========================================================
+   CATEGORY UNITS
+   ========================================================= */
 
 const categoryUnits: Record<string, string[]> = {
   Crops: [
@@ -106,41 +124,28 @@ const categoryUnits: Record<string, string[]> = {
   ],
 };
 
-/*
- * ---------------------------------------------------------
- * WEIGHT SOURCES
- * ---------------------------------------------------------
- *
- * standard:
- * A standard/typical weight is being used.
- *
- * estimated:
- * Farmer estimates the weight.
- *
- * scale:
- * Product was actually weighed.
- */
+/* =========================================================
+   WEIGHT SOURCES
+   ========================================================= */
 
 const weightSources = [
   {
-    value: "standard",
-    label: "Standard Estimate",
+    value: "weighed",
+    label: "Weighed with a scale",
   },
   {
     value: "estimated",
-    label: "Farmer Estimate",
+    label: "Estimated by farmer",
   },
   {
-    value: "scale",
-    label: "Weighed on Scale",
+    value: "standard",
+    label: "Standard/known weight",
   },
 ];
 
-/*
- * ---------------------------------------------------------
- * CREATE PRODUCT
- * ---------------------------------------------------------
- */
+/* =========================================================
+   COMPONENT
+   ========================================================= */
 
 export default function CreateProduct() {
   const { user } = useAuth();
@@ -148,52 +153,45 @@ export default function CreateProduct() {
 
   const [loading, setLoading] = useState(false);
 
-  /*
-   * Product images
-   */
   const [images, setImages] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
 
-  /*
-   * Product form
-   */
-  const [formData, setFormData] = useState({
-    name: "",
-    category: "Crops",
-    description: "",
-    price: "",
-    quantity: "",
-    unit: categoryUnits["Crops"][0],
+  /* =======================================================
+     DELIVERY OPTIONS
 
-    /*
-     * Weight of ONE unit of the product.
-     *
-     * Example:
-     *
-     * Quantity = 20
-     * Unit = 50kg bag
-     * Weight = 50kg
-     *
-     * Checkout can then calculate:
-     *
-     * 20 × 50kg = 1,000kg
-     */
-    weight_kg: "",
+     Explicit type prevents the previous "never" error.
+     ======================================================= */
 
-    /*
-     * How the weight was determined.
-     */
-    weight_source: "standard",
+  const [deliveryOptions, setDeliveryOptions] =
+    useState<DeliveryOption[]>([
+      {
+        option_name: "Pickup",
+        delivery_fee: 0,
+        estimated_days: 0,
+      },
+    ]);
 
-    harvestDate: "",
-    location: user?.farmLocation || "",
-  });
+  /* =======================================================
+     FORM DATA
+     ======================================================= */
 
-  /*
-   * ---------------------------------------------------------
-   * IMAGE SELECTION
-   * ---------------------------------------------------------
-   */
+  const [formData, setFormData] =
+    useState<ProductFormData>({
+      name: "",
+      category: "Crops",
+      description: "",
+      price: "",
+      quantity: "",
+      unit: categoryUnits["Crops"][0],
+      weight_kg: "",
+      weight_source: "standard",
+      harvestDate: "",
+      location: user?.farmLocation || "",
+    });
+
+  /* =========================================================
+     IMAGE HANDLING
+     ========================================================= */
 
   const handleImageChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -208,8 +206,7 @@ export default function CreateProduct() {
     ]);
 
     const newPreviews = newFiles.map(
-      (file) =>
-        URL.createObjectURL(file)
+      (file) => URL.createObjectURL(file)
     );
 
     setPreviews((prev) => [
@@ -218,41 +215,72 @@ export default function CreateProduct() {
     ]);
   };
 
-  /*
-   * ---------------------------------------------------------
-   * REMOVE IMAGE
-   * ---------------------------------------------------------
-   */
-
   const removeImage = (index: number) => {
-    /*
-     * Release the browser object URL
-     * before removing the preview.
-     */
-    const preview = previews[index];
-
-    if (preview) {
-      URL.revokeObjectURL(preview);
-    }
-
     setImages((prev) =>
-      prev.filter(
-        (_, i) => i !== index
-      )
+      prev.filter((_, i) => i !== index)
     );
 
     setPreviews((prev) =>
-      prev.filter(
-        (_, i) => i !== index
+      prev.filter((_, i) => i !== index)
+    );
+  };
+
+  /* =========================================================
+     DELIVERY OPTION UPDATE
+     ========================================================= */
+
+  const updateDeliveryOption = (
+    index: number,
+    field: keyof DeliveryOption,
+    value: string | number
+  ) => {
+    setDeliveryOptions((prev) =>
+      prev.map((option, i) =>
+        i === index
+          ? {
+              ...option,
+              [field]: value,
+            }
+          : option
       )
     );
   };
 
-  /*
-   * ---------------------------------------------------------
-   * SUBMIT PRODUCT
-   * ---------------------------------------------------------
-   */
+  /* =========================================================
+     ADD DELIVERY OPTION
+     ========================================================= */
+
+  const addDeliveryOption = () => {
+    setDeliveryOptions((prev) => [
+      ...prev,
+      {
+        option_name: "",
+        delivery_fee: 0,
+        estimated_days: 1,
+      },
+    ]);
+  };
+
+  /* =========================================================
+     REMOVE DELIVERY OPTION
+     ========================================================= */
+
+  const removeDeliveryOption = (index: number) => {
+    if (deliveryOptions.length === 1) {
+      toast.error(
+        "At least one delivery option is required."
+      );
+      return;
+    }
+
+    setDeliveryOptions((prev) =>
+      prev.filter((_, i) => i !== index)
+    );
+  };
+
+  /* =========================================================
+     SUBMIT
+     ========================================================= */
 
   const handleSubmit = async (
     e: React.FormEvent
@@ -261,16 +289,14 @@ export default function CreateProduct() {
 
     if (!user) {
       toast.error(
-        "You must be logged in to create a product."
+        "You must be logged in as a farmer."
       );
       return;
     }
 
-    /*
-     * -----------------------------------------------------
-     * BASIC VALIDATION
-     * -----------------------------------------------------
-     */
+    /* -------------------------------------------------------
+       BASIC VALIDATION
+       ------------------------------------------------------- */
 
     if (!formData.name.trim()) {
       toast.error(
@@ -279,9 +305,42 @@ export default function CreateProduct() {
       return;
     }
 
+    if (!formData.price) {
+      toast.error(
+        "Enter the product price."
+      );
+      return;
+    }
+
+    if (!formData.quantity) {
+      toast.error(
+        "Enter the product quantity."
+      );
+      return;
+    }
+
+    if (!formData.weight_kg) {
+      toast.error(
+        "Enter the estimated or actual product weight."
+      );
+      return;
+    }
+
+    const price = Number(
+      formData.price
+    );
+
+    const quantity = Number(
+      formData.quantity
+    );
+
+    const weightKg = Number(
+      formData.weight_kg
+    );
+
     if (
-      !formData.price ||
-      Number(formData.price) <= 0
+      !Number.isFinite(price) ||
+      price < 0
     ) {
       toast.error(
         "Enter a valid product price."
@@ -290,8 +349,8 @@ export default function CreateProduct() {
     }
 
     if (
-      !formData.quantity ||
-      Number(formData.quantity) <= 0
+      !Number.isFinite(quantity) ||
+      quantity <= 0
     ) {
       toast.error(
         "Enter a valid product quantity."
@@ -300,36 +359,65 @@ export default function CreateProduct() {
     }
 
     if (
-      !formData.weight_kg ||
-      Number(formData.weight_kg) <= 0
+      !Number.isFinite(weightKg) ||
+      weightKg <= 0
     ) {
       toast.error(
-        "Enter a valid weight per unit."
+        "Enter a valid product weight."
       );
       return;
     }
 
-    if (!formData.location.trim()) {
-      toast.error(
-        "Enter the farm or product location."
-      );
-      return;
-    }
+    /* -------------------------------------------------------
+       VALIDATE DELIVERY OPTIONS
+       ------------------------------------------------------- */
 
-    /*
-     * -----------------------------------------------------
-     * START
-     * -----------------------------------------------------
-     */
+    for (
+      let i = 0;
+      i < deliveryOptions.length;
+      i++
+    ) {
+      const option =
+        deliveryOptions[i];
+
+      if (!option.option_name.trim()) {
+        toast.error(
+          `Enter a name for delivery option ${i + 1}.`
+        );
+        return;
+      }
+
+      if (
+        !Number.isFinite(
+          option.delivery_fee
+        ) ||
+        option.delivery_fee < 0
+      ) {
+        toast.error(
+          `Enter a valid delivery fee for option ${i + 1}.`
+        );
+        return;
+      }
+
+      if (
+        !Number.isFinite(
+          option.estimated_days
+        ) ||
+        option.estimated_days < 0
+      ) {
+        toast.error(
+          `Enter valid estimated delivery days for option ${i + 1}.`
+        );
+        return;
+      }
+    }
 
     setLoading(true);
 
     try {
-      /*
-       * ---------------------------------------------------
-       * UPLOAD PRODUCT IMAGES
-       * ---------------------------------------------------
-       */
+      /* =====================================================
+         UPLOAD IMAGES
+         ===================================================== */
 
       const imageUrls: string[] = [];
 
@@ -337,7 +425,8 @@ export default function CreateProduct() {
         const fileExt =
           file.name
             .split(".")
-            .pop();
+            .pop()
+            ?.toLowerCase() || "jpg";
 
         const fileName =
           `${Date.now()}-${Math.random()
@@ -350,13 +439,12 @@ export default function CreateProduct() {
         const {
           data: uploadData,
           error: uploadError,
-        } =
-          await supabase.storage
-            .from("product-images")
-            .upload(
-              filePath,
-              file
-            );
+        } = await supabase.storage
+          .from("product-images")
+          .upload(
+            filePath,
+            file
+          );
 
         if (uploadError) {
           console.error(
@@ -368,7 +456,7 @@ export default function CreateProduct() {
         }
 
         console.log(
-          "Image uploaded:",
+          "Uploaded:",
           uploadData
         );
 
@@ -386,28 +474,20 @@ export default function CreateProduct() {
         );
       }
 
-      /*
-       * ---------------------------------------------------
-       * CREATE PRODUCT
-       * ---------------------------------------------------
-       *
-       * IMPORTANT:
-       *
-       * There is NO delivery_options insertion here.
-       *
-       * Delivery pricing is now handled by the FarmLink
-       * delivery pricing engine at checkout.
-       */
+      /* =====================================================
+         CREATE PRODUCT
+         ===================================================== */
 
       const {
         data: product,
-        error,
+        error: productError,
       } = await supabase
         .from("products")
         .insert({
           farmer_id: user.id,
 
-          name: formData.name.trim(),
+          name:
+            formData.name.trim(),
 
           category:
             formData.category,
@@ -415,33 +495,16 @@ export default function CreateProduct() {
           description:
             formData.description.trim(),
 
-          price:
-            parseFloat(
-              formData.price
-            ),
+          price,
 
-          quantity:
-            parseInt(
-              formData.quantity,
-              10
-            ),
+          quantity,
 
           unit:
             formData.unit,
 
-          /*
-           * Weight of one unit.
-           */
           weight_kg:
-            parseFloat(
-              formData.weight_kg
-            ),
+            weightKg,
 
-          /*
-           * standard
-           * estimated
-           * scale
-           */
           weight_source:
             formData.weight_source,
 
@@ -458,33 +521,85 @@ export default function CreateProduct() {
         .select()
         .single();
 
-      if (error) {
+      if (productError) {
         console.error(
           "Product creation error:",
-          error
+          productError
         );
 
-        throw error;
+        throw productError;
       }
 
-      /*
-       * ---------------------------------------------------
-       * SUCCESS
-       * ---------------------------------------------------
-       */
+      if (!product) {
+        throw new Error(
+          "Product was created but no product record was returned."
+        );
+      }
 
-      console.log(
-        "Product created:",
-        product
-      );
+      /* =====================================================
+         CREATE DELIVERY OPTIONS
+         ===================================================== */
+
+      const deliveryRows =
+        deliveryOptions.map(
+          (option) => ({
+            product_id:
+              product.id,
+
+            option_name:
+              option.option_name.trim(),
+
+            delivery_fee:
+              Number(
+                option.delivery_fee
+              ),
+
+            estimated_days:
+              Number(
+                option.estimated_days
+              ),
+          })
+        );
+
+      const {
+        error: deliveryError,
+      } = await supabase
+        .from("delivery_options")
+        .insert(
+          deliveryRows
+        );
+
+      if (deliveryError) {
+        console.error(
+          "Delivery option creation error:",
+          deliveryError
+        );
+
+        /*
+         * The product exists but its delivery
+         * options failed. Remove the product so
+         * we don't leave an incomplete listing.
+         */
+
+        await supabase
+          .from("products")
+          .delete()
+          .eq(
+            "id",
+            product.id
+          );
+
+        throw deliveryError;
+      }
+
+      /* =====================================================
+         SUCCESS
+         ===================================================== */
 
       toast.success(
         "Product created successfully!"
       );
 
-      /*
-       * Navigate back to farmer products.
-       */
       navigate(
         "/farmer/products"
       );
@@ -495,64 +610,45 @@ export default function CreateProduct() {
         error
       );
 
-      /*
-       * Supabase errors normally have:
-       * message
-       * details
-       * hint
-       * code
-       */
-
-      const message =
+      toast.error(
         error?.message ||
-        "Unable to create product.";
-
-      toast.error(message);
+          "Unable to create product."
+      );
 
     } finally {
       setLoading(false);
     }
   };
 
-  /*
-   * ---------------------------------------------------------
-   * UI
-   * ---------------------------------------------------------
-   */
+  /* =========================================================
+     RENDER
+     ========================================================= */
 
   return (
     <div className="p-4 md:p-6 lg:p-8 max-w-4xl mx-auto">
 
-      {/* BACK BUTTON */}
-
       <Button
         variant="ghost"
-        onClick={() =>
-          navigate(-1)
-        }
+        onClick={() => navigate(-1)}
         className="mb-6"
+        type="button"
       >
         <ArrowLeft className="mr-2 h-4 w-4" />
-
         Back
       </Button>
 
       <Card>
 
         <CardHeader>
-
           <CardTitle className="text-2xl">
             Add New Product
           </CardTitle>
-
         </CardHeader>
 
         <CardContent>
 
           <form
-            onSubmit={
-              handleSubmit
-            }
+            onSubmit={handleSubmit}
             className="space-y-6"
           >
 
@@ -605,15 +701,8 @@ export default function CreateProduct() {
                   ) =>
                     setFormData({
                       ...formData,
-
                       category:
                         value,
-
-                      /*
-                       * Automatically select
-                       * the first valid unit
-                       * for the new category.
-                       */
                       unit:
                         categoryUnits[
                           value
@@ -766,7 +855,8 @@ export default function CreateProduct() {
 
                         {(
                           categoryUnits[
-                            formData.category
+                            formData
+                              .category
                           ] || []
                         ).map(
                           (unit) => (
@@ -794,20 +884,13 @@ export default function CreateProduct() {
               </div>
 
               {/* =================================================
-                  PRODUCT WEIGHT
+                  WEIGHT
                   ================================================= */}
 
               <div className="space-y-2">
 
-                <Label
-                  htmlFor="weight_kg"
-                  className="flex items-center gap-2"
-                >
-
-                  <Scale className="h-4 w-4" />
-
-                  Weight per Unit (kg)
-
+                <Label htmlFor="weight_kg">
+                  Estimated / Actual Weight (kg)
                 </Label>
 
                 <Input
@@ -825,15 +908,13 @@ export default function CreateProduct() {
                         e.target.value,
                     })
                   }
-                  placeholder="e.g. 50"
+                  placeholder="e.g. 25"
                   required
                 />
 
                 <p className="text-xs text-muted-foreground">
-
-                  Enter the estimated weight
-                  of one unit of this product.
-
+                  You can estimate the weight if
+                  you don't have a weighing scale.
                 </p>
 
               </div>
@@ -862,7 +943,7 @@ export default function CreateProduct() {
                 >
 
                   <SelectTrigger>
-                    <SelectValue placeholder="Select weight source" />
+                    <SelectValue />
                   </SelectTrigger>
 
                   <SelectContent>
@@ -887,14 +968,6 @@ export default function CreateProduct() {
                   </SelectContent>
 
                 </Select>
-
-                <p className="text-xs text-muted-foreground">
-
-                  No weighing scale?
-                  You can use a standard
-                  or estimated weight.
-
-                </p>
 
               </div>
 
@@ -952,42 +1025,156 @@ export default function CreateProduct() {
             </div>
 
             {/* =================================================
-                WEIGHT EXPLANATION
+                DELIVERY OPTIONS
                 ================================================= */}
 
-            <div className="rounded-lg border border-dashed p-4">
+            <div className="space-y-4">
 
-              <div className="flex items-start gap-3">
+              <div>
 
-                <Scale className="mt-0.5 h-5 w-5 text-primary" />
+                <Label className="text-lg font-semibold">
+                  Delivery Options
+                </Label>
 
-                <div className="space-y-1">
-
-                  <p className="font-medium">
-                    Why do we need product weight?
-                  </p>
-
-                  <p className="text-sm text-muted-foreground">
-
-                    FarmLink uses product weight
-                    to select an appropriate
-                    delivery method and calculate
-                    delivery charges automatically.
-
-                  </p>
-
-                  <p className="text-sm text-muted-foreground">
-
-                    For example, if you have
-                    20 bags weighing 50 kg each,
-                    FarmLink calculates the total
-                    shipment weight as 1,000 kg.
-
-                  </p>
-
-                </div>
+                <p className="text-sm text-muted-foreground mt-1">
+                  These are temporary product-level
+                  delivery options. FarmLink's
+                  central delivery pricing system
+                  can later calculate the actual
+                  delivery fee automatically.
+                </p>
 
               </div>
+
+              {deliveryOptions.map(
+                (
+                  option,
+                  index
+                ) => (
+
+                  <div
+                    key={index}
+                    className="grid grid-cols-1 md:grid-cols-4 gap-4 border rounded-lg p-4"
+                  >
+
+                    {/* OPTION NAME */}
+
+                    <div className="space-y-2">
+
+                      <Label>
+                        Option
+                      </Label>
+
+                      <Input
+                        placeholder="e.g. Pickup"
+                        value={
+                          option.option_name
+                        }
+                        onChange={(e) =>
+                          updateDeliveryOption(
+                            index,
+                            "option_name",
+                            e.target
+                              .value
+                          )
+                        }
+                      />
+
+                    </div>
+
+                    {/* DELIVERY FEE */}
+
+                    <div className="space-y-2">
+
+                      <Label>
+                        Delivery Fee
+                      </Label>
+
+                      <Input
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        placeholder="0"
+                        value={
+                          option.delivery_fee
+                        }
+                        onChange={(e) =>
+                          updateDeliveryOption(
+                            index,
+                            "delivery_fee",
+                            Number(
+                              e.target
+                                .value
+                            )
+                          )
+                        }
+                      />
+
+                    </div>
+
+                    {/* ESTIMATED DAYS */}
+
+                    <div className="space-y-2">
+
+                      <Label>
+                        Estimated Days
+                      </Label>
+
+                      <Input
+                        type="number"
+                        min="0"
+                        step="1"
+                        placeholder="1"
+                        value={
+                          option.estimated_days
+                        }
+                        onChange={(e) =>
+                          updateDeliveryOption(
+                            index,
+                            "estimated_days",
+                            Number(
+                              e.target
+                                .value
+                            )
+                          )
+                        }
+                      />
+
+                    </div>
+
+                    {/* REMOVE */}
+
+                    <div className="flex items-end">
+
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="w-full"
+                        onClick={() =>
+                          removeDeliveryOption(
+                            index
+                          )
+                        }
+                      >
+                        Remove
+                      </Button>
+
+                    </div>
+
+                  </div>
+
+                )
+              )}
+
+              <Button
+                type="button"
+                variant="outline"
+                onClick={
+                  addDeliveryOption
+                }
+              >
+                + Add Delivery Option
+              </Button>
 
             </div>
 
@@ -1015,9 +1202,7 @@ export default function CreateProduct() {
                     >
 
                       <img
-                        src={
-                          preview
-                        }
+                        src={preview}
                         alt={`Product preview ${index + 1}`}
                         className="w-full h-full object-cover"
                       />
@@ -1040,8 +1225,6 @@ export default function CreateProduct() {
 
                   )
                 )}
-
-                {/* IMAGE UPLOAD */}
 
                 <label className="aspect-square flex flex-col items-center justify-center border-2 border-dashed rounded-lg cursor-pointer hover:bg-accent hover:text-accent-foreground transition-colors">
 
