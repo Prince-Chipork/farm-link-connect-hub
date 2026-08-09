@@ -230,21 +230,37 @@ export default function CreateProduct() {
      ========================================================= */
 
   const updateDeliveryOption = (
-    index: number,
-    field: keyof DeliveryOption,
-    value: string | number
-  ) => {
-    setDeliveryOptions((prev) =>
-      prev.map((option, i) =>
-        i === index
-          ? {
-              ...option,
-              [field]: value,
-            }
-          : option
-      )
-    );
-  };
+  index: number,
+  field: "option_name" | "delivery_fee" | "estimated_days",
+  value: string | number
+) => {
+  setDeliveryOptions((prev) => {
+    const updated = [...prev];
+
+    if (field === "option_name") {
+      updated[index] = {
+        ...updated[index],
+        option_name: String(value),
+      };
+    }
+
+    if (field === "delivery_fee") {
+      updated[index] = {
+        ...updated[index],
+        delivery_fee: Number(value),
+      };
+    }
+
+    if (field === "estimated_days") {
+      updated[index] = {
+        ...updated[index],
+        estimated_days: Number(value),
+      };
+    }
+
+    return updated;
+  });
+};
 
   /* =========================================================
      ADD DELIVERY OPTION
