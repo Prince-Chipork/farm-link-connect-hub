@@ -1008,54 +1008,87 @@ export default function CreateProduct() {
     ================================================= */}
 
 <div className="space-y-4">
-
-  <div>
-    <Label className="text-lg font-semibold">
-      Delivery Options
-    </Label>
-
-    <p className="text-sm text-muted-foreground mt-1">
-      These delivery options are currently used
-      for product-level delivery information.
-    </p>
-  </div>
+  <Label className="text-lg font-semibold">
+    Delivery Options
+  </Label>
 
   {deliveryOptions.map((option, index) => (
     <div
       key={index}
-      className="grid grid-cols-1 md:grid-cols-4 gap-4 border rounded-lg p-4"
+      className="grid grid-cols-1 gap-4 rounded-lg border p-4 md:grid-cols-3"
     >
+      <Input
+        placeholder="Option Name"
+        value={option.option_name}
+        onChange={(e) => {
+          setDeliveryOptions((current) =>
+            current.map((item, i) =>
+              i === index
+                ? {
+                    ...item,
+                    option_name: e.target.value,
+                  }
+                : item
+            )
+          );
+        }}
+      />
 
-      {/* OPTION NAME */}
+      <Input
+        type="number"
+        placeholder="Delivery Fee"
+        value={option.delivery_fee}
+        onChange={(e) => {
+          setDeliveryOptions((current) =>
+            current.map((item, i) =>
+              i === index
+                ? {
+                    ...item,
+                    delivery_fee: Number(e.target.value),
+                  }
+                : item
+            )
+          );
+        }}
+      />
 
-      <div className="space-y-2">
+      <Input
+        type="number"
+        placeholder="Estimated Days"
+        value={option.estimated_days}
+        onChange={(e) => {
+          setDeliveryOptions((current) =>
+            current.map((item, i) =>
+              i === index
+                ? {
+                    ...item,
+                    estimated_days: Number(e.target.value),
+                  }
+                : item
+            )
+          );
+        }}
+      />
+    </div>
+  ))}
 
-        <Label>
-          Option
-        </Label>
-
-        <Input
-          placeholder="e.g. Pickup"
-          value={option.option_name}
-          onChange={(e) => {
-            setDeliveryOptions((prev) =>
-              prev.map((item, i) =>
-                i === index
-                  ? {
-                      option_name:
-                        e.target.value,
-                      delivery_fee:
-                        item.delivery_fee,
-                      estimated_days:
-                        item.estimated_days,
-                    }
-                  : item
-              )
-            );
-          }}
-        />
-
-      </div>
+  <Button
+    type="button"
+    variant="outline"
+    onClick={() =>
+      setDeliveryOptions((current) => [
+        ...current,
+        {
+          option_name: "",
+          delivery_fee: 0,
+          estimated_days: 1,
+        },
+      ])
+    }
+  >
+    + Add Delivery Option
+  </Button>
+</div>
 
       {/* DELIVERY FEE */}
 
