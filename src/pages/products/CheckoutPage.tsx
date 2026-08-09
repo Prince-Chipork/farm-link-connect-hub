@@ -174,16 +174,15 @@ export default function CheckoutPage() {
       setIsLoadingDelivery(true);
 
       try {
-        const { data, error } = await supabase.rpc(
-          "get_delivery_options_for_checkout",
-          {
-            p_origin_zone_id: FARM_ZONE_ID,
-            p_destination_zone_id: ALIADE_ZONE_ID,
-            p_weight_kg: totalWeightKg,
-            p_distance_km: distanceKm,
-          }
-        );
-
+        const { data, error } = await (supabase as any).rpc(
+  "get_delivery_options_for_checkout",
+  {
+    p_origin_zone_id: FARM_ZONE_ID,
+    p_destination_zone_id: ALIADE_ZONE_ID,
+    p_weight_kg: totalWeightKg,
+    p_distance_km: distanceKm,
+  }
+);
         if (error) {
           console.error(
             "Delivery options error:",
