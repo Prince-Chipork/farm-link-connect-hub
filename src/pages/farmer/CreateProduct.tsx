@@ -158,8 +158,6 @@ export default function CreateProduct() {
 
   /* =======================================================
      DELIVERY OPTIONS
-
-     Explicit type prevents the previous "never" error.
      ======================================================= */
 
   const [deliveryOptions, setDeliveryOptions] =
@@ -205,14 +203,16 @@ export default function CreateProduct() {
       ...newFiles,
     ]);
 
-    const newPreviews = newFiles.map(
-      (file) => URL.createObjectURL(file)
+    const newPreviews = newFiles.map((file) =>
+      URL.createObjectURL(file)
     );
 
     setPreviews((prev) => [
       ...prev,
       ...newPreviews,
     ]);
+
+    e.target.value = "";
   };
 
   const removeImage = (index: number) => {
@@ -226,7 +226,7 @@ export default function CreateProduct() {
   };
 
   /* =========================================================
-     ADD DELIVERY OPTION
+     DELIVERY OPTION HANDLERS
      ========================================================= */
 
   const addDeliveryOption = () => {
@@ -239,10 +239,6 @@ export default function CreateProduct() {
       },
     ]);
   };
-
-  /* =========================================================
-     REMOVE DELIVERY OPTION
-     ========================================================= */
 
   const removeDeliveryOption = (index: number) => {
     if (deliveryOptions.length === 1) {
@@ -257,12 +253,31 @@ export default function CreateProduct() {
     );
   };
 
+  const updateDeliveryOption = (
+    index: number,
+    field: keyof DeliveryOption,
+    value: string | number
+  ) => {
+    setDeliveryOptions((prev) =>
+      prev.map((option, i) => {
+        if (i !== index) {
+          return option;
+        }
+
+        return {
+          ...option,
+          [field]: value,
+        };
+      })
+    );
+  };
+
   /* =========================================================
      SUBMIT
      ========================================================= */
 
   const handleSubmit = async (
-    e: React.FormEvent
+    e: React.FormEvent<HTMLFormElement>
   ) => {
     e.preventDefault();
 
@@ -273,9 +288,9 @@ export default function CreateProduct() {
       return;
     }
 
-    /* -------------------------------------------------------
+    /* =====================================================
        BASIC VALIDATION
-       ------------------------------------------------------- */
+       ===================================================== */
 
     if (!formData.name.trim()) {
       toast.error(
@@ -347,9 +362,9 @@ export default function CreateProduct() {
       return;
     }
 
-    /* -------------------------------------------------------
+    /* =====================================================
        VALIDATE DELIVERY OPTIONS
-       ------------------------------------------------------- */
+       ===================================================== */
 
     for (
       let i = 0;
@@ -395,7 +410,7 @@ export default function CreateProduct() {
 
     try {
       /* =====================================================
-         UPLOAD IMAGES
+         UPLOAD PRODUCT IMAGES
          ===================================================== */
 
       const imageUrls: string[] = [];
@@ -555,9 +570,8 @@ export default function CreateProduct() {
         );
 
         /*
-         * The product exists but its delivery
-         * options failed. Remove the product so
-         * we don't leave an incomplete listing.
+         * Attempt to remove the product
+         * if delivery creation fails.
          */
 
         await supabase
@@ -685,7 +699,7 @@ export default function CreateProduct() {
                       unit:
                         categoryUnits[
                           value
-                        ][0],
+                        ]?.[0] || "kg",
                     })
                   }
                 >
@@ -834,8 +848,7 @@ export default function CreateProduct() {
 
                         {(
                           categoryUnits[
-                            formData
-                              .category
+                            formData.category
                           ] || []
                         ).map(
                           (unit) => (
@@ -892,8 +905,10 @@ export default function CreateProduct() {
                 />
 
                 <p className="text-xs text-muted-foreground">
-                  You can estimate the weight if
-                  you don't have a weighing scale.
+                  If you do not have a weighing
+                  scale, you can provide your best
+                  estimate or use a standard known
+                  weight.
                 </p>
 
               </div>
@@ -1004,92 +1019,151 @@ export default function CreateProduct() {
             </div>
 
             {/* =================================================
-    DELIVERY OPTIONS
-    ================================================= */}
+                DELIVERY OPTIONS
+                ================================================= */}
 
-<div className="space-y-4">
-  <Label className="text-lg font-semibold">
-    Delivery Options
-  </Label>
+            <div className="space-y-4">
 
-  {deliveryOptions.map((option, index) => (
-    <div
-      key={index}
-      className="grid grid-cols-1 gap-4 rounded-lg border p-4 md:grid-cols-3"
-    >
-      <Input
-        placeholder="Option Name"
-        value={option.option_name}
-        onChange={(e) => {
-          setDeliveryOptions((current) =>
-            current.map((item, i) =>
-              i === index
-                ? {
-                    ...item,
-                    option_name: e.target.value,
-                  }
-                : item
-            )
-          );
-        }}
-      />
+              <div>
+                <Label className="text-lg font-semibold">
+                  Delivery Options
+                </Label>
 
-      <Input
-        type="number"
-        placeholder="Delivery Fee"
-        value={option.delivery_fee}
-        onChange={(e) => {
-          setDeliveryOptions((current) =>
-            current.map((item, i) =>
-              i === index
-                ? {
-                    ...item,
-                    delivery_fee: Number(e.target.value),
-                  }
-                : item
-            )
-          );
-        }}
-      />
+                <p className="text-sm text-muted-foreground mt-1">
+                  Add the delivery methods available
+                  for this product.
+                </p>
+              </div>
 
-      <Input
-        type="number"
-        placeholder="Estimated Days"
-        value={option.estimated_days}
-        onChange={(e) => {
-          setDeliveryOptions((current) =>
-            current.map((item, i) =>
-              i === index
-                ? {
-                    ...item,
-                    estimated_days: Number(e.target.value),
-                  }
-                : item
-            )
-          );
-        }}
-      />
-    </div>
-  ))}
+              {deliveryOptions.map(
+                (option, index) => (
 
-  <Button
-    type="button"
-    variant="outline"
-    onClick={() =>
-      setDeliveryOptions((current) => [
-        ...current,
-        {
-          option_name: "",
-          delivery_fee: 0,
-          estimated_days: 1,
-        },
-      ])
-    }
-  >
-    + Add Delivery Option
-  </Button>
-</div>
+                  <div
+                    key={index}
+                    className="rounded-lg border p-4 space-y-4"
+                  >
 
+                    {/* OPTION NAME */}
+
+                    <div className="space-y-2">
+
+                      <Label>
+                        Delivery Method
+                      </Label>
+
+                      <Input
+                        placeholder="e.g. Pickup, Farm Delivery, Express Delivery"
+                        value={
+                          option.option_name
+                        }
+                        onChange={(e) =>
+                          updateDeliveryOption(
+                            index,
+                            "option_name",
+                            e.target.value
+                          )
+                        }
+                      />
+
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                      {/* DELIVERY FEE */}
+
+                      <div className="space-y-2">
+
+                        <Label>
+                          Delivery Fee (₦)
+                        </Label>
+
+                        <Input
+                          type="number"
+                          min="0"
+                          step="0.01"
+                          placeholder="0"
+                          value={
+                            option.delivery_fee
+                          }
+                          onChange={(e) =>
+                            updateDeliveryOption(
+                              index,
+                              "delivery_fee",
+                              Number(
+                                e.target.value
+                              )
+                            )
+                          }
+                        />
+
+                      </div>
+
+                      {/* ESTIMATED DAYS */}
+
+                      <div className="space-y-2">
+
+                        <Label>
+                          Estimated Days
+                        </Label>
+
+                        <Input
+                          type="number"
+                          min="0"
+                          step="1"
+                          placeholder="1"
+                          value={
+                            option.estimated_days
+                          }
+                          onChange={(e) =>
+                            updateDeliveryOption(
+                              index,
+                              "estimated_days",
+                              Number(
+                                e.target.value
+                              )
+                            )
+                          }
+                        />
+
+                      </div>
+
+                      {/* REMOVE */}
+
+                      <div className="flex items-end">
+
+                        <Button
+                          type="button"
+                          variant="outline"
+                          className="w-full"
+                          onClick={() =>
+                            removeDeliveryOption(
+                              index
+                            )
+                          }
+                        >
+                          Remove
+                        </Button>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                )
+              )}
+
+              <Button
+                type="button"
+                variant="outline"
+                onClick={
+                  addDeliveryOption
+                }
+              >
+                + Add Delivery Option
+              </Button>
+
+            </div>
 
             {/* =================================================
                 PRODUCT IMAGES
