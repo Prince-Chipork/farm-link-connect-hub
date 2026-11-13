@@ -19,6 +19,8 @@ export interface Product {
   description: string;
   quantity: number;
   unit: "kg" | "lbs" | "piece" | "dozen" | "bunch";
+  weight_kg?: number | null;
+  weight_source?: "weighed" | "estimated" | "standard" | null;
   price: number;
   harvestDate: string;
   location: string;

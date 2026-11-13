@@ -197,6 +197,8 @@ export type Database = {
           price: number
           quantity: number
           unit: string
+          weight_kg: number | null
+          weight_source: string | null
           updated_at: string | null
         }
         Insert: {
@@ -214,6 +216,8 @@ export type Database = {
           price: number
           quantity?: number
           unit?: string
+          weight_kg?: number | null
+          weight_source?: string | null
           updated_at?: string | null
         }
         Update: {
@@ -231,6 +235,8 @@ export type Database = {
           price?: number
           quantity?: number
           unit?: string
+          weight_kg?: number | null
+          weight_source?: string | null
           updated_at?: string | null
         }
         Relationships: [
