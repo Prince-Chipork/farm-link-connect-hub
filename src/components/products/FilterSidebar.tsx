@@ -27,21 +27,30 @@ const FilterSidebar = ({
   onPriceChange,
   onClearFilters,
 }: FilterSidebarProps) => {
-  const hasActiveFilters = searchQuery || selectedCategories.length > 0 || priceRange[0] < 100000;
+  const hasActiveFilters =
+    searchQuery || selectedCategories.length > 0 || priceRange[0] < 100000;
 
   return (
     <Card className="sticky top-20">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-lg">Filters</CardTitle>
         {hasActiveFilters && (
-          <Button variant="ghost" size="sm" onClick={onClearFilters} className="h-8 text-xs">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onClearFilters}
+            className="h-8 text-xs"
+          >
             <X className="h-3 w-3 mr-1" /> Clear
           </Button>
         )}
       </CardHeader>
+
       <CardContent className="space-y-6">
         <div>
-          <Label htmlFor="search" className="font-semibold text-sm">Search</Label>
+          <Label htmlFor="search" className="font-semibold text-sm">
+            Search
+          </Label>
           <Input
             id="search"
             placeholder="Search products..."
@@ -59,9 +68,14 @@ const FilterSidebar = ({
                 <Checkbox
                   id={category.toLowerCase()}
                   checked={selectedCategories.includes(category)}
-                  onCheckedChange={(checked) => onCategoryChange(category, checked as boolean)}
+                  onCheckedChange={(checked) =>
+                    onCategoryChange(category, checked as boolean)
+                  }
                 />
-                <Label htmlFor={category.toLowerCase()} className="text-sm font-normal cursor-pointer">
+                <Label
+                  htmlFor={category.toLowerCase()}
+                  className="text-sm font-normal cursor-pointer"
+                >
                   {category}
                 </Label>
               </div>
@@ -70,7 +84,7 @@ const FilterSidebar = ({
         </div>
 
         <div>
-          <h4 className="font-semibold text-sm mb-3">Max Price (\u20a6)</h4>
+          <h4 className="font-semibold text-sm mb-3">Max Price (₦)</h4>
           <Slider
             value={priceRange}
             onValueChange={onPriceChange}
@@ -79,9 +93,11 @@ const FilterSidebar = ({
             step={1000}
           />
           <div className="flex justify-between text-sm text-muted-foreground mt-2">
-            <span>$0</span>
-            <span className="font-medium text-foreground">\u20a6{priceRange[0].toLocaleString()}</span>
-            <span>$100k+</span>
+            <span>₦0</span>
+            <span className="font-medium text-foreground">
+              ₦{priceRange[0].toLocaleString()}
+            </span>
+            <span>₦100k+</span>
           </div>
         </div>
       </CardContent>
